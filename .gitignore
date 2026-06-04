@@ -30,6 +30,9 @@ tmp/
 temp/
 .tmp/
 
+# Locally cloned upstream repositories for review
+external/
+
 # OS/package artifacts
 *.tgz
 *.zip

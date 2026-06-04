@@ -6,6 +6,7 @@ Central library for AI steering files, agent instructions, Cursor rules, and Cod
 
 - `collected/` preserves raw source files copied from existing projects with provenance kept in the folder names.
 - `templates/` contains normalized starters intended for reuse in new or existing projects.
+- `templates/skills/` contains reviewed imported and adapted skills.
 - `docs/` contains inventory, classification, and review notes.
 - `docs/source-manifest.sha256` records hashes for collected source files.
 - `scripts/` contains local helpers for scaffolding AI context into project repos.
@@ -29,6 +30,14 @@ Create baseline Codex context in another project:
 
 Use `--profile base` for stack-neutral files, `--profile angular` for Angular-oriented steering, or `--profile payload` for Payload CMS Cursor rules.
 
+Install reviewed skill bundles:
+
+```sh
+./scripts/install-skill-bundle.sh /path/to/project --bundle core
+```
+
+Bundles: `core`, `engineering`, `rust`, `product`, `planning`, `frontend`, `all`.
+
 Refresh collected source material from local repos:
 
 ```sh
@@ -47,6 +56,7 @@ Run local checks:
 ./scripts/check.sh
 ./scripts/refresh-source-manifest.sh
 ./scripts/collect-ai-context.sh /Users/dsteele/repos
+./scripts/install-skill-bundle.sh /path/to/project --bundle core
 ```
 
 ## Review Workflow
@@ -62,5 +72,10 @@ Run local checks:
 - [Collection workflow](docs/collection-workflow.md)
 - [Scaffold profiles](docs/scaffold-profiles.md)
 - [Template authoring](docs/template-authoring.md)
+- [Skill bundles](docs/skill-bundles.md)
+- [External skill review](docs/external-skill-review.md)
+- [External source policy](docs/external-source-policy.md)
+- [Skill attribution](docs/skill-attribution.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security notes](SECURITY.md)
+- [Third-party notices](THIRD_PARTY_NOTICES.md)

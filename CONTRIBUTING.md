@@ -22,6 +22,14 @@ Keep those separate.
 - Keep examples generic unless the template is explicitly stack-specific.
 - Update `docs/reuse-candidates.md` when promoting or rejecting a candidate.
 
+## Third-Party Skills
+
+- Review license and provenance before importing.
+- Put copied third-party skills under `templates/skills/imported/`.
+- Put rewritten or condensed derivatives under `templates/skills/adapted/`.
+- Update `docs/skill-attribution.md` and `THIRD_PARTY_NOTICES.md`.
+- Copy upstream license files into `templates/skills/imported/licenses/`.
+
 ## Scripts
 
 - Prefer POSIX `sh`.

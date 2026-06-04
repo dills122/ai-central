@@ -48,3 +48,9 @@ Suggested next review question: decide whether these should live as Codex skills
 - A merge/update mode that preserves local project additions instead of overwriting generated files.
 - A provenance manifest with source path, hash, and last collected date for every raw file.
 - Templates for Rust, Go, shell scripting, monorepos, CI, and security that are not tied to one project.
+
+## External Skill Sources
+
+See `docs/external-skill-review.md` for recommendations from locally cloned upstream skill repositories.
+
+Imported and adapted skills now live under `templates/skills/`. Attribution is maintained in `docs/skill-attribution.md` and `THIRD_PARTY_NOTICES.md`.
