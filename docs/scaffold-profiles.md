@@ -25,6 +25,14 @@ Includes everything from `base`, plus:
 
 Use for Angular apps and Angular monorepo packages.
 
+## Frontend Design
+
+Includes everything from `base`, plus:
+
+- `.codex/steering/frontend-design-steering.md`
+
+Use for user-facing apps, dashboards, landing pages, frontend components, and design-system work.
+
 ## Payload
 
 Includes everything from `base`, plus:

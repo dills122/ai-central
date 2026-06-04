@@ -1,0 +1,82 @@
+{
+  "version": 1,
+  "profiles": [
+    {
+      "id": "base",
+      "label": "Base",
+      "type": "project",
+      "description": "Generic AGENTS and Codex steering for any repository.",
+      "signals": ["default"]
+    },
+    {
+      "id": "angular",
+      "label": "Angular",
+      "type": "language-framework",
+      "description": "Angular-oriented steering for frontend app development.",
+      "signals": ["angular.json"]
+    },
+    {
+      "id": "frontend-design",
+      "label": "Frontend Design",
+      "type": "domain",
+      "description": "UI quality, accessibility, responsive behavior, and interaction-state steering.",
+      "signals": ["*.tsx", "*.jsx", "*.component.ts", "angular.json"]
+    },
+    {
+      "id": "payload",
+      "label": "Payload CMS",
+      "type": "framework",
+      "description": "Payload CMS Cursor rules and implementation guidance.",
+      "signals": ["payload.config.ts", "payload.config.js"]
+    }
+  ],
+  "bundles": [
+    {
+      "id": "core",
+      "label": "Core",
+      "type": "general",
+      "description": "Safe default planning, spec, testing, review, debugging, source-driven, and frontend review skills.",
+      "recommended": true
+    },
+    {
+      "id": "engineering",
+      "label": "Engineering",
+      "type": "persona-task",
+      "description": "Engineering lifecycle, architecture, CI, security, observability, migration, and tooling skills.",
+      "signals": ["package.json"]
+    },
+    {
+      "id": "rust",
+      "label": "Rust",
+      "type": "language",
+      "description": "Rust implementation, lint, debug, security, Pest, and RON skills.",
+      "signals": ["Cargo.toml"]
+    },
+    {
+      "id": "product",
+      "label": "Product",
+      "type": "persona-task",
+      "description": "PM, research, analytics, GTM, strategy, and code-to-PRD skills.",
+      "signals": ["docs/", "product/"]
+    },
+    {
+      "id": "planning",
+      "label": "Planning",
+      "type": "workflow",
+      "description": "Full and lightweight planning-file workflows for long-running tasks."
+    },
+    {
+      "id": "frontend",
+      "label": "Frontend",
+      "type": "domain",
+      "description": "Frontend, browser testing, accessibility, Playwright review, and design-system skills.",
+      "signals": ["*.tsx", "*.jsx", "*.component.ts", "angular.json"]
+    },
+    {
+      "id": "all",
+      "label": "All",
+      "type": "meta",
+      "description": "Installs every available skill bundle."
+    }
+  ]
+}

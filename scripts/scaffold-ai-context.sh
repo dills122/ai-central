@@ -2,7 +2,7 @@
 set -eu
 
 usage() {
-  echo "Usage: $0 TARGET_DIR [--profile base|angular|payload]" >&2
+  echo "Usage: $0 TARGET_DIR [--profile base|angular|payload|frontend-design]" >&2
 }
 
 if [ "$#" -lt 1 ]; then
@@ -32,7 +32,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 case "$profile" in
-  base|angular|payload) ;;
+  base|angular|payload|frontend-design) ;;
   *)
     echo "Unknown profile: $profile" >&2
     usage
@@ -67,6 +67,10 @@ copy_if_missing "$repo_root/templates/steering/testing-quality-gates-steering.md
 
 if [ "$profile" = "angular" ]; then
   copy_if_missing "$repo_root/templates/steering/angular-steering.md" "$target_dir/.codex/steering/angular-steering.md"
+fi
+
+if [ "$profile" = "frontend-design" ]; then
+  copy_if_missing "$repo_root/templates/steering/frontend-design-steering.md" "$target_dir/.codex/steering/frontend-design-steering.md"
 fi
 
 if [ "$profile" = "payload" ]; then

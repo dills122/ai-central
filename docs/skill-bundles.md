@@ -4,6 +4,8 @@ Use `scripts/install-skill-bundle.sh` to copy reviewed skills into a target proj
 
 The installer is non-overwriting: existing skill folders are skipped.
 
+For guided project setup, prefer `scripts/setup-ai-context.sh`.
+
 ```sh
 ./scripts/install-skill-bundle.sh /path/to/project --bundle core
 ```

@@ -7,6 +7,7 @@ Central library for AI steering files, agent instructions, Cursor rules, and Cod
 - `collected/` preserves raw source files copied from existing projects with provenance kept in the folder names.
 - `templates/` contains normalized starters intended for reuse in new or existing projects.
 - `templates/skills/` contains reviewed imported and adapted skills.
+- `templates/catalog.json` describes available profiles and bundles.
 - `docs/` contains inventory, classification, and review notes.
 - `docs/source-manifest.sha256` records hashes for collected source files.
 - `scripts/` contains local helpers for scaffolding AI context into project repos.
@@ -22,13 +23,19 @@ Scanned `/Users/dsteele/repos` on 2026-06-04 and collected:
 
 ## Quick Start
 
+Run the guided setup for a new or existing project:
+
+```sh
+./scripts/setup-ai-context.sh /path/to/project
+```
+
 Create baseline Codex context in another project:
 
 ```sh
 ./scripts/scaffold-ai-context.sh /path/to/project --profile angular
 ```
 
-Use `--profile base` for stack-neutral files, `--profile angular` for Angular-oriented steering, or `--profile payload` for Payload CMS Cursor rules.
+Use `--profile base` for stack-neutral files, `--profile angular` for Angular-oriented steering, `--profile frontend-design` for UI quality steering, or `--profile payload` for Payload CMS Cursor rules.
 
 Install reviewed skill bundles:
 
@@ -54,6 +61,7 @@ Run local checks:
 
 ```sh
 ./scripts/check.sh
+./scripts/setup-ai-context.sh /path/to/project --yes --dry-run
 ./scripts/refresh-source-manifest.sh
 ./scripts/collect-ai-context.sh /Users/dsteele/repos
 ./scripts/install-skill-bundle.sh /path/to/project --bundle core
@@ -70,8 +78,10 @@ Run local checks:
 ## Docs
 
 - [Collection workflow](docs/collection-workflow.md)
+- [Setup CLI](docs/setup-cli.md)
 - [Scaffold profiles](docs/scaffold-profiles.md)
 - [Template authoring](docs/template-authoring.md)
+- [Template taxonomy](docs/template-taxonomy.md)
 - [Skill bundles](docs/skill-bundles.md)
 - [External skill review](docs/external-skill-review.md)
 - [External source policy](docs/external-source-policy.md)

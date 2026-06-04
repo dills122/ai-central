@@ -33,3 +33,4 @@ Optimize for:
 
 - Full local check: `./scripts/check.sh`
 - Refresh manifest: `./scripts/refresh-source-manifest.sh`
+- Guided setup dry run: `./scripts/setup-ai-context.sh /path/to/project --yes --dry-run`
