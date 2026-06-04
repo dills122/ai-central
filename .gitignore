@@ -1,0 +1,37 @@
+.DS_Store
+Thumbs.db
+
+# Local editor and tool state
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Environment and local config
+.env
+.env.*
+!.env.example
+
+# Dependency and build output, in case helper tooling is added later
+node_modules/
+dist/
+build/
+coverage/
+.turbo/
+.cache/
+
+# Temporary scratch output
+tmp/
+temp/
+.tmp/
+
+# OS/package artifacts
+*.tgz
+*.zip
+
+collected
