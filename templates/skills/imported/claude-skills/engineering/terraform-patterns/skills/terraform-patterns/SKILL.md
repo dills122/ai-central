@@ -89,14 +89,8 @@ If the user has `.tf` files or wants to provision infrastructure with Terraform 
    ```
 
 3. **Generate report**
-   ```bash
-   python3 scripts/tf_module_analyzer.py ./terraform
-   ```
-
-4. **Run security scan**
-   ```bash
-   python3 scripts/tf_security_scanner.py ./terraform
-   ```
+   - Inspect `.tf` files directly and summarize structure, state, provider, and security findings.
+   - Prefer the dedicated `terraform-skill` bundle for executable Terraform/OpenTofu validation workflows.
 
 ### `/terraform:module` — Module Design
 
@@ -170,63 +164,14 @@ If the user has `.tf` files or wants to provision infrastructure with Terraform 
    | State accessible to all team members | Medium | Restrict via IAM policies or TF Cloud teams |
 
 3. **Generate security report**
-   ```bash
-   python3 scripts/tf_security_scanner.py ./terraform
-   python3 scripts/tf_security_scanner.py ./terraform --output json
-   ```
+   - Inspect Terraform files directly and report findings with file paths, severity, and remediation.
+   - Use project-approved Terraform scanners such as `terraform validate`, `tfsec`, `checkov`, or `trivy config` when available.
 
 ---
 
 ## Tooling
 
-### `scripts/tf_module_analyzer.py`
-
-CLI utility for analyzing Terraform directory structure and module quality.
-
-**Features:**
-- Resource and data source counting
-- Variable and output analysis (missing descriptions, types, validation)
-- Naming convention checks
-- Module composition detection
-- File structure validation
-- JSON and text output
-
-**Usage:**
-```bash
-# Analyze a Terraform directory
-python3 scripts/tf_module_analyzer.py ./terraform
-
-# JSON output
-python3 scripts/tf_module_analyzer.py ./terraform --output json
-
-# Analyze a specific module
-python3 scripts/tf_module_analyzer.py ./modules/vpc
-```
-
-### `scripts/tf_security_scanner.py`
-
-CLI utility for scanning `.tf` files for common security issues.
-
-**Features:**
-- Hardcoded secret detection (AWS keys, passwords, tokens)
-- Overly permissive IAM policy detection
-- Open security group detection (0.0.0.0/0 on sensitive ports)
-- Missing encryption checks (S3, RDS, EBS)
-- Public access detection (S3, RDS, EC2)
-- Sensitive variable audit
-- JSON and text output
-
-**Usage:**
-```bash
-# Scan a Terraform directory
-python3 scripts/tf_security_scanner.py ./terraform
-
-# JSON output
-python3 scripts/tf_security_scanner.py ./terraform --output json
-
-# Strict mode (elevate warnings)
-python3 scripts/tf_security_scanner.py ./terraform --strict
-```
+Executable helper scripts from the upstream source are intentionally omitted from this repo after skill security scanning flagged risky file traversal patterns. Use this skill as guidance, and use project-approved Terraform/OpenTofu tools for execution.
 
 ---
 

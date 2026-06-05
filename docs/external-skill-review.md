@@ -58,7 +58,7 @@ Status: the first integration batch has been pulled into `templates/skills/`.
 
 Imported:
 
-- 112 third-party skill directories under `templates/skills/imported/`
+- 111 third-party skill directories under `templates/skills/imported/`
 - 2 adapted local skills under `templates/skills/adapted/`
 
 Install into a project with:

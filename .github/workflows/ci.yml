@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Repository checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run local checks
+        run: ./scripts/check.sh
+
+      - name: Validate catalog JSON
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('templates/catalog.json', 'utf8')); console.log('catalog ok')"
+
+      - name: Ensure external clones are not tracked
+        run: |
+          if git ls-files external | grep -q .; then
+            echo "external/ is for local review clones and must not be tracked"
+            git ls-files external
+            exit 1
+          fi
+
+      - name: Check imported source attribution
+        run: |
+          missing=0
+          for source in \
+            agent-skills \
+            planning-with-files \
+            rust-agentic-skills \
+            pm-skills \
+            claude-skills \
+            antfu-skills \
+            web-quality-skills \
+            terraform-skill \
+            agent-toolkit
+          do
+            if [ ! -f "templates/skills/imported/licenses/${source}-LICENSE" ]; then
+              echo "missing license copy for ${source}"
+              missing=1
+            fi
+          done
+          exit "$missing"
+
