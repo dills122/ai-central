@@ -8,12 +8,14 @@ Use `scripts/setup-ai-context.sh` as the guided entrypoint for installing steeri
 
 The setup script:
 
-- detects project signals such as `package.json`, `angular.json`, `Cargo.toml`, Payload config files, frontend source files, and docs/product folders
+- detects project signals such as `package.json`, `angular.json`, `Cargo.toml`, Terraform/OpenTofu files, Payload config files, Vue/Nuxt files, frontend source files, and docs/product folders
 - recommends steering profiles and skill bundles
 - prompts for custom inclusion/exclusion
 - calls the existing non-overwriting installers
 
 The current profile and bundle catalog is documented in `templates/catalog.json`.
+
+See `docs/link-mode.md` for the symlink strategy and tradeoffs.
 
 ## Non-Interactive Mode
 
@@ -21,6 +23,12 @@ Use detected recommendations without prompts:
 
 ```sh
 ./scripts/setup-ai-context.sh /path/to/project --yes
+```
+
+Use symlinks for reusable skills and generic steering:
+
+```sh
+./scripts/setup-ai-context.sh /path/to/project --yes --mode link
 ```
 
 Use explicit selections:
@@ -67,7 +75,10 @@ Bundles install reusable skills:
 | `rust` | Rust implementation, lint, debug, security, Pest, and RON skills |
 | `product` | PM, research, analytics, GTM, strategy, and code-to-PRD skills |
 | `planning` | Full and lightweight planning-file workflows |
-| `frontend` | Frontend, browser testing, accessibility, Playwright review, and design-system skills |
+| `frontend` | Frontend, browser testing, accessibility, Playwright review, design-system, web quality, and frontend toolchain skills |
+| `frontend-vue` | Vue, Nuxt, Pinia, Vue Router, VueUse, UnoCSS, and Vue testing skills |
+| `infra` | Terraform/OpenTofu review, debugging, CI, state, security, testing, and rollback guidance |
+| `workflow` | Architecture diagrams, handoffs, requirements clarity, QA planning, docs, Mermaid, OpenAPI TypeScript, and React workflow skills |
 | `all` | Everything above |
 
 ## Overwrite Policy

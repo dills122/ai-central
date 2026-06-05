@@ -30,6 +30,7 @@ Promote only reviewed output into:
 ## License Rules
 
 - MIT and Apache-2.0 sources are generally acceptable for adaptation, but keep attribution.
+- Share-alike sources such as CC BY-SA require an explicit import strategy before copying or adapting content into reusable templates.
 - Repositories without a clear root license are discovery sources only.
 - Aggregated catalogs are discovery sources unless the specific target skill's source and license are reviewed.
 - Avoid legal, medical, financial, or regulated-domain generation skills unless the repo has explicit guardrails and the use case is intentional.

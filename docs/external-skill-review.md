@@ -20,6 +20,13 @@ These upstream repositories were cloned locally for review:
 | `JimLiu/baoyu-skills` | `external/baoyu-skills` | No root license found | 22 | Use as discovery until license is resolved |
 | `agentskills/agentskills` | `external/agentskills` | Apache-2.0 code, CC-BY-4.0 docs | 0 | Use as format/spec reference |
 | `alirezarezvani/claude-skills` | `external/claude-skills` | MIT | 757 | Selectively mine engineering/product skills |
+| `trailofbits/skills` | `external/trailofbits-skills` | CC BY-SA 4.0 | 74 | High-value security reference; do not copy directly without share-alike plan |
+| `heilcheng/awesome-agent-skills` | `external/heilcheng-awesome-agent-skills` | MIT | 0 local `SKILL.md`; catalog README | Use as discovery catalog only |
+| `antfu/skills` | `external/antfu-skills` | MIT | 17 | Selectively import frontend/toolchain skills |
+| `microsoft/skills` | `external/microsoft-skills` | MIT | 189 | Selective Azure/Microsoft cloud profile only |
+| `addyosmani/web-quality-skills` | `external/web-quality-skills` | MIT | 6 | Import/adapt into frontend quality bundle |
+| `antonbabenko/terraform-skill` | `external/terraform-skill` | Apache-2.0 | 1 | Import/adapt into infrastructure bundle |
+| `softaworks/agent-toolkit` | `external/agent-toolkit` | MIT | 86 total; 43 source plus `dist/` copies | Selectively mine source skills only |
 
 ## Reviewed Commits
 
@@ -37,6 +44,13 @@ These upstream repositories were cloned locally for review:
 | `JimLiu/baoyu-skills` | `ce84174bf7af6a178ae2c980f1bdcce4f1c3f7de` |
 | `agentskills/agentskills` | `5d4c1fda3f786fff826c7f56b6cb3341e7f3a911` |
 | `alirezarezvani/claude-skills` | `fcd4fa1b203a9a0dc44d2482af21adfb53b7a727` |
+| `trailofbits/skills` | `c94841be3deae8a880fa1a9078979adac7ca3dbc` |
+| `heilcheng/awesome-agent-skills` | `de9056857eb0e96da833469d2ee3ac392058225d` |
+| `antfu/skills` | `50deaeb269d80d92db7a2c5a677290309ae307fc` |
+| `microsoft/skills` | `619745888df8014bc963929896f9a279c6d12641` |
+| `addyosmani/web-quality-skills` | `7b59d48aaf1f793935002f4998dfccc656f40839` |
+| `antonbabenko/terraform-skill` | `b59d2be9ff4db8f835c8459e05e325ba11e3a21f` |
+| `softaworks/agent-toolkit` | `3027f20f3181758385a1bb8c022d4041dfb4de84` |
 
 ## Priority 1: Integrate Soon
 
@@ -44,7 +58,7 @@ Status: the first integration batch has been pulled into `templates/skills/`.
 
 Imported:
 
-- 77 third-party skill directories under `templates/skills/imported/`
+- 112 third-party skill directories under `templates/skills/imported/`
 - 2 adapted local skills under `templates/skills/adapted/`
 
 Install into a project with:
@@ -245,6 +259,109 @@ Recommended caution:
 
 Integration status: copied selected engineering and product skills into `templates/skills/imported/claude-skills/`.
 
+### `antfu/skills`
+
+Why: Compact MIT-licensed frontend/toolchain skill pack with direct coverage for Vue, Nuxt, Vite, Vitest, pnpm, Turborepo, VitePress, Slidev, UnoCSS, and related ecosystem guidance.
+
+Recommended candidates to import:
+
+- `pnpm`
+- `turborepo`
+- `vite`
+- `vitest`
+- `vitepress`
+- `slidev`
+- `web-design-guidelines`
+
+Recommended Vue bundle candidates:
+
+- `vue`
+- `vue-best-practices`
+- `vue-router-best-practices`
+- `vue-testing-best-practices`
+- `nuxt`
+- `pinia`
+- `vueuse-functions`
+- `unocss`
+
+Recommended adaptation:
+
+- Add a future `frontend-vue` bundle/profile instead of putting all Vue/Nuxt material into the default frontend bundle.
+- Prefer toolchain skills that fill current gaps first: `vite`, `vitest`, `pnpm`, `turborepo`, and `vitepress`.
+- Compare `web-design-guidelines` with the existing adapted `frontend-design-review` skill before importing to avoid duplicating design rules.
+
+Recommended caution:
+
+- `antfu` is a personal preference skill and should not be imported into reusable project scaffolding by default.
+- `tsdown` is useful only if the repo wants a specific library-bundling profile; keep it out of the first batch.
+
+Integration status: copied selected skills into `templates/skills/imported/antfu-skills/`.
+
+### `addyosmani/web-quality-skills`
+
+Why: Small MIT-licensed skill pack focused on web quality audits. It aligns directly with the existing `frontend` bundle and complements `frontend-design-review`, `a11y-audit`, and Playwright review skills.
+
+Recommended candidates to import:
+
+- `web-quality-audit`
+- `performance`
+- `core-web-vitals`
+- `accessibility`
+- `seo`
+- `best-practices`
+
+Recommended adaptation:
+
+- Add these to the `frontend` bundle, or split a future `web-quality` bundle if the default frontend bundle starts feeling too broad.
+- Keep the Lighthouse-version notes intact and review them periodically because audit names and scoring change over time.
+- Avoid duplicating existing accessibility guidance by making `web-quality-audit` the umbrella skill and keeping deeper skills available on demand.
+
+Integration status: copied all 6 skills into `templates/skills/imported/web-quality-skills/`.
+
+### `antonbabenko/terraform-skill`
+
+Why: Strong Apache-2.0 Terraform/OpenTofu skill with the right safety posture: diagnose-first workflow, explicit risk categories, validation plans, and rollback notes.
+
+Recommended import:
+
+- `terraform-skill`
+
+Recommended adaptation:
+
+- Add a future `infra` or `terraform` bundle rather than mixing this into the broad `engineering` default.
+- Preserve the destructive-operation guardrails around destroy plans, production applies, state mutation, and approval.
+- Import references with the skill; the root `SKILL.md` relies on progressive disclosure through reference files.
+
+Integration status: copied the skill and references into `templates/skills/imported/terraform-skill/`.
+
+### `softaworks/agent-toolkit`
+
+Why: MIT-licensed toolkit with useful workflow, documentation, architecture, frontend handoff, QA, and communication skills. It overlaps with some existing imports, so this should be mined rather than imported wholesale.
+
+Recommended candidates to mine:
+
+- `c4-architecture`
+- `database-schema-designer`
+- `design-system-starter`
+- `frontend-to-backend-requirements`
+- `backend-to-frontend-handoff-docs`
+- `openapi-to-typescript`
+- `qa-test-planner`
+- `requirements-clarity`
+- `session-handoff`
+- `crafting-effective-readmes`
+- `mermaid-diagrams`
+- `react-dev`
+- `react-useeffect`
+
+Recommended caution:
+
+- Import only from `external/agent-toolkit/skills/`; ignore duplicated generated copies under `dist/plugins/`.
+- Skip personal/productivity/social skills such as meeting updates, workplace conversations, meme generation, domain brainstorming, and tool-provider wrappers unless a project explicitly needs them.
+- Compare `codex`, `plugin-forge`, and `command-creator` with the local skill/plugin creator guidance before importing.
+
+Integration status: copied selected source skills into `templates/skills/imported/agent-toolkit/`.
+
 ### `agentskills/agentskills`
 
 Why: This is a format/specification reference, not a skill pack. It is useful for validating our local skill layout and metadata expectations.
@@ -316,6 +433,81 @@ Do not use for:
 - direct import until a root license or per-skill license is confirmed
 - social posting automation without explicit account and approval safeguards
 
+### `trailofbits/skills`
+
+Use for:
+
+- security-audit skill design and taxonomy
+- fuzzing, static analysis, variant analysis, SARIF, Semgrep, CodeQL, YARA, supply-chain, and secure workflow ideas
+- domain-specific audit references for C/C++, Python, smart contracts, mobile/APK review, constant-time analysis, and zeroization
+- possible future `security-audit` and `testing-deep` bundle planning
+
+Strong candidates by concept:
+
+- `static-analysis/skills/codeql`
+- `static-analysis/skills/semgrep`
+- `static-analysis/skills/sarif-parsing`
+- `supply-chain-risk-auditor`
+- `variant-analysis`
+- `semgrep-rule-creator`
+- `semgrep-rule-variant-creator`
+- `property-based-testing`
+- `mutation-testing`
+- `modern-python`
+- `c-review`
+- `constant-time-analysis`
+- `zeroize-audit`
+- `devcontainer-setup`
+- `gh-cli`
+
+Do not use for:
+
+- direct import into the current MIT-licensed template tree without deciding how to handle CC BY-SA 4.0 obligations
+- default bundles for normal app repos; most skills are advanced audit tools and would add noise outside security-heavy projects
+- crypto/smart-contract scanner skills unless the target project actually needs that domain
+
+Recommendation: treat as a high-value reference source for now. If we want direct integration, create an explicit share-alike-compatible area or write fresh local skills inspired by the concepts rather than copying text.
+
+### `heilcheng/awesome-agent-skills`
+
+Use for:
+
+- discovering future upstream repos and bundle categories
+- comparing catalog organization and README taxonomy against our `templates/catalog.json`
+- identifying gaps in personas, engineering workflows, and design/research skills
+
+Do not use for:
+
+- direct import; this clone has no local `SKILL.md` files
+- attribution to individual skill authors unless we follow links to the original repos and review those licenses directly
+
+### `microsoft/skills`
+
+Use for:
+
+- Azure SDK and Microsoft AI Foundry project profiles
+- language-specific Azure skill discovery for .NET, Java, Python, Rust, and TypeScript
+- Azure service areas such as Identity, Cosmos DB, Event Hubs, Service Bus, Key Vault, Storage, Monitor, AI Search, M365 agents, and Foundry models
+- installer UX ideas around selective skill loading and cross-agent symlink setup
+
+Potential future profile candidates:
+
+- `azure-typescript`
+- `azure-python`
+- `azure-dotnet`
+- `azure-java`
+- `azure-rust`
+- `microsoft-foundry`
+- `m365-agents`
+
+Do not use for:
+
+- default project scaffolding; the repo is large and cloud-vendor-specific
+- wholesale import of all 189 local skills
+- non-Azure projects, except as a reference for selective installation patterns
+
+Recommendation: keep as an optional Azure/Microsoft profile source. Import only a small language/service subset when a real target project needs it.
+
 ## Proposed Integration Plan
 
 1. Add `templates/skills/` as the reviewed, reusable skill output area.
@@ -326,7 +518,13 @@ Do not use for:
 6. Add a `frontend-design` profile based on Impeccable references, not the full executable system.
 7. Mine `alirezarezvani/claude-skills` for gaps after Addy/Rust/Planning are in place.
 8. Fill PM gaps from `phuryn/pm-skills`, skipping duplicates and legal/resume skills.
-9. Add a catalog manifest with source repo, commit SHA, license, imported files, adaptation notes, and review date.
+9. Add a Vue/frontend-toolchain import batch from `antfu/skills` after deciding whether to add a `frontend-vue` bundle.
+10. Add a web quality import batch from `addyosmani/web-quality-skills`.
+11. Add an infrastructure bundle seeded by `antonbabenko/terraform-skill`.
+12. Mine `softaworks/agent-toolkit` for architecture, handoff, QA, and documentation gaps.
+13. Use `microsoft/skills` only for optional Azure/Microsoft profiles.
+14. Use `trailofbits/skills` as a security-audit reference until a CC BY-SA import strategy is agreed.
+15. Add a catalog manifest with source repo, commit SHA, license, imported files, adaptation notes, and review date.
 
 ## Suggested First Import Batch
 

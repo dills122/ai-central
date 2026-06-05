@@ -1,5 +1,15 @@
 {
   "version": 1,
+  "installModes": [
+    {
+      "id": "copy",
+      "description": "Copy all installed files into the target project."
+    },
+    {
+      "id": "link",
+      "description": "Copy repo-specific files and symlink reusable steering, Cursor rules, and skill directories back to AI Central."
+    }
+  ],
   "profiles": [
     {
       "id": "base",
@@ -69,8 +79,28 @@
       "id": "frontend",
       "label": "Frontend",
       "type": "domain",
-      "description": "Frontend, browser testing, accessibility, Playwright review, and design-system skills.",
-      "signals": ["*.tsx", "*.jsx", "*.component.ts", "angular.json"]
+      "description": "Frontend, browser testing, accessibility, Playwright review, design-system, web quality, and modern frontend toolchain skills.",
+      "signals": ["*.tsx", "*.jsx", "*.component.ts", "angular.json", "vite.config.ts", "vite.config.js"]
+    },
+    {
+      "id": "frontend-vue",
+      "label": "Frontend Vue",
+      "type": "language-framework",
+      "description": "Vue, Nuxt, Pinia, Vue Router, VueUse, UnoCSS, and Vue testing skills.",
+      "signals": ["*.vue", "nuxt.config.ts", "nuxt.config.js", "vue", "nuxt", "pinia"]
+    },
+    {
+      "id": "infra",
+      "label": "Infrastructure",
+      "type": "domain",
+      "description": "Terraform/OpenTofu review, debugging, CI, state, security, testing, and rollback guidance.",
+      "signals": ["*.tf", "*.tfvars", "*.tofu", "*.tofuvars"]
+    },
+    {
+      "id": "workflow",
+      "label": "Workflow",
+      "type": "persona-task",
+      "description": "Architecture diagrams, handoffs, requirements clarity, QA planning, docs, OpenAPI TypeScript, and React workflow skills."
     },
     {
       "id": "all",

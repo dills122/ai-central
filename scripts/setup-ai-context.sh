@@ -8,7 +8,8 @@ Usage: setup-ai-context.sh TARGET_DIR [options]
 Options:
   --yes                    Use detected recommendations without prompts
   --profiles LIST          Comma-separated steering profiles: base,angular,payload,frontend-design
-  --bundles LIST           Comma-separated skill bundles: core,engineering,rust,product,planning,frontend,all
+  --bundles LIST           Comma-separated skill bundles: core,engineering,rust,product,planning,frontend,frontend-vue,infra,workflow,all
+  --mode copy|link          copy installs files; link symlinks reusable templates and skills
   --skip-profiles LIST     Comma-separated profiles to exclude
   --skip-bundles LIST      Comma-separated bundles to exclude
   --dry-run                Show what would run without writing files
@@ -17,6 +18,7 @@ Options:
 Examples:
   ./scripts/setup-ai-context.sh /path/to/project
   ./scripts/setup-ai-context.sh /path/to/project --yes
+  ./scripts/setup-ai-context.sh /path/to/project --yes --mode link
   ./scripts/setup-ai-context.sh /path/to/project --profiles base,angular --bundles core,frontend
 EOF
 }
@@ -110,6 +112,27 @@ prompt_csv() {
   esac
 }
 
+prompt_mode() {
+  current=$1
+  if [ ! -t 0 ]; then
+    printf "%s" "$current"
+    return 0
+  fi
+  printf "Install mode\n" >&2
+  printf "Allowed: copy,link\n" >&2
+  printf "Default: %s\n" "$current" >&2
+  printf "Enter install mode, blank for default: " >&2
+  read answer || answer=
+  case "$answer" in
+    "") printf "%s" "$current" ;;
+    copy|link) printf "%s" "$answer" ;;
+    *)
+      echo "Unknown mode: $answer" >&2
+      exit 2
+      ;;
+  esac
+}
+
 detect_profiles() {
   target_dir=$1
   profiles=base
@@ -150,6 +173,20 @@ detect_bundles() {
     bundles=$(append_unique "$bundles" "frontend")
   fi
 
+  if find "$target_dir" -maxdepth 5 \( -name '*.vue' -o -name nuxt.config.ts -o -name nuxt.config.js -o -name vite.config.ts -o -name vite.config.js \) -type f | grep -q .; then
+    bundles=$(append_unique "$bundles" "frontend")
+  fi
+
+  if find "$target_dir" -maxdepth 5 \( -name '*.vue' -o -name nuxt.config.ts -o -name nuxt.config.js \) -type f | grep -q .; then
+    bundles=$(append_unique "$bundles" "frontend-vue")
+  elif find "$target_dir" -maxdepth 3 -name package.json -type f -exec grep -E '"(vue|nuxt|pinia|@vueuse/core)"[[:space:]]*:' {} \; | grep -q .; then
+    bundles=$(append_unique "$bundles" "frontend-vue")
+  fi
+
+  if find "$target_dir" -maxdepth 5 \( -name '*.tf' -o -name '*.tfvars' -o -name '*.tofu' -o -name '*.tofuvars' \) -type f | grep -q .; then
+    bundles=$(append_unique "$bundles" "infra")
+  fi
+
   if [ -d "$target_dir/docs" ] || [ -d "$target_dir/product" ]; then
     bundles=$(append_unique "$bundles" "product")
   fi
@@ -160,6 +197,7 @@ detect_bundles() {
 target_dir=
 yes=0
 dry_run=0
+mode=copy
 profiles_arg=
 bundles_arg=
 skip_profiles=
@@ -187,6 +225,11 @@ while [ "$#" -gt 0 ]; do
     --bundles)
       [ "$#" -ge 2 ] || { usage; exit 2; }
       bundles_arg=$2
+      shift 2
+      ;;
+    --mode)
+      [ "$#" -ge 2 ] || { usage; exit 2; }
+      mode=$2
       shift 2
       ;;
     --skip-profiles)
@@ -225,7 +268,16 @@ if [ ! -d "$target_dir" ]; then
 fi
 
 allowed_profiles=base,angular,payload,frontend-design
-allowed_bundles=core,engineering,rust,product,planning,frontend,all
+allowed_bundles=core,engineering,rust,product,planning,frontend,frontend-vue,infra,workflow,all
+
+case "$mode" in
+  copy|link) ;;
+  *)
+    echo "Unknown mode: $mode" >&2
+    usage
+    exit 2
+    ;;
+esac
 
 validate_csv "$profiles_arg" "$allowed_profiles" "profile"
 validate_csv "$bundles_arg" "$allowed_bundles" "bundle"
@@ -250,6 +302,7 @@ if [ "$yes" -ne 1 ]; then
   if prompt_default_yes "Customize selections?"; then
     profiles=$(prompt_csv "Profiles to install" "$profiles" "$allowed_profiles")
     bundles=$(prompt_csv "Skill bundles to install" "$bundles" "$allowed_bundles")
+    mode=$(prompt_mode "$mode")
   fi
 fi
 
@@ -258,6 +311,7 @@ bundles=$(remove_items "$bundles" "$skip_bundles")
 
 echo "Selected profiles: ${profiles:-none}"
 echo "Selected bundles: ${bundles:-none}"
+echo "Install mode: $mode"
 
 run_cmd() {
   if [ "$dry_run" -eq 1 ]; then
@@ -275,12 +329,12 @@ old_ifs=$IFS
 IFS=,
 for profile in $profiles; do
   [ -n "$profile" ] || continue
-  run_cmd "$repo_root/scripts/scaffold-ai-context.sh" "$target_dir" --profile "$profile"
+  run_cmd "$repo_root/scripts/scaffold-ai-context.sh" "$target_dir" --profile "$profile" --mode "$mode"
 done
 
 for bundle in $bundles; do
   [ -n "$bundle" ] || continue
-  run_cmd "$repo_root/scripts/install-skill-bundle.sh" "$target_dir" --bundle "$bundle"
+  run_cmd "$repo_root/scripts/install-skill-bundle.sh" "$target_dir" --bundle "$bundle" --mode "$mode"
 done
 IFS=$old_ifs
 

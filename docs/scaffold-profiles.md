@@ -6,6 +6,12 @@ The scaffold script installs non-overwriting AI context into a target project.
 ./scripts/scaffold-ai-context.sh /path/to/project --profile base
 ```
 
+Use `--mode link` to symlink reusable steering while still copying repo-specific files:
+
+```sh
+./scripts/scaffold-ai-context.sh /path/to/project --profile frontend-design --mode link
+```
+
 ## Base
 
 Installs:

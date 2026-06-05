@@ -29,6 +29,12 @@ Run the guided setup for a new or existing project:
 ./scripts/setup-ai-context.sh /path/to/project
 ```
 
+Use symlinks for reusable skills and generic steering:
+
+```sh
+./scripts/setup-ai-context.sh /path/to/project --yes --mode link
+```
+
 Create baseline Codex context in another project:
 
 ```sh
@@ -43,7 +49,7 @@ Install reviewed skill bundles:
 ./scripts/install-skill-bundle.sh /path/to/project --bundle core
 ```
 
-Bundles: `core`, `engineering`, `rust`, `product`, `planning`, `frontend`, `all`.
+Bundles: `core`, `engineering`, `rust`, `product`, `planning`, `frontend`, `frontend-vue`, `infra`, `workflow`, `all`.
 
 Refresh collected source material from local repos:
 
@@ -62,6 +68,7 @@ Run local checks:
 ```sh
 ./scripts/check.sh
 ./scripts/setup-ai-context.sh /path/to/project --yes --dry-run
+./scripts/setup-ai-context.sh /path/to/project --yes --mode link --dry-run
 ./scripts/refresh-source-manifest.sh
 ./scripts/collect-ai-context.sh /Users/dsteele/repos
 ./scripts/install-skill-bundle.sh /path/to/project --bundle core
@@ -79,6 +86,7 @@ Run local checks:
 
 - [Collection workflow](docs/collection-workflow.md)
 - [Setup CLI](docs/setup-cli.md)
+- [Link mode](docs/link-mode.md)
 - [Scaffold profiles](docs/scaffold-profiles.md)
 - [Template authoring](docs/template-authoring.md)
 - [Template taxonomy](docs/template-taxonomy.md)

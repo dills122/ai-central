@@ -14,6 +14,10 @@ Detailed source attribution, reviewed commits, imported locations, and notes are
 | `phuryn/pm-skills` | MIT | Imported selected product-management skills |
 | `alirezarezvani/claude-skills` | MIT | Imported selected engineering and product skills |
 | `pbakaus/impeccable` | Apache-2.0 | Adapted frontend design-review guidance |
+| `antfu/skills` | MIT | Imported selected frontend/toolchain and Vue ecosystem skills |
+| `addyosmani/web-quality-skills` | MIT | Imported web quality audit skills |
+| `antonbabenko/terraform-skill` | Apache-2.0 | Imported Terraform/OpenTofu skill and references |
+| `softaworks/agent-toolkit` | MIT | Imported selected workflow, architecture, documentation, QA, and React skills |
 
 Copies of upstream licenses are stored under `templates/skills/imported/licenses/`.
 
