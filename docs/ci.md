@@ -15,7 +15,7 @@ This repo uses GitHub Actions for baseline validation and skill security scannin
 
 - `policy: balanced`
 - `fail_on_severity: critical`
-- `lenient: true`
+- `lenient: false`
 - static analysis only; no LLM, cloud, or behavioral analyzers
 
 This is intentionally conservative. The repo imports a large amount of third-party skill content, so the first goal is to establish a stable baseline without blocking normal work on noisy high-severity findings.
@@ -26,4 +26,3 @@ After reviewing initial GitHub Actions results, consider:
 2. Enabling `use_behavioral: true`.
 3. Adding a custom scanner policy for known acceptable imported patterns.
 4. Enabling LLM analysis only if the repo has an agreed secret-management policy for `SKILL_SCANNER_LLM_API_KEY`.
-

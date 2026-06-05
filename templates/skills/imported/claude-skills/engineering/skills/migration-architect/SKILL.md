@@ -453,13 +453,15 @@ Metrics:
 migration_validation:
   stage: test
   script:
-    - python scripts/compatibility_checker.py --before=old_schema.json --after=new_schema.json
-    - python scripts/migration_planner.py --config=migration_config.json --validate
+    - run project-approved schema compatibility checks
+    - validate migration plan artifacts
   artifacts:
     reports:
       - compatibility_report.json
       - migration_plan.json
 ```
+
+Executable helper scripts from the upstream source are intentionally omitted from this repo after skill security scanning flagged unsafe SQL string-construction patterns. Use this skill as planning guidance and generate project-specific validation scripts only after review.
 
 ### Infrastructure as Code
 ```terraform

@@ -23,7 +23,6 @@ jobs:
       skill_path: templates/skills
       policy: balanced
       fail_on_severity: critical
-      lenient: true
+      lenient: false
       use_behavioral: false
       use_llm: false
-
