@@ -85,6 +85,7 @@ Run local checks:
 ## Docs
 
 - [Collection workflow](docs/collection-workflow.md)
+- [CI](docs/ci.md)
 - [Setup CLI](docs/setup-cli.md)
 - [Link mode](docs/link-mode.md)
 - [Scaffold profiles](docs/scaffold-profiles.md)
