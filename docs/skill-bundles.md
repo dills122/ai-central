@@ -21,6 +21,7 @@ Use `--mode link` to symlink reusable skill directories instead of copying them:
 | Bundle | Contents |
 | --- | --- |
 | `core` | Lightweight planning, frontend review, context engineering, spec, planning, TDD, review, debugging, source-driven development |
+| `brevity` | Caveman token-saving skills for terse replies, help, commit messages, code review comments, and memory-file compression |
 | `engineering` | All `addyosmani/agent-skills` plus selected engineering skills from `alirezarezvani/claude-skills` |
 | `rust` | All imported Rust Agentic Skills, prefixed as `rust-*` |
 | `product` | Selected non-duplicate PM Skills plus selected product-team Claude Skills |
@@ -30,6 +31,8 @@ Use `--mode link` to symlink reusable skill directories instead of copying them:
 | `infra` | Terraform/OpenTofu review, debugging, CI, state, security, testing, and rollback guidance |
 | `workflow` | Architecture diagrams, handoff docs, requirements clarity, QA planning, README writing, Mermaid diagrams, OpenAPI TypeScript, React workflow skills |
 | `all` | Installs every bundle above |
+
+`brevity` intentionally installs only portable skill content. It does not run the upstream global installer, add Claude Code hooks/statusline files, or register the optional MCP shrink proxy.
 
 ## Naming
 

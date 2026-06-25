@@ -15,6 +15,7 @@ This repo includes third-party skills and adapted guidance from reviewed upstrea
 | `addyosmani/web-quality-skills` | `7b59d48aaf1f793935002f4998dfccc656f40839` | MIT | `templates/skills/imported/web-quality-skills/` | Copied all 6 web quality skills. |
 | `antonbabenko/terraform-skill` | `b59d2be9ff4db8f835c8459e05e325ba11e3a21f` | Apache-2.0 | `templates/skills/imported/terraform-skill/` | Copied Terraform/OpenTofu skill with references. |
 | `softaworks/agent-toolkit` | `3027f20f3181758385a1bb8c022d4041dfb4de84` | MIT | `templates/skills/imported/agent-toolkit/` | Copied selected source skills only; excluded duplicated `dist/` copies and provider/social/persona skills. |
+| `JuliusBrussee/caveman` | `25d22f864ad68cc447a4cb93aefde918aa4aec9f` | MIT | `templates/skills/imported/caveman/` | Copied portable skills and agent presets; installer exposes portable skills through the `brevity` bundle. |
 
 ## Adapted Sources
 

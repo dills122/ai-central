@@ -36,7 +36,7 @@ Use explicit selections:
 ```sh
 ./scripts/setup-ai-context.sh /path/to/project \
   --profiles base,angular,frontend-design \
-  --bundles core,frontend,product
+  --bundles core,brevity,frontend,product
 ```
 
 Exclude recommendations:
@@ -71,6 +71,7 @@ Bundles install reusable skills:
 | Bundle | Purpose |
 | --- | --- |
 | `core` | Safe default task, planning, review, debugging, source-driven, and frontend review skills |
+| `brevity` | Caveman token-saving skills for terse replies, commit messages, review comments, help, and memory-file compression |
 | `engineering` | Broader engineering lifecycle, architecture, CI, security, observability, migration, and tooling skills |
 | `rust` | Rust implementation, lint, debug, security, Pest, and RON skills |
 | `product` | PM, research, analytics, GTM, strategy, and code-to-PRD skills |

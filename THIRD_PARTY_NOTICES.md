@@ -18,6 +18,7 @@ Detailed source attribution, reviewed commits, imported locations, and notes are
 | `addyosmani/web-quality-skills` | MIT | Imported web quality audit skills |
 | `antonbabenko/terraform-skill` | Apache-2.0 | Imported Terraform/OpenTofu skill and references |
 | `softaworks/agent-toolkit` | MIT | Imported selected workflow, architecture, documentation, QA, and React skills |
+| `JuliusBrussee/caveman` | MIT | Imported token-saving communication, commit, review, help, and memory-compression skills |
 
 Copies of upstream licenses are stored under `templates/skills/imported/licenses/`.
 

@@ -49,6 +49,13 @@
       "recommended": true
     },
     {
+      "id": "brevity",
+      "label": "Brevity",
+      "type": "workflow",
+      "description": "Caveman token-saving skills for terse agent replies, help, commit messages, code review comments, and memory-file compression.",
+      "recommended": true
+    },
+    {
       "id": "engineering",
       "label": "Engineering",
       "type": "persona-task",
