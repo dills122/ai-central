@@ -8,7 +8,7 @@ Usage: setup-ai-context.sh TARGET_DIR [options]
 Options:
   --yes                    Use detected recommendations without prompts
   --profiles LIST          Comma-separated steering profiles: base,angular,payload,frontend-design
-  --bundles LIST           Comma-separated skill bundles: core,engineering,rust,product,planning,frontend,frontend-vue,infra,workflow,all
+  --bundles LIST           Comma-separated skill bundles: core,brevity,engineering,rust,product,planning,frontend,frontend-vue,infra,workflow,all
   --mode copy|link          copy installs files; link symlinks reusable templates and skills
   --skip-profiles LIST     Comma-separated profiles to exclude
   --skip-bundles LIST      Comma-separated bundles to exclude
@@ -19,7 +19,7 @@ Examples:
   ./scripts/setup-ai-context.sh /path/to/project
   ./scripts/setup-ai-context.sh /path/to/project --yes
   ./scripts/setup-ai-context.sh /path/to/project --yes --mode link
-  ./scripts/setup-ai-context.sh /path/to/project --profiles base,angular --bundles core,frontend
+  ./scripts/setup-ai-context.sh /path/to/project --profiles base,angular --bundles core,brevity,frontend
 EOF
 }
 
@@ -155,7 +155,7 @@ detect_profiles() {
 
 detect_bundles() {
   target_dir=$1
-  bundles=core
+  bundles=core,brevity
 
   if [ -f "$target_dir/Cargo.toml" ] || find "$target_dir" -maxdepth 4 -name Cargo.toml -type f | grep -q .; then
     bundles=$(append_unique "$bundles" "rust")
@@ -268,7 +268,7 @@ if [ ! -d "$target_dir" ]; then
 fi
 
 allowed_profiles=base,angular,payload,frontend-design
-allowed_bundles=core,engineering,rust,product,planning,frontend,frontend-vue,infra,workflow,all
+allowed_bundles=core,brevity,engineering,rust,product,planning,frontend,frontend-vue,infra,workflow,all
 
 case "$mode" in
   copy|link) ;;

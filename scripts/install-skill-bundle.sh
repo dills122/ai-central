@@ -2,7 +2,7 @@
 set -eu
 
 usage() {
-  echo "Usage: $0 TARGET_DIR [--bundle core|engineering|rust|product|planning|frontend|frontend-vue|infra|workflow|all] [--mode copy|link]" >&2
+  echo "Usage: $0 TARGET_DIR [--bundle core|brevity|engineering|rust|product|planning|frontend|frontend-vue|infra|workflow|all] [--mode copy|link]" >&2
 }
 
 if [ "$#" -lt 1 ]; then
@@ -41,7 +41,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 case "$bundle" in
-  core|engineering|rust|product|planning|frontend|frontend-vue|infra|workflow|all) ;;
+  core|brevity|engineering|rust|product|planning|frontend|frontend-vue|infra|workflow|all) ;;
   *)
     echo "Unknown bundle: $bundle" >&2
     usage
@@ -110,6 +110,14 @@ install_core() {
   install_skill "$repo_root/templates/skills/imported/agent-skills/source-driven-development" "source-driven-development"
 }
 
+install_brevity() {
+  install_skill "$repo_root/templates/skills/imported/caveman/skills/caveman" "caveman"
+  install_skill "$repo_root/templates/skills/imported/caveman/skills/caveman-help" "caveman-help"
+  install_skill "$repo_root/templates/skills/imported/caveman/skills/caveman-commit" "caveman-commit"
+  install_skill "$repo_root/templates/skills/imported/caveman/skills/caveman-review" "caveman-review"
+  install_skill "$repo_root/templates/skills/imported/caveman/skills/caveman-compress" "caveman-compress"
+}
+
 install_engineering() {
   install_find_skills "$repo_root/templates/skills/imported/agent-skills" ""
   install_find_skills "$repo_root/templates/skills/imported/claude-skills/engineering" "claude-"
@@ -169,6 +177,9 @@ case "$bundle" in
   core)
     install_core
     ;;
+  brevity)
+    install_brevity
+    ;;
   engineering)
     install_engineering
     ;;
@@ -195,6 +206,7 @@ case "$bundle" in
     ;;
   all)
     install_core
+    install_brevity
     install_engineering
     install_rust
     install_product

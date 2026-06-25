@@ -49,7 +49,7 @@ Install reviewed skill bundles:
 ./scripts/install-skill-bundle.sh /path/to/project --bundle core
 ```
 
-Bundles: `core`, `engineering`, `rust`, `product`, `planning`, `frontend`, `frontend-vue`, `infra`, `workflow`, `all`.
+Bundles: `core`, `brevity`, `engineering`, `rust`, `product`, `planning`, `frontend`, `frontend-vue`, `infra`, `workflow`, `all`.
 
 Refresh collected source material from local repos:
 

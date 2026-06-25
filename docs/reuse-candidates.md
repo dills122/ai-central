@@ -54,3 +54,9 @@ Suggested next review question: decide whether these should live as Codex skills
 See `docs/external-skill-review.md` for recommendations from locally cloned upstream skill repositories.
 
 Imported and adapted skills now live under `templates/skills/`. Attribution is maintained in `docs/skill-attribution.md` and `THIRD_PARTY_NOTICES.md`.
+
+### `JuliusBrussee/caveman`
+
+Why: Portable token-saving skills fit this repo's goal of reusable agent context across projects. The main `caveman` skill can be installed everywhere without running machine-wide hooks, while commit/review/help/compress skills give focused workflows for shorter outputs and lower context cost.
+
+Integration status: imported upstream skills and agent presets under `templates/skills/imported/caveman/`; exposed portable skills through the `brevity` bundle. The upstream global installer, Claude Code hooks/statusline, and optional MCP shrink proxy are not scaffolded by default.
