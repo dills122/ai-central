@@ -49,7 +49,7 @@ Install reviewed skill bundles:
 ./scripts/install-skill-bundle.sh /path/to/project --bundle core
 ```
 
-Bundles: `core`, `brevity`, `engineering`, `rust`, `product`, `planning`, `frontend`, `frontend-vue`, `infra`, `workflow`, `all`.
+Bundles: `core`, `brevity`, `engineering`, `rust`, `product`, `planning`, `frontend`, `frontend-tooling`, `frontend-vue`, `hallmark`, `infra`, `workflow`, `all`.
 
 Refresh collected source material from local repos:
 
@@ -93,6 +93,7 @@ Run local checks:
 - [Template taxonomy](docs/template-taxonomy.md)
 - [Skill bundles](docs/skill-bundles.md)
 - [External skill review](docs/external-skill-review.md)
+- [Context-management audit (2026-07)](docs/context-management-audit-2026-07.md)
 - [External source policy](docs/external-source-policy.md)
 - [Skill attribution](docs/skill-attribution.md)
 - [Contributing](CONTRIBUTING.md)

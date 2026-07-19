@@ -76,8 +76,10 @@ Bundles install reusable skills:
 | `rust` | Rust implementation, lint, debug, security, Pest, and RON skills |
 | `product` | PM, research, analytics, GTM, strategy, and code-to-PRD skills |
 | `planning` | Full and lightweight planning-file workflows |
-| `frontend` | Frontend, browser testing, accessibility, Playwright review, design-system, web quality, and frontend toolchain skills |
+| `frontend` | General frontend design, browser testing, accessibility, Playwright review, design-system, and web quality skills |
+| `frontend-tooling` | Vite, Vitest, pnpm, Turborepo, VitePress, and Slidev; select only for matching projects |
 | `frontend-vue` | Vue, Nuxt, Pinia, Vue Router, VueUse, UnoCSS, and Vue testing skills |
+| `hallmark` | Creative-direction workflow for intentional pages, redesigns, audits, and design studies |
 | `infra` | Terraform/OpenTofu review, debugging, CI, state, security, testing, and rollback guidance |
 | `workflow` | Architecture diagrams, handoffs, requirements clarity, QA planning, docs, Mermaid, OpenAPI TypeScript, and React workflow skills |
 | `all` | Everything above |

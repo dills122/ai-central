@@ -2,7 +2,7 @@
 set -eu
 
 usage() {
-  echo "Usage: $0 TARGET_DIR [--bundle core|brevity|engineering|rust|product|planning|frontend|frontend-vue|infra|workflow|all] [--mode copy|link]" >&2
+  echo "Usage: $0 TARGET_DIR [--bundle core|brevity|engineering|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|workflow|all] [--mode copy|link]" >&2
 }
 
 if [ "$#" -lt 1 ]; then
@@ -41,7 +41,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 case "$bundle" in
-  core|brevity|engineering|rust|product|planning|frontend|frontend-vue|infra|workflow|all) ;;
+  core|brevity|engineering|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|workflow|all) ;;
   *)
     echo "Unknown bundle: $bundle" >&2
     usage
@@ -146,12 +146,19 @@ install_frontend() {
   install_find_skills "$repo_root/templates/skills/imported/claude-skills/engineering-team/playwright-pro" "claude-playwright-"
   install_find_skills "$repo_root/templates/skills/imported/claude-skills/product-team/skills/ui-design-system" "claude-"
   install_find_skills "$repo_root/templates/skills/imported/web-quality-skills" "web-"
+}
+
+install_frontend_tooling() {
   install_skill "$repo_root/templates/skills/imported/antfu-skills/vite" "vite"
   install_skill "$repo_root/templates/skills/imported/antfu-skills/vitest" "vitest"
   install_skill "$repo_root/templates/skills/imported/antfu-skills/pnpm" "pnpm"
   install_skill "$repo_root/templates/skills/imported/antfu-skills/turborepo" "turborepo"
   install_skill "$repo_root/templates/skills/imported/antfu-skills/vitepress" "vitepress"
   install_skill "$repo_root/templates/skills/imported/antfu-skills/slidev" "slidev"
+}
+
+install_hallmark() {
+  install_skill "$repo_root/templates/skills/adapted/hallmark-design" "hallmark-design"
 }
 
 install_frontend_vue() {
@@ -195,8 +202,14 @@ case "$bundle" in
   frontend)
     install_frontend
     ;;
+  frontend-tooling)
+    install_frontend_tooling
+    ;;
   frontend-vue)
     install_frontend_vue
+    ;;
+  hallmark)
+    install_hallmark
     ;;
   infra)
     install_infra
@@ -212,7 +225,9 @@ case "$bundle" in
     install_product
     install_planning
     install_frontend
+    install_frontend_tooling
     install_frontend_vue
+    install_hallmark
     install_infra
     install_workflow
     ;;
