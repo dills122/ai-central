@@ -86,8 +86,14 @@
       "id": "frontend",
       "label": "Frontend",
       "type": "domain",
-      "description": "Frontend, browser testing, accessibility, Playwright review, design-system, web quality, and modern frontend toolchain skills.",
+      "description": "General frontend design, browser testing, accessibility, Playwright review, design-system, and web quality skills.",
       "signals": ["*.tsx", "*.jsx", "*.component.ts", "angular.json", "vite.config.ts", "vite.config.js"]
+    },
+    {
+      "id": "frontend-tooling",
+      "label": "Frontend Tooling",
+      "type": "tooling",
+      "description": "Vite, Vitest, pnpm, Turborepo, VitePress, and Slidev guidance; choose only for matching tools."
     },
     {
       "id": "frontend-vue",
@@ -95,6 +101,12 @@
       "type": "language-framework",
       "description": "Vue, Nuxt, Pinia, Vue Router, VueUse, UnoCSS, and Vue testing skills.",
       "signals": ["*.vue", "nuxt.config.ts", "nuxt.config.js", "vue", "nuxt", "pinia"]
+    },
+    {
+      "id": "hallmark",
+      "label": "Hallmark Design",
+      "type": "domain",
+      "description": "Creative-direction workflow for intentional pages, redesigns, audits, and design studies."
     },
     {
       "id": "infra",

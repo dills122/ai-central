@@ -27,6 +27,7 @@ These upstream repositories were cloned locally for review:
 | `addyosmani/web-quality-skills` | `external/web-quality-skills` | MIT | 6 | Import/adapt into frontend quality bundle |
 | `antonbabenko/terraform-skill` | `external/terraform-skill` | Apache-2.0 | 1 | Import/adapt into infrastructure bundle |
 | `softaworks/agent-toolkit` | `external/agent-toolkit` | MIT | 86 total; 43 source plus `dist/` copies | Selectively mine source skills only |
+| `Nutlope/hallmark` | `external/hallmark` | MIT | 1 | Adapt as an opt-in creative-direction skill; do not add to default frontend context |
 
 ## Reviewed Commits
 
@@ -51,6 +52,7 @@ These upstream repositories were cloned locally for review:
 | `addyosmani/web-quality-skills` | `7b59d48aaf1f793935002f4998dfccc656f40839` |
 | `antonbabenko/terraform-skill` | `b59d2be9ff4db8f835c8459e05e325ba11e3a21f` |
 | `softaworks/agent-toolkit` | `3027f20f3181758385a1bb8c022d4041dfb4de84` |
+| `Nutlope/hallmark` | `aeb42fb354ff4efa36ab475773a082315a3af2ce` |
 
 ## Priority 1: Integrate Soon
 
