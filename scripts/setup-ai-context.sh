@@ -7,7 +7,7 @@ Usage: setup-ai-context.sh TARGET_DIR [options]
 
 Options:
   --yes                    Use detected recommendations without prompts
-  --profiles LIST          Comma-separated steering profiles: base,angular,payload,frontend-design
+  --profiles LIST          Comma-separated steering profiles: base,angular,payload,frontend-design,infrastructure-opentofu
   --bundles LIST           Comma-separated skill bundles: core,brevity,engineering,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,workflow,all
   --mode copy|link          copy installs files; link symlinks reusable templates and skills
   --skip-profiles LIST     Comma-separated profiles to exclude
@@ -150,6 +150,10 @@ detect_profiles() {
     profiles=$(append_unique "$profiles" "frontend-design")
   fi
 
+  if find "$target_dir" -maxdepth 5 \( -name '*.tf' -o -name '*.tfvars' -o -name '*.tofu' -o -name '*.tofuvars' \) -type f | grep -q .; then
+    profiles=$(append_unique "$profiles" "infrastructure-opentofu")
+  fi
+
   printf "%s" "$profiles"
 }
 
@@ -263,7 +267,7 @@ if [ ! -d "$target_dir" ]; then
   exit 1
 fi
 
-allowed_profiles=base,angular,payload,frontend-design
+allowed_profiles=base,angular,payload,frontend-design,infrastructure-opentofu
 allowed_bundles=core,brevity,engineering,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,workflow,all
 
 case "$mode" in

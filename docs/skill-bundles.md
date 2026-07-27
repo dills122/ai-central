@@ -49,3 +49,7 @@ Some imported skills are prefixed during installation to avoid collisions:
 - `toolkit-*` for selected Agent Toolkit skills
 
 The original copied sources remain under `templates/skills/imported/`.
+
+Copied third-party skill payloads include their applicable license file. In particular, the
+`infra` bundle installs `terraform-skill/LICENSE` beside the skill and references so downstream
+project copies retain the Apache-2.0 terms.

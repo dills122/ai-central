@@ -2,7 +2,7 @@
 set -eu
 
 usage() {
-  echo "Usage: $0 TARGET_DIR [--profile base|angular|payload|frontend-design] [--mode copy|link]" >&2
+  echo "Usage: $0 TARGET_DIR [--profile base|angular|payload|frontend-design|infrastructure-opentofu] [--mode copy|link]" >&2
 }
 
 if [ "$#" -lt 1 ]; then
@@ -41,7 +41,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 case "$profile" in
-  base|angular|payload|frontend-design) ;;
+  base|angular|payload|frontend-design|infrastructure-opentofu) ;;
   *)
     echo "Unknown profile: $profile" >&2
     usage
@@ -108,4 +108,8 @@ fi
 if [ "$profile" = "payload" ]; then
   mkdir -p "$target_dir/.cursor/rules"
   install_reusable_if_missing "$repo_root/templates/cursor-rules/payload-overview.md" "$target_dir/.cursor/rules/payload-overview.md"
+fi
+
+if [ "$profile" = "infrastructure-opentofu" ]; then
+  copy_if_missing "$repo_root/templates/steering/infrastructure-opentofu-steering.md" "$target_dir/.codex/steering/infrastructure-opentofu-steering.md"
 fi

@@ -47,6 +47,19 @@ Includes everything from `base`, plus:
 
 Use for Payload CMS projects or app folders.
 
+## Infrastructure And OpenTofu
+
+Includes everything from `base`, plus:
+
+- `.codex/steering/infrastructure-opentofu-steering.md`
+
+Use for repositories with OpenTofu/Terraform compositions, modules, remote state, provider-backed
+CI, or infrastructure operator workflows. Replace its project, version, platform, and command
+placeholders before treating the installed file as enforceable policy.
+
+The profile supplies durable repository steering. Pair it with the opt-in `infra` skill bundle
+when agents also need the detailed Terraform/OpenTofu diagnosis and implementation workflow.
+
 ## Idempotency
 
 The script skips existing files. It does not merge or overwrite.
