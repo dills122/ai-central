@@ -63,6 +63,7 @@ Profiles install steering/context files:
 | `angular` | Angular-specific steering |
 | `payload` | Payload CMS Cursor rules |
 | `frontend-design` | Frontend UI quality, accessibility, responsive, and interaction-state steering |
+| `infrastructure-opentofu` | OpenTofu state, secrets, validation, plan/apply, recovery, and network-safety steering |
 
 ## Bundles
 

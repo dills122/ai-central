@@ -79,3 +79,31 @@ High-value reusable skills include:
 - AI files below ignored dependency folders.
 - Generic repository docs unless they were in known AI context locations.
 - Temporary third-party skill dumps under `wap-labs/tmp`; these should be reviewed separately before importing because provenance and licensing may differ.
+
+## Promoted Infrastructure Steering
+
+- `templates/steering/infrastructure-opentofu-steering.md` is a normalized, provider-neutral
+  starter for OpenTofu lifecycle, state, secret, CI, recovery, and network-safety rules.
+- The `infra` bundle supplies the reviewed `terraform-skill` procedural workflow and now carries
+  its Apache-2.0 license into installed project copies.
+- Raw provider configuration, state, plans, backend inputs, tfvars, and secrets are excluded.
+
+### Focused Wap Labs Refresh — 2026-07-26
+
+Feature-source provenance:
+
+- repository: `dills122/wap-labs`
+- branch: `codex/inf-101-opentofu-steering-followup`
+- commit: `acee3c772f885d957dc85d7d116fa08c73d3e2f8`
+- review: draft PR `dills122/wap-labs#441`
+- base checkpoint: merged INF-101 commit `26d50a88`
+- status at collection: feature source under review; not represented as landed `main`
+
+Collected through a temporary project-name-preserving allowlist root with
+`scripts/collect-ai-context.sh`:
+
+- `collected/misc/wap-labs/AGENTS.md`
+- `collected/misc/wap-labs/.codex/steering/infrastructure-opentofu-steering.md`
+
+Only these two AI-context files were collected. The source tree's implementation HCL, workflows,
+runtime backend inputs, generated artifacts, state, plans, tfvars, and credentials were not copied.

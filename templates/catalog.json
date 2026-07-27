@@ -38,6 +38,13 @@
       "type": "framework",
       "description": "Payload CMS Cursor rules and implementation guidance.",
       "signals": ["payload.config.ts", "payload.config.js"]
+    },
+    {
+      "id": "infrastructure-opentofu",
+      "label": "Infrastructure and OpenTofu",
+      "type": "platform",
+      "description": "State, secrets, validation, plan/apply, recovery, and network-safety steering for OpenTofu infrastructure.",
+      "signals": ["*.tf", "*.tfvars", "*.tofu", "*.tofuvars"]
     }
   ],
   "bundles": [

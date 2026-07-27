@@ -41,7 +41,9 @@ Create baseline Codex context in another project:
 ./scripts/scaffold-ai-context.sh /path/to/project --profile angular
 ```
 
-Use `--profile base` for stack-neutral files, `--profile angular` for Angular-oriented steering, `--profile frontend-design` for UI quality steering, or `--profile payload` for Payload CMS Cursor rules.
+Use `--profile base` for stack-neutral files, `--profile angular` for Angular-oriented steering,
+`--profile frontend-design` for UI quality steering, `--profile payload` for Payload CMS Cursor
+rules, or `--profile infrastructure-opentofu` for infrastructure lifecycle and safety steering.
 
 Install reviewed skill bundles:
 

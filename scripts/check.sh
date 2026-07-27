@@ -14,6 +14,10 @@ tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-check.XXXXXX")
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile angular >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile angular >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile payload >/dev/null
+./scripts/scaffold-ai-context.sh "$tmp_dir" --profile infrastructure-opentofu >/dev/null
+infrastructure_hash=$(shasum -a 256 "$tmp_dir/.codex/steering/infrastructure-opentofu-steering.md")
+./scripts/scaffold-ai-context.sh "$tmp_dir" --profile infrastructure-opentofu >/dev/null
+test "$infrastructure_hash" = "$(shasum -a 256 "$tmp_dir/.codex/steering/infrastructure-opentofu-steering.md")"
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle core >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle core >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle brevity >/dev/null
@@ -29,6 +33,7 @@ test -f "$tmp_dir/AGENTS.md"
 test -f "$tmp_dir/.codex/steering/repository-steering.md"
 test -f "$tmp_dir/.codex/steering/angular-steering.md"
 test -f "$tmp_dir/.cursor/rules/payload-overview.md"
+test -f "$tmp_dir/.codex/steering/infrastructure-opentofu-steering.md"
 test -f "$tmp_dir/.codex/skills/planning-files-lite/SKILL.md"
 test -f "$tmp_dir/.codex/skills/frontend-design-review/SKILL.md"
 test -f "$tmp_dir/.codex/skills/context-engineering/SKILL.md"
@@ -37,6 +42,7 @@ test -f "$tmp_dir/.codex/skills/caveman-compress/SKILL.md"
 test -f "$tmp_dir/.codex/skills/vue/SKILL.md"
 test -f "$tmp_dir/.codex/skills/hallmark-design/SKILL.md"
 test -f "$tmp_dir/.codex/skills/terraform-skill/SKILL.md"
+test -f "$tmp_dir/.codex/skills/terraform-skill/LICENSE"
 test -f "$tmp_dir/.codex/skills/toolkit-c4-architecture/SKILL.md"
 
 frontend_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-frontend-check.XXXXXX")
@@ -50,6 +56,7 @@ touch "$setup_dir/package.json" "$setup_dir/angular.json" "$setup_dir/main.tf" "
 ./scripts/setup-ai-context.sh "$setup_dir" --yes >/dev/null
 test -f "$setup_dir/AGENTS.md"
 test -f "$setup_dir/.codex/steering/angular-steering.md"
+test -f "$setup_dir/.codex/steering/infrastructure-opentofu-steering.md"
 test -f "$setup_dir/.codex/skills/frontend-design-review/SKILL.md"
 test ! -e "$setup_dir/.codex/skills/caveman"
 test ! -e "$setup_dir/.codex/skills/api-and-interface-design"
@@ -69,5 +76,13 @@ test -f "$link_dir/.codex/skills/context-engineering/SKILL.md"
 ./scripts/install-skill-bundle.sh "$link_dir" --bundle infra --mode link >/dev/null
 test -L "$link_dir/.codex/skills/terraform-skill"
 test -f "$link_dir/.codex/skills/terraform-skill/SKILL.md"
+
+existing_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-existing-check.XXXXXX")
+mkdir -p "$existing_dir/.codex/steering"
+printf '%s\n' 'project-owned infrastructure steering' >"$existing_dir/.codex/steering/infrastructure-opentofu-steering.md"
+existing_hash=$(shasum -a 256 "$existing_dir/.codex/steering/infrastructure-opentofu-steering.md")
+./scripts/scaffold-ai-context.sh "$existing_dir" --profile infrastructure-opentofu >/dev/null
+./scripts/scaffold-ai-context.sh "$existing_dir" --profile infrastructure-opentofu >/dev/null
+test "$existing_hash" = "$(shasum -a 256 "$existing_dir/.codex/steering/infrastructure-opentofu-steering.md")"
 
 echo "checks passed"
