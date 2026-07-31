@@ -46,9 +46,17 @@ find "$source_root" \
     -name 'copilot-instructions.md' -o \
     -name '*.mdc' -o \
     -path '*/.codex/steering/*' -o \
+    -path '*/.codex/prompts/*' -o \
+    -path '*/.codex/agents/*' -o \
     -path '*/.codex/skills/*/SKILL.md' -o \
+    -path '*/.claude/agents/*' -o \
+    -path '*/.claude/commands/*' -o \
+    -path '*/.claude/rules/*' -o \
     -path '*/.cursor/rules/*' -o \
-    -path '*/docs/steering/*' \
+    -path '*/.github/instructions/*' -o \
+    -path '*/.github/prompts/*' -o \
+    -path '*/docs/steering/*' -o \
+    -path '*/docs/agents/*' \
   \) -type f -print | while IFS= read -r file; do
     copy_file "$file"
   done

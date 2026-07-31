@@ -2,7 +2,7 @@
 set -eu
 
 usage() {
-  echo "Usage: $0 TARGET_DIR [--profile base|angular|kotlin-jvm|payload|frontend-design|infrastructure-opentofu] [--mode copy|link]" >&2
+  echo "Usage: $0 TARGET_DIR [--profile base|angular|kotlin-jvm|rust|shell-scripting|payload|frontend-design|infrastructure-opentofu] [--mode copy|link]" >&2
 }
 
 if [ "$#" -lt 1 ]; then
@@ -41,7 +41,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 case "$profile" in
-  base|angular|kotlin-jvm|payload|frontend-design|infrastructure-opentofu) ;;
+  base|angular|kotlin-jvm|rust|shell-scripting|payload|frontend-design|infrastructure-opentofu) ;;
   *)
     echo "Unknown profile: $profile" >&2
     usage
@@ -103,6 +103,14 @@ fi
 
 if [ "$profile" = "kotlin-jvm" ]; then
   install_reusable_if_missing "$repo_root/templates/steering/kotlin-jvm-steering.md" "$target_dir/.codex/steering/kotlin-jvm-steering.md"
+fi
+
+if [ "$profile" = "rust" ]; then
+  install_reusable_if_missing "$repo_root/templates/steering/rust-steering.md" "$target_dir/.codex/steering/rust-steering.md"
+fi
+
+if [ "$profile" = "shell-scripting" ]; then
+  install_reusable_if_missing "$repo_root/templates/steering/shell-scripting-steering.md" "$target_dir/.codex/steering/shell-scripting-steering.md"
 fi
 
 if [ "$profile" = "frontend-design" ]; then

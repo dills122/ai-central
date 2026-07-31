@@ -33,6 +33,20 @@
       "signals": ["*.kt", "build.gradle.kts", "settings.gradle.kts"]
     },
     {
+      "id": "rust",
+      "label": "Rust",
+      "type": "language-platform",
+      "description": "Rust architecture, contracts, untrusted-input safety, deterministic behavior, codegen, and testing guidance.",
+      "signals": ["Cargo.toml", "*.rs"]
+    },
+    {
+      "id": "shell-scripting",
+      "label": "Shell and Scripting",
+      "type": "tooling",
+      "description": "POSIX-first portable repository automation, safety, lifecycle, and verification guidance.",
+      "signals": ["*.sh", "scripts/", "Makefile", "Dockerfile"]
+    },
+    {
       "id": "frontend-design",
       "label": "Frontend Design",
       "type": "domain",

@@ -48,6 +48,24 @@ Includes everything from `base`, plus:
 Use for Kotlin/JVM services and modules built with Gradle. Replace the Kotlin root, JVM version,
 and verification command placeholders before treating the installed file as project policy.
 
+## Rust
+
+Includes everything from `base`, plus:
+
+- `.codex/steering/rust-steering.md`
+
+Use for Rust crates and workspaces. Guided setup selects this profile and the existing `rust` skill
+bundle when it detects `Cargo.toml`.
+
+## Shell And Scripting
+
+Includes everything from `base`, plus:
+
+- `.codex/steering/shell-scripting-steering.md`
+
+Use explicitly for repositories with substantial shared shell, CI, container, VM, hook, bootstrap,
+or release automation. Replace the command and scripts-root placeholders before enforcing it.
+
 ## Payload
 
 Includes everything from `base`, plus:

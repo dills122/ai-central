@@ -13,6 +13,10 @@ These are broadly reusable with placeholders:
 - Angular coding standards
 - Kotlin/JVM architecture, Gradle wrapper/toolchain alignment, structured concurrency, thin route
   modules, explicit persistence/contracts, and layered testing
+- Rust architecture, typed failures, contract/codegen discipline, bounded untrusted input,
+  deterministic concurrency, and layered verification
+- POSIX-first repository scripting, explicit interfaces, safe destructive boundaries, cleanup,
+  portability, and representative-environment testing
 - Payload CMS rules
 - Branch and PR metadata expectations
 - OpenTofu lifecycle boundaries: exact tool/provider pins, committed cross-platform locks,
@@ -56,7 +60,25 @@ Suggested next review question: decide whether these should live as Codex skills
 - A project detector that reads `package.json`, `rush.json`, `Cargo.toml`, `go.mod`, `.github/workflows`, and app folders before selecting templates.
 - A merge/update mode that preserves local project additions instead of overwriting generated files.
 - A provenance manifest with source path, hash, and last collected date for every raw file.
-- Templates for Rust, Go, shell scripting, monorepos, CI, and security that are not tied to one project.
+- Templates for Go, monorepos, CI, and security that are not tied to one project.
+
+## Cross-Repository Refresh
+
+The 2026-07-31 refresh is documented in
+`docs/repository-ai-context-audit-2026-07-31.md`. It promoted:
+
+- `templates/steering/rust-steering.md` and automatic `Cargo.toml` profile detection, alongside the
+  existing Rust skill bundle;
+- `templates/steering/shell-scripting-steering.md` as an explicit profile for repositories with
+  substantial shared automation.
+
+High-value candidates kept as source reference for a later focused review:
+
+- Capsule Corp's untrusted-execution and security-boundary guidance;
+- Forage's local-first and privacy boundary guidance;
+- Liars Dice Python/`uv`/`pytest` and deterministic simulation guidance, after its local-only AI
+  files and research are committed upstream;
+- Wap Labs' compliance-context retrieval and evidence-trust workflow.
 
 ## Reef Review
 

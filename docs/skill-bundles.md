@@ -38,8 +38,8 @@ Use `--mode link` to symlink reusable skill directories instead of copying them:
 `brevity` intentionally installs only portable skill content. It does not run the upstream global installer, add Claude Code hooks/statusline files, or register the optional MCP shrink proxy.
 
 `core` is always selected by `setup-ai-context.sh`. Other bundles are opt-in or selected from
-concrete project signals; Kotlin source or Gradle Kotlin DSL selects `jvm`. This keeps routine
-context small and avoids loading unrelated tool or persona guidance.
+concrete project signals; Kotlin source or Gradle Kotlin DSL selects `jvm`, and `Cargo.toml` selects
+`rust`. This keeps routine context small and avoids loading unrelated tool or persona guidance.
 
 ## Naming
 

@@ -142,3 +142,18 @@ Promoted from the review:
   files;
 - the `kotlin-jvm-engineering` skill and automatically detected `jvm` bundle for the guided setup
   path.
+
+### Cross-Repository Refresh — 2026-07-31
+
+After the focused Reef import, a broader refresh reviewed 44 local checkout directories whose
+GitHub origin belongs to `dills122`. It added 16 committed raw source files:
+
+- eight Wap Labs files: two `CLAUDE.md` entrypoints and six canonical `docs/agents/` files;
+- four Capsule Corp files: root `AGENTS.md`, `CLAUDE.md`, and two project steering files;
+- three Forage files: root `AGENTS.md` and two project steering files;
+- one committed Liars Dice `CLAUDE.md`.
+
+The refresh promoted normalized Rust and shell/scripting steering profiles and expanded the
+collector's recognized AI locations. Exact source commits, dirty-worktree handling, exclusions,
+and future candidates are documented in
+`docs/repository-ai-context-audit-2026-07-31.md`.

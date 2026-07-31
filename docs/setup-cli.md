@@ -76,6 +76,8 @@ Profiles install steering/context files:
 | `base` | Generic AGENTS and Codex steering |
 | `angular` | Angular-specific steering |
 | `kotlin-jvm` | Kotlin/JVM architecture, Gradle toolchain, coroutine, persistence, contract, and testing steering |
+| `rust` | Rust architecture, contracts, input safety, codegen, deterministic behavior, and testing steering |
+| `shell-scripting` | POSIX-first repository automation, lifecycle, safety, and verification steering |
 | `payload` | Payload CMS Cursor rules |
 | `frontend-design` | Frontend UI quality, accessibility, responsive, and interaction-state steering |
 | `infrastructure-opentofu` | OpenTofu state, secrets, validation, plan/apply, recovery, and network-safety steering |

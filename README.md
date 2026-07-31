@@ -23,7 +23,8 @@ Scanned `/Users/dsteele/repos` on 2026-06-04 and collected:
 
 A focused Reef review on 2026-07-31 added its root AI guidance, two project-owned Codex steering
 files, and ten canonical `docs/steering/` files. The review also promoted a reusable Kotlin/JVM
-steering profile.
+steering profile. A broader 44-checkout refresh then added committed Wap Labs, Forage, Capsule
+Corp, and Liars Dice context and promoted Rust and shell/scripting profiles.
 
 ## Quick Start
 
@@ -46,7 +47,8 @@ Create baseline Codex context in another project:
 ```
 
 Use `--profile base` for stack-neutral files, `--profile angular` for Angular-oriented steering,
-`--profile kotlin-jvm` for Kotlin/JVM and Gradle guidance, `--profile frontend-design` for UI
+`--profile kotlin-jvm` for Kotlin/JVM and Gradle guidance, `--profile rust` for Rust guidance,
+`--profile shell-scripting` for portable automation guidance, `--profile frontend-design` for UI
 quality steering, `--profile payload` for Payload CMS Cursor rules, or
 `--profile infrastructure-opentofu` for infrastructure lifecycle and safety steering.
 
@@ -101,6 +103,7 @@ Run local checks:
 - [Skill bundles](docs/skill-bundles.md)
 - [External skill review](docs/external-skill-review.md)
 - [Context-management audit (2026-07)](docs/context-management-audit-2026-07.md)
+- [Repository AI-context audit (2026-07-31)](docs/repository-ai-context-audit-2026-07-31.md)
 - [External source policy](docs/external-source-policy.md)
 - [Skill attribution](docs/skill-attribution.md)
 - [Contributing](CONTRIBUTING.md)

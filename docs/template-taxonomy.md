@@ -10,6 +10,8 @@ Examples:
 
 - `templates/steering/angular-steering.md`
 - `templates/steering/kotlin-jvm-steering.md`
+- `templates/steering/rust-steering.md`
+- `templates/steering/shell-scripting-steering.md`
 - `templates/steering/javascript-esm-steering.md`
 - `templates/steering/frontend-design-steering.md`
 - `templates/steering/infrastructure-opentofu-steering.md`
