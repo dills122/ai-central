@@ -8,9 +8,16 @@ These are broadly reusable with placeholders:
 - Safe refactor boundaries
 - Contract-first files
 - Local command map
-- JavaScript/ESM rules
+- JavaScript/TypeScript strict typing, ESM, boundary validation, async ownership, dependency, security,
+  performance, and verification rules
 - Testing and quality gates
 - Angular coding standards
+- Kotlin/JVM Gradle/toolchain alignment, project-fit module boundaries, language design, structured
+  concurrency, compatibility, optional external boundaries, and layered testing
+- Rust architecture, typed failures, contract/codegen discipline, bounded untrusted input,
+  deterministic concurrency, and layered verification
+- POSIX-first repository scripting, explicit interfaces, safe destructive boundaries, cleanup,
+  portability, and representative-environment testing
 - Payload CMS rules
 - Branch and PR metadata expectations
 - OpenTofu lifecycle boundaries: exact tool/provider pins, committed cross-platform locks,
@@ -52,7 +59,59 @@ Suggested next review question: decide whether these should live as Codex skills
 - A project detector that reads `package.json`, `rush.json`, `Cargo.toml`, `go.mod`, `.github/workflows`, and app folders before selecting templates.
 - A merge/update mode that preserves local project additions instead of overwriting generated files.
 - A provenance manifest with source path, hash, and last collected date for every raw file.
-- Templates for Rust, Go, shell scripting, monorepos, CI, and security that are not tied to one project.
+- Templates for Go, monorepos, CI, and security that are not tied to one project.
+
+## Cross-Repository Refresh
+
+The 2026-07-31 refresh is documented in
+`docs/repository-ai-context-audit-2026-07-31.md`. It promoted:
+
+- `templates/steering/rust-steering.md` and automatic `Cargo.toml` profile detection, alongside the
+  existing Rust skill bundle;
+- `templates/steering/shell-scripting-steering.md` as an explicit profile for repositories with
+  substantial shared automation.
+
+High-value candidates identified during local review for a later focused review:
+
+- Capsule Corp's untrusted-execution and security-boundary guidance;
+- Forage's local-first and privacy boundary guidance;
+- Liars Dice Python/`uv`/`pytest` and deterministic simulation guidance, after its local-only AI
+  files and research are committed upstream;
+- Wap Labs' compliance-context retrieval and evidence-trust workflow.
+
+## Reef Review
+
+Reef keeps its current AI direction in `docs/steering/`, not only under `.codex/`. Those files were
+reviewed locally but are not retained here because most of their content describes Reef's trading
+domain and repository architecture rather than reusable JVM practice.
+
+Promoted now:
+
+- `templates/steering/kotlin-jvm-steering.md` and the `kotlin-jvm` profile. The normalized template
+  retains general Kotlin/JVM and Gradle engineering rules while removing Reef paths, commands,
+  framework choices, market concepts, and prescriptive domain architecture.
+- `templates/skills/adapted/kotlin-jvm-engineering/` and the `jvm` bundle. Guided setup selects the
+  profile and bundle together when Kotlin source or Gradle Kotlin DSL is detected.
+
+Other Reef language, data, API, and architecture documents were not imported. Any future template
+should start with a fresh domain-neutral review rather than copying those project policies.
+
+## Strict Language Steering Review
+
+The 2026-07-31 primary-source review is documented in
+`docs/language-steering-research-2026-07-31.md`. It promoted:
+
+- a separate, automatically detected `javascript-typescript` profile instead of installing
+  JavaScript rules from the stack-neutral `base` profile;
+- strict, consistently structured JavaScript/TypeScript, Kotlin/JVM, Rust, and POSIX shell
+  templates covering reproducibility, maintainability, input and resource safety, dependencies,
+  concurrency, performance, tests, and executable quality gates;
+- regression checks that keep domain terminology out, require shared enforcement sections, verify
+  direct and detected installation, and prevent JavaScript steering from leaking into pure Rust or
+  base installations.
+
+The templates use placeholders for repository commands and supported versions. They avoid imposing
+frameworks, service layouts, product domains, or one universal architecture.
 
 ## Infrastructure And OpenTofu Review
 

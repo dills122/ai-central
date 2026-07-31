@@ -21,6 +21,14 @@ Scanned `/Users/dsteele/repos` on 2026-06-04 and collected:
 - 13 Cursor/Payload CMS rules from `breakerflow-platform/apps/cms`
 - 33 first-party Codex skills from `wap-labs/.codex/skills`
 
+A focused Reef review on 2026-07-31 promoted a reusable Kotlin/JVM steering profile and skill. Reef's
+trading-platform and repository-specific source context was reviewed locally but is not retained in
+the reusable library. A broader 44-checkout review promoted Rust and shell/scripting profiles while
+likewise leaving project-specific source context in its originating repositories.
+
+A primary-source language review on 2026-07-31 strengthened the JavaScript/TypeScript, Kotlin/JVM,
+Rust, and POSIX shell templates with strict, domain-neutral engineering and verification standards.
+
 ## Quick Start
 
 Run the guided setup for a new or existing project:
@@ -41,9 +49,12 @@ Create baseline Codex context in another project:
 ./scripts/scaffold-ai-context.sh /path/to/project --profile angular
 ```
 
-Use `--profile base` for stack-neutral files, `--profile angular` for Angular-oriented steering,
-`--profile frontend-design` for UI quality steering, `--profile payload` for Payload CMS Cursor
-rules, or `--profile infrastructure-opentofu` for infrastructure lifecycle and safety steering.
+Use `--profile base` for stack-neutral files, `--profile javascript-typescript` for JavaScript and
+TypeScript guidance, `--profile angular` for Angular-oriented steering, `--profile kotlin-jvm` for
+Kotlin/JVM and Gradle guidance, `--profile rust` for Rust guidance, `--profile shell-scripting` for
+portable automation guidance, `--profile frontend-design` for UI quality steering, `--profile
+payload` for Payload CMS Cursor rules, or `--profile infrastructure-opentofu` for infrastructure
+lifecycle and safety steering.
 
 Install reviewed skill bundles:
 
@@ -51,7 +62,7 @@ Install reviewed skill bundles:
 ./scripts/install-skill-bundle.sh /path/to/project --bundle core
 ```
 
-Bundles: `core`, `brevity`, `engineering`, `rust`, `product`, `planning`, `frontend`, `frontend-tooling`, `frontend-vue`, `hallmark`, `infra`, `workflow`, `all`.
+Bundles: `core`, `brevity`, `engineering`, `jvm`, `rust`, `product`, `planning`, `frontend`, `frontend-tooling`, `frontend-vue`, `hallmark`, `infra`, `workflow`, `all`.
 
 Refresh collected source material from local repos:
 
@@ -96,6 +107,8 @@ Run local checks:
 - [Skill bundles](docs/skill-bundles.md)
 - [External skill review](docs/external-skill-review.md)
 - [Context-management audit (2026-07)](docs/context-management-audit-2026-07.md)
+- [Repository AI-context audit (2026-07-31)](docs/repository-ai-context-audit-2026-07-31.md)
+- [Language steering research (2026-07-31)](docs/language-steering-research-2026-07-31.md)
 - [External source policy](docs/external-source-policy.md)
 - [Skill attribution](docs/skill-attribution.md)
 - [Contributing](CONTRIBUTING.md)

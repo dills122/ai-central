@@ -107,3 +107,54 @@ Collected through a temporary project-name-preserving allowlist root with
 
 Only these two AI-context files were collected. The source tree's implementation HCL, workflows,
 runtime backend inputs, generated artifacts, state, plans, tfvars, and credentials were not copied.
+
+### Focused Reef Review — 2026-07-31
+
+Review provenance:
+
+- repository: `dills122/reef`
+- local path: `/Users/dsteele/repos/reef`
+- branch: `master`
+- commit: `7237004deb087bff802bb7c60a9c49ecf4187750`
+- worktree status at review: clean
+
+Reef's AI entrypoints and canonical `docs/steering/` tree were reviewed locally. The source is
+dominated by trading, matching, simulation, settlement, and Reef-specific architecture, so those
+files are not retained under `collected/` or installed into other projects.
+
+Promoted from the review:
+
+- `templates/steering/kotlin-jvm-steering.md`, rewritten as a project-neutral Kotlin/JVM starter for
+  Gradle builds, toolchains, modules, language design, coroutines, optional external boundaries,
+  compatibility, and layered tests;
+- the `kotlin-jvm` scaffold profile and automatic detection for Kotlin source or Gradle Kotlin DSL;
+- the concise `kotlin-jvm-engineering` skill and automatically detected `jvm` bundle.
+
+Not promoted:
+
+- trading, order, matching, settlement, market-data, simulation, or Reef service ownership;
+- Reef paths, commands, package names, framework choices, contracts, throughput claims, and storage
+  architecture;
+- domain-driven, event-driven, messaging, persistence, or service-layer patterns as universal JVM
+  requirements.
+
+### Cross-Repository Refresh — 2026-07-31
+
+A broader refresh reviewed 44 local checkout directories whose GitHub origin belongs to `dills122`.
+Wap Labs, Forage, Capsule Corp, and Liars Dice contained useful ideas, but their committed AI files
+also carry project architecture, product rules, and repository commands. Those raw files remain in
+their originating repositories rather than being copied into AI Central.
+
+The review promoted normalized Rust and shell/scripting steering profiles and expanded the
+collector's recognized AI locations. Source commits, dirty-worktree handling, exclusions, and
+future candidates are documented in `docs/repository-ai-context-audit-2026-07-31.md`.
+
+### Strict Language Steering Research — 2026-07-31
+
+A separate primary-source review strengthened every currently bundled language steering template:
+JavaScript/TypeScript, Kotlin/JVM, Rust, and POSIX shell. The review introduced a dedicated detected
+JavaScript/TypeScript profile, made `base` language-neutral, aligned the templates around strict
+enforcement and verification sections, and added cross-install regression coverage.
+
+Sources, decisions, and future-profile criteria are documented in
+`docs/language-steering-research-2026-07-31.md`.

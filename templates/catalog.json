@@ -19,11 +19,39 @@
       "signals": ["default"]
     },
     {
+      "id": "javascript-typescript",
+      "label": "JavaScript and TypeScript",
+      "type": "language-platform",
+      "description": "Strict JavaScript/TypeScript typing, ESM, dependency, boundary, async, security, performance, and verification guidance.",
+      "signals": ["package.json", "*.js", "*.mjs", "*.cjs", "*.jsx", "*.ts", "*.mts", "*.cts", "*.tsx"]
+    },
+    {
       "id": "angular",
       "label": "Angular",
       "type": "language-framework",
       "description": "Angular-oriented steering for frontend app development.",
       "signals": ["angular.json"]
+    },
+    {
+      "id": "kotlin-jvm",
+      "label": "Kotlin/JVM",
+      "type": "language-platform",
+      "description": "Strict Kotlin/JVM and Gradle toolchain, dependency, API, coroutine, boundary, security, performance, and verification guidance.",
+      "signals": ["*.kt", "build.gradle.kts", "settings.gradle.kts"]
+    },
+    {
+      "id": "rust",
+      "label": "Rust",
+      "type": "language-platform",
+      "description": "Strict Rust toolchain, ownership, API, unsafe, dependency, concurrency, performance, and verification guidance.",
+      "signals": ["Cargo.toml", "*.rs"]
+    },
+    {
+      "id": "shell-scripting",
+      "label": "Shell and Scripting",
+      "type": "tooling",
+      "description": "Strict POSIX-first interfaces, quoting, failure handling, cleanup, security, portability, and verification guidance.",
+      "signals": ["*.sh", "scripts/", "Makefile", "Dockerfile"]
     },
     {
       "id": "frontend-design",
@@ -68,6 +96,13 @@
       "type": "persona-task",
       "description": "Engineering lifecycle, architecture, CI, security, observability, migration, and tooling skills.",
       "signals": ["package.json"]
+    },
+    {
+      "id": "jvm",
+      "label": "JVM",
+      "type": "language-platform",
+      "description": "General Kotlin/JVM implementation, Gradle toolchain, module, coroutine, compatibility, boundary, and verification workflow.",
+      "signals": ["*.kt", "build.gradle.kts", "settings.gradle.kts"]
     },
     {
       "id": "rust",
