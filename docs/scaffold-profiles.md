@@ -45,8 +45,9 @@ Includes everything from `base`, plus:
 
 - `.codex/steering/kotlin-jvm-steering.md`
 
-Use for Kotlin/JVM services and modules built with Gradle. Replace the Kotlin root, JVM version,
-and verification command placeholders before treating the installed file as project policy.
+Use for Kotlin/JVM services, libraries, CLI tools, and applications built with Gradle. Replace the
+Kotlin root, JVM version, and verification command placeholders before treating the installed file
+as project policy.
 
 ## Rust
 

@@ -23,7 +23,7 @@ Use `--mode link` to symlink reusable skill directories instead of copying them:
 | `core` | Lightweight planning, frontend review, context engineering, spec, planning, TDD, review, debugging, source-driven development |
 | `brevity` | Caveman token-saving skills for terse replies, help, commit messages, code review comments, and memory-file compression |
 | `engineering` | All `addyosmani/agent-skills` plus selected engineering skills from `alirezarezvani/claude-skills` |
-| `jvm` | Kotlin/JVM implementation, Gradle toolchain, coroutine, architecture, persistence, contract, and verification workflow |
+| `jvm` | General Kotlin/JVM implementation, Gradle toolchain, module, coroutine, compatibility, boundary, and verification workflow |
 | `rust` | All imported Rust Agentic Skills, prefixed as `rust-*` |
 | `product` | Selected non-duplicate PM Skills plus selected product-team Claude Skills |
 | `planning` | `planning-files-lite` and full `planning-with-files` |

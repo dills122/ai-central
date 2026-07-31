@@ -75,7 +75,7 @@ Profiles install steering/context files:
 | --- | --- |
 | `base` | Generic AGENTS and Codex steering |
 | `angular` | Angular-specific steering |
-| `kotlin-jvm` | Kotlin/JVM architecture, Gradle toolchain, coroutine, persistence, contract, and testing steering |
+| `kotlin-jvm` | General Kotlin/JVM Gradle, toolchain, module, language, coroutine, compatibility, boundary, and testing steering |
 | `rust` | Rust architecture, contracts, input safety, codegen, deterministic behavior, and testing steering |
 | `shell-scripting` | POSIX-first repository automation, lifecycle, safety, and verification steering |
 | `payload` | Payload CMS Cursor rules |

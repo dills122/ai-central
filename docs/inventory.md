@@ -110,50 +110,41 @@ runtime backend inputs, generated artifacts, state, plans, tfvars, and credentia
 
 ### Focused Reef Review — 2026-07-31
 
-Source provenance:
+Review provenance:
 
 - repository: `dills122/reef`
 - local path: `/Users/dsteele/repos/reef`
 - branch: `master`
 - commit: `7237004deb087bff802bb7c60a9c49ecf4187750`
-- worktree status at collection: clean
+- worktree status at review: clean
 
-Collected 14 project-owned AI-context files under `collected/misc/reef/`:
-
-- root `AGENTS.md` and the `CLAUDE.md` redirect to canonical guidance;
-- two real files from `.codex/steering/`;
-- all ten files from the canonical `docs/steering/` index, including Kotlin, Go, architecture,
-  repository, data-platform, API-boundary, and inter-service guidance.
-
-Skipped:
-
-- three `.codex/steering/` symlinks that point back to AI Central templates;
-- `.codex/skills/` symlinks that point back to AI Central skill bundles;
-- duplicate files in `.claude/worktrees/` and `.worktrees/`;
-- large product plans, implementation evidence, generated sources, and project-specific runtime
-  documentation outside the canonical steering surface.
+Reef's AI entrypoints and canonical `docs/steering/` tree were reviewed locally. The source is
+dominated by trading, matching, simulation, settlement, and Reef-specific architecture, so those
+files are not retained under `collected/` or installed into other projects.
 
 Promoted from the review:
 
-- `templates/steering/kotlin-jvm-steering.md`, a normalized Kotlin/JVM starter covering Gradle
-  wrapper/toolchain discipline, framework-light architecture, thin routes, structured concurrency,
-  persistence, contracts, and layered tests;
-- the `kotlin-jvm` scaffold profile and automatic detection for Kotlin source or Gradle Kotlin DSL
-  files;
-- the `kotlin-jvm-engineering` skill and automatically detected `jvm` bundle for the guided setup
-  path.
+- `templates/steering/kotlin-jvm-steering.md`, rewritten as a project-neutral Kotlin/JVM starter for
+  Gradle builds, toolchains, modules, language design, coroutines, optional external boundaries,
+  compatibility, and layered tests;
+- the `kotlin-jvm` scaffold profile and automatic detection for Kotlin source or Gradle Kotlin DSL;
+- the concise `kotlin-jvm-engineering` skill and automatically detected `jvm` bundle.
+
+Not promoted:
+
+- trading, order, matching, settlement, market-data, simulation, or Reef service ownership;
+- Reef paths, commands, package names, framework choices, contracts, throughput claims, and storage
+  architecture;
+- domain-driven, event-driven, messaging, persistence, or service-layer patterns as universal JVM
+  requirements.
 
 ### Cross-Repository Refresh — 2026-07-31
 
-After the focused Reef import, a broader refresh reviewed 44 local checkout directories whose
-GitHub origin belongs to `dills122`. It added 16 committed raw source files:
+A broader refresh reviewed 44 local checkout directories whose GitHub origin belongs to `dills122`.
+Wap Labs, Forage, Capsule Corp, and Liars Dice contained useful ideas, but their committed AI files
+also carry project architecture, product rules, and repository commands. Those raw files remain in
+their originating repositories rather than being copied into AI Central.
 
-- eight Wap Labs files: two `CLAUDE.md` entrypoints and six canonical `docs/agents/` files;
-- four Capsule Corp files: root `AGENTS.md`, `CLAUDE.md`, and two project steering files;
-- three Forage files: root `AGENTS.md` and two project steering files;
-- one committed Liars Dice `CLAUDE.md`.
-
-The refresh promoted normalized Rust and shell/scripting steering profiles and expanded the
-collector's recognized AI locations. Exact source commits, dirty-worktree handling, exclusions,
-and future candidates are documented in
-`docs/repository-ai-context-audit-2026-07-31.md`.
+The review promoted normalized Rust and shell/scripting steering profiles and expanded the
+collector's recognized AI locations. Source commits, dirty-worktree handling, exclusions, and
+future candidates are documented in `docs/repository-ai-context-audit-2026-07-31.md`.

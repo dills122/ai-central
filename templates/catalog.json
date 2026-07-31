@@ -29,7 +29,7 @@
       "id": "kotlin-jvm",
       "label": "Kotlin/JVM",
       "type": "language-platform",
-      "description": "Kotlin/JVM architecture, Gradle toolchain, coroutine, persistence, contract, and testing guidance.",
+      "description": "General Kotlin/JVM Gradle, toolchain, module, language, coroutine, compatibility, boundary, and testing guidance.",
       "signals": ["*.kt", "build.gradle.kts", "settings.gradle.kts"]
     },
     {
@@ -94,7 +94,7 @@
       "id": "jvm",
       "label": "JVM",
       "type": "language-platform",
-      "description": "Kotlin/JVM implementation, Gradle toolchain, coroutine, architecture, persistence, contract, and verification workflow.",
+      "description": "General Kotlin/JVM implementation, Gradle toolchain, module, coroutine, compatibility, boundary, and verification workflow.",
       "signals": ["*.kt", "build.gradle.kts", "settings.gradle.kts"]
     },
     {
