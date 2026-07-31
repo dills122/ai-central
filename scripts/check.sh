@@ -13,6 +13,8 @@ tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-check.XXXXXX")
 
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile angular >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile angular >/dev/null
+./scripts/scaffold-ai-context.sh "$tmp_dir" --profile kotlin-jvm >/dev/null
+./scripts/scaffold-ai-context.sh "$tmp_dir" --profile kotlin-jvm >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile payload >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile infrastructure-opentofu >/dev/null
 infrastructure_hash=$(shasum -a 256 "$tmp_dir/.codex/steering/infrastructure-opentofu-steering.md")
@@ -21,6 +23,7 @@ test "$infrastructure_hash" = "$(shasum -a 256 "$tmp_dir/.codex/steering/infrast
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle core >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle core >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle brevity >/dev/null
+./scripts/install-skill-bundle.sh "$tmp_dir" --bundle jvm >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle frontend-vue >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle frontend-tooling >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle hallmark >/dev/null
@@ -32,6 +35,7 @@ test "$infrastructure_hash" = "$(shasum -a 256 "$tmp_dir/.codex/steering/infrast
 test -f "$tmp_dir/AGENTS.md"
 test -f "$tmp_dir/.codex/steering/repository-steering.md"
 test -f "$tmp_dir/.codex/steering/angular-steering.md"
+test -f "$tmp_dir/.codex/steering/kotlin-jvm-steering.md"
 test -f "$tmp_dir/.cursor/rules/payload-overview.md"
 test -f "$tmp_dir/.codex/steering/infrastructure-opentofu-steering.md"
 test -f "$tmp_dir/.codex/skills/planning-files-lite/SKILL.md"
@@ -39,6 +43,8 @@ test -f "$tmp_dir/.codex/skills/frontend-design-review/SKILL.md"
 test -f "$tmp_dir/.codex/skills/context-engineering/SKILL.md"
 test -f "$tmp_dir/.codex/skills/caveman/SKILL.md"
 test -f "$tmp_dir/.codex/skills/caveman-compress/SKILL.md"
+test -f "$tmp_dir/.codex/skills/kotlin-jvm-engineering/SKILL.md"
+test -f "$tmp_dir/.codex/skills/kotlin-jvm-engineering/agents/openai.yaml"
 test -f "$tmp_dir/.codex/skills/vue/SKILL.md"
 test -f "$tmp_dir/.codex/skills/hallmark-design/SKILL.md"
 test -f "$tmp_dir/.codex/skills/terraform-skill/SKILL.md"
@@ -52,12 +58,14 @@ test ! -e "$frontend_dir/.codex/skills/vite"
 
 setup_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-setup-check.XXXXXX")
 mkdir -p "$setup_dir/src"
-touch "$setup_dir/package.json" "$setup_dir/angular.json" "$setup_dir/main.tf" "$setup_dir/src/app.component.ts" "$setup_dir/src/App.vue"
+touch "$setup_dir/package.json" "$setup_dir/angular.json" "$setup_dir/main.tf" "$setup_dir/src/app.component.ts" "$setup_dir/src/App.vue" "$setup_dir/src/App.kt"
 ./scripts/setup-ai-context.sh "$setup_dir" --yes >/dev/null
 test -f "$setup_dir/AGENTS.md"
 test -f "$setup_dir/.codex/steering/angular-steering.md"
+test -f "$setup_dir/.codex/steering/kotlin-jvm-steering.md"
 test -f "$setup_dir/.codex/steering/infrastructure-opentofu-steering.md"
 test -f "$setup_dir/.codex/skills/frontend-design-review/SKILL.md"
+test -f "$setup_dir/.codex/skills/kotlin-jvm-engineering/SKILL.md"
 test ! -e "$setup_dir/.codex/skills/caveman"
 test ! -e "$setup_dir/.codex/skills/api-and-interface-design"
 test -f "$setup_dir/.codex/skills/web-web-quality-audit/SKILL.md"
@@ -76,6 +84,9 @@ test -f "$link_dir/.codex/skills/context-engineering/SKILL.md"
 ./scripts/install-skill-bundle.sh "$link_dir" --bundle infra --mode link >/dev/null
 test -L "$link_dir/.codex/skills/terraform-skill"
 test -f "$link_dir/.codex/skills/terraform-skill/SKILL.md"
+./scripts/install-skill-bundle.sh "$link_dir" --bundle jvm --mode link >/dev/null
+test -L "$link_dir/.codex/skills/kotlin-jvm-engineering"
+test -f "$link_dir/.codex/skills/kotlin-jvm-engineering/SKILL.md"
 
 existing_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-existing-check.XXXXXX")
 mkdir -p "$existing_dir/.codex/steering"

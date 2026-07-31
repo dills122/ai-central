@@ -107,3 +107,38 @@ Collected through a temporary project-name-preserving allowlist root with
 
 Only these two AI-context files were collected. The source tree's implementation HCL, workflows,
 runtime backend inputs, generated artifacts, state, plans, tfvars, and credentials were not copied.
+
+### Focused Reef Review — 2026-07-31
+
+Source provenance:
+
+- repository: `dills122/reef`
+- local path: `/Users/dsteele/repos/reef`
+- branch: `master`
+- commit: `7237004deb087bff802bb7c60a9c49ecf4187750`
+- worktree status at collection: clean
+
+Collected 14 project-owned AI-context files under `collected/misc/reef/`:
+
+- root `AGENTS.md` and the `CLAUDE.md` redirect to canonical guidance;
+- two real files from `.codex/steering/`;
+- all ten files from the canonical `docs/steering/` index, including Kotlin, Go, architecture,
+  repository, data-platform, API-boundary, and inter-service guidance.
+
+Skipped:
+
+- three `.codex/steering/` symlinks that point back to AI Central templates;
+- `.codex/skills/` symlinks that point back to AI Central skill bundles;
+- duplicate files in `.claude/worktrees/` and `.worktrees/`;
+- large product plans, implementation evidence, generated sources, and project-specific runtime
+  documentation outside the canonical steering surface.
+
+Promoted from the review:
+
+- `templates/steering/kotlin-jvm-steering.md`, a normalized Kotlin/JVM starter covering Gradle
+  wrapper/toolchain discipline, framework-light architecture, thin routes, structured concurrency,
+  persistence, contracts, and layered tests;
+- the `kotlin-jvm` scaffold profile and automatic detection for Kotlin source or Gradle Kotlin DSL
+  files;
+- the `kotlin-jvm-engineering` skill and automatically detected `jvm` bundle for the guided setup
+  path.

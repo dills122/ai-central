@@ -23,6 +23,7 @@ The collector copies matching files into `collected/misc/` using source-relative
 Collect AI guidance and reusable context from:
 
 - `.codex/steering/`
+- `docs/steering/` when the project treats it as canonical AI/engineering direction
 - `.codex/skills/`
 - `AGENTS.md`
 - `CLAUDE.md`
@@ -35,6 +36,7 @@ Skip:
 - `node_modules/`
 - `.git/`
 - generated build output
+- linked or copied agent worktrees under `.claude/worktrees/` and `.worktrees/`
 - temporary third-party imports until reviewed
 
 ## After Collection

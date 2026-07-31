@@ -23,7 +23,7 @@ Copied in link mode:
 
 Symlinked in link mode:
 
-- reusable steering such as JavaScript/ESM, Angular, frontend-design
+- reusable steering such as JavaScript/ESM, Angular, Kotlin/JVM, and frontend-design
 - Payload Cursor rules
 - `.codex/skills/*` installed from skill bundles
 

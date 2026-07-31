@@ -11,6 +11,8 @@ These are broadly reusable with placeholders:
 - JavaScript/ESM rules
 - Testing and quality gates
 - Angular coding standards
+- Kotlin/JVM architecture, Gradle wrapper/toolchain alignment, structured concurrency, thin route
+  modules, explicit persistence/contracts, and layered testing
 - Payload CMS rules
 - Branch and PR metadata expectations
 - OpenTofu lifecycle boundaries: exact tool/provider pins, committed cross-platform locks,
@@ -28,6 +30,8 @@ These are valuable, but should not be installed verbatim into most projects:
   hostnames, cost thresholds, and incident ownership
 - `paylet` and app-specific AGENTS content until reviewed for private domain details
 - Cursor rules that embed Payload-specific examples when the target project is not Payload
+- Reef's trading lifecycle, matching-lane, throughput, Bot Arena, and service-ownership details
+  outside projects with the same domain and architecture
 
 ## Promote As Skills
 
@@ -53,6 +57,32 @@ Suggested next review question: decide whether these should live as Codex skills
 - A merge/update mode that preserves local project additions instead of overwriting generated files.
 - A provenance manifest with source path, hash, and last collected date for every raw file.
 - Templates for Rust, Go, shell scripting, monorepos, CI, and security that are not tied to one project.
+
+## Reef Review
+
+The focused Reef import is preserved under `collected/misc/reef/`. It is especially useful because
+Reef keeps its current, tool-agnostic AI direction in `docs/steering/`, not only under `.codex/`.
+
+Promoted now:
+
+- `templates/steering/kotlin-jvm-steering.md` and the `kotlin-jvm` profile. The normalized template
+  retains the reusable engineering rules while replacing Reef paths, JVM versions, and commands
+  with placeholders.
+- `templates/skills/adapted/kotlin-jvm-engineering/` and the `jvm` bundle. Guided setup selects the
+  profile and bundle together when Kotlin source or Gradle Kotlin DSL is detected.
+
+Useful future candidates, kept as raw source for now:
+
+- `docs/steering/go.md` for a general Go service/engine template;
+- `docs/steering/inter-service-communication.md` for contract-first protobuf/gRPC and idempotent
+  transport guidance;
+- `docs/steering/data-platform.md` for Postgres, outbox, exact data types, retention, and hot-write
+  discipline;
+- `docs/steering/external-api-boundary.md` for public-versus-internal API separation;
+- `docs/steering/astro.md` for honest documentation/product-site guidance.
+
+The architecture and repository-priority documents are valuable source references, but their
+trading lifecycle, partitioning, and throughput claims are too Reef-specific to scaffold verbatim.
 
 ## Infrastructure And OpenTofu Review
 

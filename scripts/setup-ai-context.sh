@@ -7,8 +7,8 @@ Usage: setup-ai-context.sh TARGET_DIR [options]
 
 Options:
   --yes                    Use detected recommendations without prompts
-  --profiles LIST          Comma-separated steering profiles: base,angular,payload,frontend-design,infrastructure-opentofu
-  --bundles LIST           Comma-separated skill bundles: core,brevity,engineering,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,workflow,all
+  --profiles LIST          Comma-separated steering profiles: base,angular,kotlin-jvm,payload,frontend-design,infrastructure-opentofu
+  --bundles LIST           Comma-separated skill bundles: core,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,workflow,all
   --mode copy|link          copy installs files; link symlinks reusable templates and skills
   --skip-profiles LIST     Comma-separated profiles to exclude
   --skip-bundles LIST      Comma-separated bundles to exclude
@@ -142,6 +142,10 @@ detect_profiles() {
     profiles=$(append_unique "$profiles" "frontend-design")
   fi
 
+  if find "$target_dir" -maxdepth 5 \( -name '*.kt' -o -name build.gradle.kts -o -name settings.gradle.kts \) -type f | grep -q .; then
+    profiles=$(append_unique "$profiles" "kotlin-jvm")
+  fi
+
   if find "$target_dir" -maxdepth 4 \( -name payload.config.ts -o -name payload.config.js -o -path '*/payload.config.ts' -o -path '*/payload.config.js' \) -type f | grep -q .; then
     profiles=$(append_unique "$profiles" "payload")
   fi
@@ -160,6 +164,10 @@ detect_profiles() {
 detect_bundles() {
   target_dir=$1
   bundles=core
+
+  if find "$target_dir" -maxdepth 5 \( -name '*.kt' -o -name build.gradle.kts -o -name settings.gradle.kts \) -type f | grep -q .; then
+    bundles=$(append_unique "$bundles" "jvm")
+  fi
 
   if [ -f "$target_dir/Cargo.toml" ] || find "$target_dir" -maxdepth 4 -name Cargo.toml -type f | grep -q .; then
     bundles=$(append_unique "$bundles" "rust")
@@ -267,8 +275,8 @@ if [ ! -d "$target_dir" ]; then
   exit 1
 fi
 
-allowed_profiles=base,angular,payload,frontend-design,infrastructure-opentofu
-allowed_bundles=core,brevity,engineering,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,workflow,all
+allowed_profiles=base,angular,kotlin-jvm,payload,frontend-design,infrastructure-opentofu
+allowed_bundles=core,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,workflow,all
 
 case "$mode" in
   copy|link) ;;

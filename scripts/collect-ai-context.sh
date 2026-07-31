@@ -34,6 +34,8 @@ copy_file() {
 find "$source_root" \
   -path '*/node_modules' -prune -o \
   -path '*/.git' -prune -o \
+  -path '*/.claude/worktrees' -prune -o \
+  -path '*/.worktrees' -prune -o \
   -path '*/dist' -prune -o \
   -path '*/build' -prune -o \
   \( \
@@ -45,7 +47,8 @@ find "$source_root" \
     -name '*.mdc' -o \
     -path '*/.codex/steering/*' -o \
     -path '*/.codex/skills/*/SKILL.md' -o \
-    -path '*/.cursor/rules/*' \
+    -path '*/.cursor/rules/*' -o \
+    -path '*/docs/steering/*' \
   \) -type f -print | while IFS= read -r file; do
     copy_file "$file"
   done

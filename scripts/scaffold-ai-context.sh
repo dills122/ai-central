@@ -2,7 +2,7 @@
 set -eu
 
 usage() {
-  echo "Usage: $0 TARGET_DIR [--profile base|angular|payload|frontend-design|infrastructure-opentofu] [--mode copy|link]" >&2
+  echo "Usage: $0 TARGET_DIR [--profile base|angular|kotlin-jvm|payload|frontend-design|infrastructure-opentofu] [--mode copy|link]" >&2
 }
 
 if [ "$#" -lt 1 ]; then
@@ -41,7 +41,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 case "$profile" in
-  base|angular|payload|frontend-design|infrastructure-opentofu) ;;
+  base|angular|kotlin-jvm|payload|frontend-design|infrastructure-opentofu) ;;
   *)
     echo "Unknown profile: $profile" >&2
     usage
@@ -99,6 +99,10 @@ copy_if_missing "$repo_root/templates/steering/testing-quality-gates-steering.md
 
 if [ "$profile" = "angular" ]; then
   install_reusable_if_missing "$repo_root/templates/steering/angular-steering.md" "$target_dir/.codex/steering/angular-steering.md"
+fi
+
+if [ "$profile" = "kotlin-jvm" ]; then
+  install_reusable_if_missing "$repo_root/templates/steering/kotlin-jvm-steering.md" "$target_dir/.codex/steering/kotlin-jvm-steering.md"
 fi
 
 if [ "$profile" = "frontend-design" ]; then

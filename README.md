@@ -21,6 +21,10 @@ Scanned `/Users/dsteele/repos` on 2026-06-04 and collected:
 - 13 Cursor/Payload CMS rules from `breakerflow-platform/apps/cms`
 - 33 first-party Codex skills from `wap-labs/.codex/skills`
 
+A focused Reef review on 2026-07-31 added its root AI guidance, two project-owned Codex steering
+files, and ten canonical `docs/steering/` files. The review also promoted a reusable Kotlin/JVM
+steering profile.
+
 ## Quick Start
 
 Run the guided setup for a new or existing project:
@@ -42,8 +46,9 @@ Create baseline Codex context in another project:
 ```
 
 Use `--profile base` for stack-neutral files, `--profile angular` for Angular-oriented steering,
-`--profile frontend-design` for UI quality steering, `--profile payload` for Payload CMS Cursor
-rules, or `--profile infrastructure-opentofu` for infrastructure lifecycle and safety steering.
+`--profile kotlin-jvm` for Kotlin/JVM and Gradle guidance, `--profile frontend-design` for UI
+quality steering, `--profile payload` for Payload CMS Cursor rules, or
+`--profile infrastructure-opentofu` for infrastructure lifecycle and safety steering.
 
 Install reviewed skill bundles:
 
@@ -51,7 +56,7 @@ Install reviewed skill bundles:
 ./scripts/install-skill-bundle.sh /path/to/project --bundle core
 ```
 
-Bundles: `core`, `brevity`, `engineering`, `rust`, `product`, `planning`, `frontend`, `frontend-tooling`, `frontend-vue`, `hallmark`, `infra`, `workflow`, `all`.
+Bundles: `core`, `brevity`, `engineering`, `jvm`, `rust`, `product`, `planning`, `frontend`, `frontend-tooling`, `frontend-vue`, `hallmark`, `infra`, `workflow`, `all`.
 
 Refresh collected source material from local repos:
 

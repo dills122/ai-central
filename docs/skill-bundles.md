@@ -23,6 +23,7 @@ Use `--mode link` to symlink reusable skill directories instead of copying them:
 | `core` | Lightweight planning, frontend review, context engineering, spec, planning, TDD, review, debugging, source-driven development |
 | `brevity` | Caveman token-saving skills for terse replies, help, commit messages, code review comments, and memory-file compression |
 | `engineering` | All `addyosmani/agent-skills` plus selected engineering skills from `alirezarezvani/claude-skills` |
+| `jvm` | Kotlin/JVM implementation, Gradle toolchain, coroutine, architecture, persistence, contract, and verification workflow |
 | `rust` | All imported Rust Agentic Skills, prefixed as `rust-*` |
 | `product` | Selected non-duplicate PM Skills plus selected product-team Claude Skills |
 | `planning` | `planning-files-lite` and full `planning-with-files` |
@@ -36,7 +37,9 @@ Use `--mode link` to symlink reusable skill directories instead of copying them:
 
 `brevity` intentionally installs only portable skill content. It does not run the upstream global installer, add Claude Code hooks/statusline files, or register the optional MCP shrink proxy.
 
-`core` is the only automatic bundle selected by `setup-ai-context.sh`. All other bundles are opt-in or selected from concrete project signals. This keeps routine context small and avoids loading unrelated tool or persona guidance.
+`core` is always selected by `setup-ai-context.sh`. Other bundles are opt-in or selected from
+concrete project signals; Kotlin source or Gradle Kotlin DSL selects `jvm`. This keeps routine
+context small and avoids loading unrelated tool or persona guidance.
 
 ## Naming
 

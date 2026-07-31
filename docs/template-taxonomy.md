@@ -9,6 +9,7 @@ Project templates are stack, language, platform, or domain specific.
 Examples:
 
 - `templates/steering/angular-steering.md`
+- `templates/steering/kotlin-jvm-steering.md`
 - `templates/steering/javascript-esm-steering.md`
 - `templates/steering/frontend-design-steering.md`
 - `templates/steering/infrastructure-opentofu-steering.md`
