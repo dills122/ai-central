@@ -9,6 +9,13 @@ for script in scripts/*.sh; do
   sh -n "$script"
 done
 
+if grep -Eiq 'reef|order book|matching engine|trading|market data|settlement' \
+  templates/steering/kotlin-jvm-steering.md \
+  templates/skills/adapted/kotlin-jvm-engineering/SKILL.md; then
+  echo "Kotlin/JVM reusable guidance contains project-domain terminology" >&2
+  exit 1
+fi
+
 tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-check.XXXXXX")
 
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile angular >/dev/null

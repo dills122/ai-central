@@ -5,94 +5,110 @@
 Use this guidance for Kotlin/JVM code under `{{KOTLIN_ROOT}}`.
 
 Repository-specific `AGENTS.md`, module documentation, and closer-scoped steering take precedence.
-Follow the repository's existing framework and build conventions unless a change explicitly replaces
-them.
+Follow the project's existing architecture, framework, and build conventions unless a change
+explicitly replaces them. Replace every placeholder before treating this file as project policy.
 
 ## Build And Toolchain
 
-- Use the checked-in Gradle wrapper; do not rely on a globally installed Gradle.
-- Keep the Java toolchain, Kotlin JVM target, CI runtime, and container runtime aligned with
+- Use the checked-in Gradle wrapper rather than a globally installed Gradle.
+- Keep the Java toolchain, Kotlin JVM target, CI runtime, and deployment runtime compatible with
   `{{JVM_VERSION}}`.
-- Pin Kotlin, plugins, and dependencies through the repository's existing dependency-management
-  mechanism. Review toolchain upgrades separately from feature changes.
-- Keep generated sources reproducible. Do not hand-edit generated code; change its schema or
-  generator and regenerate it.
-- Do not hide failing product-owned tests with source-set exclusions or broad test filters.
+- Manage plugin and dependency versions through the repository's established mechanism, such as a
+  version catalog, convention plugin, or dependency-management block.
+- Keep dependency additions narrow and intentional. Check the standard library and existing
+  dependencies before introducing another library.
+- Separate toolchain and major dependency upgrades from unrelated feature work when practical.
+- Treat generated sources as outputs: change the schema or generator, regenerate, and verify drift.
+- Do not hide failing project tests with source-set exclusions, broad filters, or relaxed gates.
 
-## Architecture And Boundaries
+## Structure And Boundaries
 
-- Keep domain rules independent from HTTP, serialization, dependency-injection, SQL, and messaging
-  framework types.
-- Put use cases, command handlers, and workflow orchestration in an application layer organized by
-  bounded context.
-- Keep transport, persistence, and external-service code in explicit adapters or infrastructure
-  packages.
-- Keep composition-root wiring and environment bootstrap separate from request handlers and domain
-  code.
-- Prefer modules and packages named for business roles over generic technology buckets.
-
-Framework code should connect the application; it should not define business behavior.
-
-## API And Routing
-
-- Keep routes thin: validate and map boundary data, invoke one application use case, and map its
-  result.
-- Split route modules by bounded context before an entrypoint accumulates unrelated handlers.
-- Pass route modules cohesive services or gateways. A long constructor of single-method lambdas is
-  still a misplaced god class.
-- Keep transport failures distinct from domain rejections and return stable, structured error
-  shapes.
+- Preserve the repository's established module and package boundaries; do not impose a new
+  architectural style without a concrete need.
+- Keep core behavior testable without booting an entire framework or external environment.
+- Keep I/O, configuration, serialization, persistence, and external-system integration at clear
+  boundaries when the project uses them.
+- Keep application entrypoints and framework adapters focused on mapping inputs, invoking behavior,
+  and mapping results.
+- Keep library public APIs narrow and intentional. Prefer `internal` or private visibility for
+  implementation details.
+- Avoid catch-all utility packages, cyclic module dependencies, and abstractions that only wrap one
+  implementation without adding a useful boundary.
+- Follow existing framework choices. Do not introduce or replace a server, UI, persistence,
+  serialization, dependency-injection, or logging framework incidentally.
 
 ## Kotlin Design
 
-- Prefer immutable data classes for DTOs and event payloads.
-- Use sealed types or enums for constrained state instead of stringly typed control flow.
-- Make nullability, units, identifiers, money/quantity representation, and time semantics explicit
-  at boundaries.
-- Use structured concurrency. Avoid detached work, unbounded coroutine creation, and hidden blocking
-  calls on coroutine dispatchers.
-- Inject clocks, ID generators, and randomness sources when behavior must be deterministic.
-- Keep classes cohesive; split orchestration, validation, persistence, projection, and serialization
-  when they begin to change for different reasons.
-- Extract a shared bootstrap or integration helper when the same pattern appears a second time and
-  could otherwise drift.
+- Prefer immutable values and read-only collection interfaces unless mutation has a clear owner.
+- Make nullability explicit and avoid sentinel strings or numbers for missing or invalid state.
+- Use data classes for value-oriented data and sealed types or enums for genuinely closed state
+  spaces; do not force either pattern where ordinary classes are clearer.
+- Use domain-specific value types for identifiers, units, or constrained values when they prevent
+  real mistakes, not as ceremony around every primitive.
+- Keep functions and classes cohesive. Split code when responsibilities change for different
+  reasons or tests require excessive setup.
+- Use extension functions for behavior that naturally belongs with a type; avoid using them to hide
+  dependencies or global behavior.
+- Handle recoverable failures explicitly and preserve useful causes. Do not catch broad exceptions
+  merely to return a default value.
+- Keep Java interoperability in mind for public APIs: avoid leaking Kotlin-specific constructs when
+  Java callers are part of the supported contract.
 
-## Persistence And Messaging
+## Coroutines And Concurrency
 
-- Keep migrations explicit, ordered, and versioned.
-- Make transaction boundaries visible in application workflows.
-- Persist domain state and its corresponding outbox/event facts atomically when the delivery model
-  requires it.
-- Design consumers for the declared delivery semantics and enforce idempotency for retries.
-- Avoid generic repositories that erase domain meaning or leak storage schemas into public API
+- Use structured concurrency and make coroutine ownership and cancellation clear.
+- Avoid detached work, unbounded coroutine creation, blocking calls on constrained dispatchers, and
+  mutable state shared without an explicit synchronization strategy.
+- Inject clocks, ID generators, schedulers, or randomness when behavior must be deterministic.
+- Make timeouts, retries, cleanup, and shutdown behavior explicit at I/O boundaries.
+- Do not add coroutines to synchronous code unless concurrency or suspension provides a concrete
+  benefit.
+
+## Data, Configuration, And External Systems
+
+Apply these rules only when the project has the corresponding boundary:
+
+- Keep database migrations explicit, ordered, reviewable, and compatible with the deployment plan.
+- Make transaction boundaries visible and keep network calls out of database transactions unless
+  the tradeoff is deliberate.
+- Use parameterized database operations and avoid leaking persistence models into stable public
   contracts.
+- Keep credentials and environment-specific values outside source control. Validate configuration
+  early and report missing values without exposing secrets.
+- Design asynchronous consumers for the delivery guarantees the system actually provides, including
+  duplicate delivery or retry behavior where applicable.
+- Bound queues, retries, payloads, and concurrent external calls; use explicit timeouts.
 
-## Contracts And Interoperability
+## Contracts And Compatibility
 
-- Define cross-module and cross-service contracts before transport adapters.
-- Prefer additive, versioned contract evolution and test compatibility across supported producers
-  and consumers.
-- Carry required identity, correlation, causation, and time metadata through every adapter.
-- Test serialization and semantic parity at language or service boundaries, not only compilation.
+- Treat public Kotlin APIs, Java-facing APIs, serialized data, configuration keys, command-line
+  interfaces, and service endpoints as contracts when downstream users depend on them.
+- Prefer additive evolution and intentional deprecation over silent breaking changes.
+- Keep one source of truth for generated schemas, clients, or bindings and verify generated output.
+- Test serialization, API compatibility, and cross-module or cross-language behavior where those
+  boundaries exist.
 
 ## Testing
 
-Prioritize:
+Choose tests that match the project shape:
 
-- domain state-transition and invariant tests;
-- application command/use-case tests;
-- route and serialization tests;
-- persistence and migration integration tests;
-- messaging and external-service contract tests;
-- deterministic coroutine and time-dependent tests.
+- focused unit tests for behavior and edge cases;
+- parameterized tests for meaningful input combinations;
+- coroutine tests with controlled scheduling and time;
+- boundary tests for parsing, serialization, configuration, and error mapping;
+- integration tests for databases, files, processes, networks, or frameworks when used;
+- compatibility tests for public libraries and generated contracts;
+- regression tests for every fixed defect when practical.
 
-Workflow tests should assert resulting state and emitted facts, not only return values.
+Keep tests deterministic and independent by default. Do not require live external services unless
+the test is explicitly an integration or end-to-end check.
 
 ## Verification
 
-Run the smallest reliable checks for the changed module, then the broader gate before handoff:
+Run the smallest reliable checks for the changed module, then the broader repository gate:
 
 ```sh
+{{KOTLIN_FORMAT_COMMAND}}
 {{KOTLIN_TEST_COMMAND}}
 {{KOTLIN_CHECK_COMMAND}}
 ```

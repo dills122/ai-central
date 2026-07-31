@@ -21,9 +21,9 @@ Scanned `/Users/dsteele/repos` on 2026-06-04 and collected:
 - 13 Cursor/Payload CMS rules from `breakerflow-platform/apps/cms`
 - 33 first-party Codex skills from `wap-labs/.codex/skills`
 
-A focused Reef review on 2026-07-31 added its root AI guidance, two project-owned Codex steering
-files, and ten canonical `docs/steering/` files. The review also promoted a reusable Kotlin/JVM
-steering profile.
+A focused Reef review on 2026-07-31 promoted a reusable Kotlin/JVM steering profile and skill. Reef's
+trading-platform and repository-specific source context was reviewed locally but is not retained in
+the reusable library.
 
 ## Quick Start
 
