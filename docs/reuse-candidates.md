@@ -8,7 +8,8 @@ These are broadly reusable with placeholders:
 - Safe refactor boundaries
 - Contract-first files
 - Local command map
-- JavaScript/ESM rules
+- JavaScript/TypeScript strict typing, ESM, boundary validation, async ownership, dependency, security,
+  performance, and verification rules
 - Testing and quality gates
 - Angular coding standards
 - Kotlin/JVM Gradle/toolchain alignment, project-fit module boundaries, language design, structured
@@ -94,6 +95,23 @@ Promoted now:
 
 Other Reef language, data, API, and architecture documents were not imported. Any future template
 should start with a fresh domain-neutral review rather than copying those project policies.
+
+## Strict Language Steering Review
+
+The 2026-07-31 primary-source review is documented in
+`docs/language-steering-research-2026-07-31.md`. It promoted:
+
+- a separate, automatically detected `javascript-typescript` profile instead of installing
+  JavaScript rules from the stack-neutral `base` profile;
+- strict, consistently structured JavaScript/TypeScript, Kotlin/JVM, Rust, and POSIX shell
+  templates covering reproducibility, maintainability, input and resource safety, dependencies,
+  concurrency, performance, tests, and executable quality gates;
+- regression checks that keep domain terminology out, require shared enforcement sections, verify
+  direct and detected installation, and prevent JavaScript steering from leaking into pure Rust or
+  base installations.
+
+The templates use placeholders for repository commands and supported versions. They avoid imposing
+frameworks, service layouts, product domains, or one universal architecture.
 
 ## Infrastructure And OpenTofu Review
 

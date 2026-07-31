@@ -7,8 +7,8 @@ description: Implement, refactor, review, or debug Kotlin/JVM services, librarie
 
 ## Establish The Project Contract
 
-1. Read `AGENTS.md`, closer-scoped guidance, module documentation, Gradle settings, and the affected
-   build files.
+1. Read `AGENTS.md`, `.codex/steering/kotlin-jvm-steering.md` when installed, closer-scoped guidance,
+   module documentation, Gradle settings, and the affected build files.
 2. Use the checked-in Gradle wrapper and identify the Java toolchain, Kotlin JVM target, plugin and
    dependency-management approach, test framework, formatting/linting tools, and CI commands.
 3. Inspect neighboring source and tests before introducing a new package, abstraction, dependency,
@@ -48,7 +48,8 @@ description: Implement, refactor, review, or debug Kotlin/JVM services, librarie
 ## Protect Build And Boundary Integrity
 
 - Keep the Java toolchain, Kotlin target, CI runtime, and deployment runtime compatible.
-- Use the repository's dependency-management mechanism and keep new dependencies intentional.
+- Use the repository's dependency-management mechanism, preserve locks and verification metadata,
+  and keep new dependencies intentional.
 - Keep generated output reproducible and verify drift when contracts or generators change.
 - Apply migrations, transaction, retry, idempotency, timeout, and resource-bound rules only to the
   data or integration boundaries that actually exist.

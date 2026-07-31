@@ -7,7 +7,7 @@ Usage: setup-ai-context.sh TARGET_DIR [options]
 
 Options:
   --yes                    Use detected recommendations without prompts
-  --profiles LIST          Comma-separated steering profiles: base,angular,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
+  --profiles LIST          Comma-separated steering profiles: base,javascript-typescript,angular,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
   --bundles LIST           Comma-separated skill bundles: core,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,workflow,all
   --mode copy|link          copy installs files; link symlinks reusable templates and skills
   --skip-profiles LIST     Comma-separated profiles to exclude
@@ -137,7 +137,12 @@ detect_profiles() {
   target_dir=$1
   profiles=base
 
+  if [ -f "$target_dir/package.json" ] || find "$target_dir" -maxdepth 5 \( -name '*.js' -o -name '*.mjs' -o -name '*.cjs' -o -name '*.jsx' -o -name '*.ts' -o -name '*.mts' -o -name '*.cts' -o -name '*.tsx' \) -type f | grep -q .; then
+    profiles=$(append_unique "$profiles" "javascript-typescript")
+  fi
+
   if [ -f "$target_dir/angular.json" ] || find "$target_dir" -maxdepth 3 -name angular.json -type f | grep -q .; then
+    profiles=$(append_unique "$profiles" "javascript-typescript")
     profiles=$(append_unique "$profiles" "angular")
     profiles=$(append_unique "$profiles" "frontend-design")
   fi
@@ -151,10 +156,12 @@ detect_profiles() {
   fi
 
   if find "$target_dir" -maxdepth 4 \( -name payload.config.ts -o -name payload.config.js -o -path '*/payload.config.ts' -o -path '*/payload.config.js' \) -type f | grep -q .; then
+    profiles=$(append_unique "$profiles" "javascript-typescript")
     profiles=$(append_unique "$profiles" "payload")
   fi
 
   if find "$target_dir" -maxdepth 4 \( -name '*.tsx' -o -name '*.jsx' -o -name '*.component.ts' \) -type f | grep -q .; then
+    profiles=$(append_unique "$profiles" "javascript-typescript")
     profiles=$(append_unique "$profiles" "frontend-design")
   fi
 
@@ -279,7 +286,7 @@ if [ ! -d "$target_dir" ]; then
   exit 1
 fi
 
-allowed_profiles=base,angular,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
+allowed_profiles=base,javascript-typescript,angular,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
 allowed_bundles=core,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,workflow,all
 
 case "$mode" in

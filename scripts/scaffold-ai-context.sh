@@ -2,7 +2,7 @@
 set -eu
 
 usage() {
-  echo "Usage: $0 TARGET_DIR [--profile base|angular|kotlin-jvm|rust|shell-scripting|payload|frontend-design|infrastructure-opentofu] [--mode copy|link]" >&2
+  echo "Usage: $0 TARGET_DIR [--profile base|javascript-typescript|angular|kotlin-jvm|rust|shell-scripting|payload|frontend-design|infrastructure-opentofu] [--mode copy|link]" >&2
 }
 
 if [ "$#" -lt 1 ]; then
@@ -41,7 +41,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 case "$profile" in
-  base|angular|kotlin-jvm|rust|shell-scripting|payload|frontend-design|infrastructure-opentofu) ;;
+  base|javascript-typescript|angular|kotlin-jvm|rust|shell-scripting|payload|frontend-design|infrastructure-opentofu) ;;
   *)
     echo "Unknown profile: $profile" >&2
     usage
@@ -94,8 +94,13 @@ install_reusable_if_missing() {
 
 copy_if_missing "$repo_root/templates/agents/AGENTS.md" "$target_dir/AGENTS.md"
 copy_if_missing "$repo_root/templates/steering/repository-steering.md" "$target_dir/.codex/steering/repository-steering.md"
-install_reusable_if_missing "$repo_root/templates/steering/javascript-esm-steering.md" "$target_dir/.codex/steering/javascript-esm-steering.md"
 copy_if_missing "$repo_root/templates/steering/testing-quality-gates-steering.md" "$target_dir/.codex/steering/testing-quality-gates-steering.md"
+
+case "$profile" in
+  javascript-typescript|angular|frontend-design|payload)
+    install_reusable_if_missing "$repo_root/templates/steering/javascript-typescript-steering.md" "$target_dir/.codex/steering/javascript-typescript-steering.md"
+    ;;
+esac
 
 if [ "$profile" = "angular" ]; then
   install_reusable_if_missing "$repo_root/templates/steering/angular-steering.md" "$target_dir/.codex/steering/angular-steering.md"

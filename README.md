@@ -26,6 +26,9 @@ trading-platform and repository-specific source context was reviewed locally but
 the reusable library. A broader 44-checkout review promoted Rust and shell/scripting profiles while
 likewise leaving project-specific source context in its originating repositories.
 
+A primary-source language review on 2026-07-31 strengthened the JavaScript/TypeScript, Kotlin/JVM,
+Rust, and POSIX shell templates with strict, domain-neutral engineering and verification standards.
+
 ## Quick Start
 
 Run the guided setup for a new or existing project:
@@ -46,11 +49,12 @@ Create baseline Codex context in another project:
 ./scripts/scaffold-ai-context.sh /path/to/project --profile angular
 ```
 
-Use `--profile base` for stack-neutral files, `--profile angular` for Angular-oriented steering,
-`--profile kotlin-jvm` for Kotlin/JVM and Gradle guidance, `--profile rust` for Rust guidance,
-`--profile shell-scripting` for portable automation guidance, `--profile frontend-design` for UI
-quality steering, `--profile payload` for Payload CMS Cursor rules, or
-`--profile infrastructure-opentofu` for infrastructure lifecycle and safety steering.
+Use `--profile base` for stack-neutral files, `--profile javascript-typescript` for JavaScript and
+TypeScript guidance, `--profile angular` for Angular-oriented steering, `--profile kotlin-jvm` for
+Kotlin/JVM and Gradle guidance, `--profile rust` for Rust guidance, `--profile shell-scripting` for
+portable automation guidance, `--profile frontend-design` for UI quality steering, `--profile
+payload` for Payload CMS Cursor rules, or `--profile infrastructure-opentofu` for infrastructure
+lifecycle and safety steering.
 
 Install reviewed skill bundles:
 
@@ -104,6 +108,7 @@ Run local checks:
 - [External skill review](docs/external-skill-review.md)
 - [Context-management audit (2026-07)](docs/context-management-audit-2026-07.md)
 - [Repository AI-context audit (2026-07-31)](docs/repository-ai-context-audit-2026-07-31.md)
+- [Language steering research (2026-07-31)](docs/language-steering-research-2026-07-31.md)
 - [External source policy](docs/external-source-policy.md)
 - [Skill attribution](docs/skill-attribution.md)
 - [Contributing](CONTRIBUTING.md)

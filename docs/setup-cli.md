@@ -8,9 +8,9 @@ Use `scripts/setup-ai-context.sh` as the guided entrypoint for installing steeri
 
 The setup script:
 
-- detects project signals such as `package.json`, `angular.json`, Kotlin/Gradle Kotlin DSL files,
-  `Cargo.toml`, Terraform/OpenTofu files, Payload config files, Vue/Nuxt files, frontend source files,
-  and docs/product folders
+- detects project signals such as `package.json`, JavaScript/TypeScript source, `angular.json`,
+  Kotlin/Gradle Kotlin DSL files, `Cargo.toml`, Terraform/OpenTofu files, Payload config files,
+  Vue/Nuxt files, frontend source files, and docs/product folders
 - recommends steering profiles and skill bundles
 - prompts for custom inclusion/exclusion
 - calls the existing non-overwriting installers
@@ -74,10 +74,11 @@ Profiles install steering/context files:
 | Profile | Purpose |
 | --- | --- |
 | `base` | Generic AGENTS and Codex steering |
+| `javascript-typescript` | Strict JavaScript/TypeScript typing, ESM, boundary, async, dependency, security, performance, and verification steering |
 | `angular` | Angular-specific steering |
-| `kotlin-jvm` | General Kotlin/JVM Gradle, toolchain, module, language, coroutine, compatibility, boundary, and testing steering |
-| `rust` | Rust architecture, contracts, input safety, codegen, deterministic behavior, and testing steering |
-| `shell-scripting` | POSIX-first repository automation, lifecycle, safety, and verification steering |
+| `kotlin-jvm` | Strict Kotlin/JVM and Gradle toolchain, dependency, API, coroutine, boundary, security, performance, and verification steering |
+| `rust` | Strict Rust toolchain, ownership, API, unsafe, dependency, concurrency, performance, and verification steering |
+| `shell-scripting` | Strict POSIX-first interfaces, quoting, failure handling, cleanup, security, portability, and verification steering |
 | `payload` | Payload CMS Cursor rules |
 | `frontend-design` | Frontend UI quality, accessibility, responsive, and interaction-state steering |
 | `infrastructure-opentofu` | OpenTofu state, secrets, validation, plan/apply, recovery, and network-safety steering |

@@ -148,3 +148,13 @@ their originating repositories rather than being copied into AI Central.
 The review promoted normalized Rust and shell/scripting steering profiles and expanded the
 collector's recognized AI locations. Source commits, dirty-worktree handling, exclusions, and
 future candidates are documented in `docs/repository-ai-context-audit-2026-07-31.md`.
+
+### Strict Language Steering Research — 2026-07-31
+
+A separate primary-source review strengthened every currently bundled language steering template:
+JavaScript/TypeScript, Kotlin/JVM, Rust, and POSIX shell. The review introduced a dedicated detected
+JavaScript/TypeScript profile, made `base` language-neutral, aligned the templates around strict
+enforcement and verification sections, and added cross-install regression coverage.
+
+Sources, decisions, and future-profile criteria are documented in
+`docs/language-steering-research-2026-07-31.md`.

@@ -17,14 +17,32 @@ if grep -Eiq 'reef|order book|matching engine|trading|market data|settlement' \
 fi
 
 if grep -Eiq 'wap|waves|wml|wsp|wtp|lowband|forage|capsule|liars.?dice' \
+  templates/steering/javascript-typescript-steering.md \
   templates/steering/rust-steering.md \
   templates/steering/shell-scripting-steering.md; then
-  echo "Rust or shell reusable guidance contains source-project terminology" >&2
+  echo "Reusable language guidance contains source-project terminology" >&2
   exit 1
 fi
 
+for language_template in \
+  templates/steering/javascript-typescript-steering.md \
+  templates/steering/kotlin-jvm-steering.md \
+  templates/steering/rust-steering.md \
+  templates/steering/shell-scripting-steering.md; do
+  grep -q '^## Scope And Enforcement$' "$language_template"
+  grep -q '^## Testing And Quality Gates$' "$language_template"
+  grep -q '^## Verification$' "$language_template"
+done
+
+base_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-base-check.XXXXXX")
+./scripts/scaffold-ai-context.sh "$base_dir" --profile base >/dev/null
+test -f "$base_dir/.codex/steering/repository-steering.md"
+test ! -e "$base_dir/.codex/steering/javascript-typescript-steering.md"
+
 tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-check.XXXXXX")
 
+./scripts/scaffold-ai-context.sh "$tmp_dir" --profile javascript-typescript >/dev/null
+./scripts/scaffold-ai-context.sh "$tmp_dir" --profile javascript-typescript >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile angular >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile angular >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile kotlin-jvm >/dev/null
@@ -50,6 +68,7 @@ test "$infrastructure_hash" = "$(shasum -a 256 "$tmp_dir/.codex/steering/infrast
 
 test -f "$tmp_dir/AGENTS.md"
 test -f "$tmp_dir/.codex/steering/repository-steering.md"
+test -f "$tmp_dir/.codex/steering/javascript-typescript-steering.md"
 test -f "$tmp_dir/.codex/steering/angular-steering.md"
 test -f "$tmp_dir/.codex/steering/kotlin-jvm-steering.md"
 test -f "$tmp_dir/.codex/steering/rust-steering.md"
@@ -79,6 +98,7 @@ mkdir -p "$setup_dir/src"
 touch "$setup_dir/package.json" "$setup_dir/angular.json" "$setup_dir/Cargo.toml" "$setup_dir/main.tf" "$setup_dir/src/app.component.ts" "$setup_dir/src/App.vue" "$setup_dir/src/App.kt"
 ./scripts/setup-ai-context.sh "$setup_dir" --yes >/dev/null
 test -f "$setup_dir/AGENTS.md"
+test -f "$setup_dir/.codex/steering/javascript-typescript-steering.md"
 test -f "$setup_dir/.codex/steering/angular-steering.md"
 test -f "$setup_dir/.codex/steering/kotlin-jvm-steering.md"
 test -f "$setup_dir/.codex/steering/rust-steering.md"
@@ -92,12 +112,18 @@ test -f "$setup_dir/.codex/skills/web-web-quality-audit/SKILL.md"
 test -f "$setup_dir/.codex/skills/vue/SKILL.md"
 test -f "$setup_dir/.codex/skills/terraform-skill/SKILL.md"
 
+rust_setup_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-rust-setup-check.XXXXXX")
+touch "$rust_setup_dir/Cargo.toml"
+./scripts/setup-ai-context.sh "$rust_setup_dir" --yes >/dev/null
+test -f "$rust_setup_dir/.codex/steering/rust-steering.md"
+test ! -e "$rust_setup_dir/.codex/steering/javascript-typescript-steering.md"
+
 link_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-link-check.XXXXXX")
 touch "$link_dir/package.json"
 ./scripts/setup-ai-context.sh "$link_dir" --profiles base,frontend-design --bundles core --mode link --yes >/dev/null
 test -f "$link_dir/AGENTS.md"
 test ! -L "$link_dir/AGENTS.md"
-test -L "$link_dir/.codex/steering/javascript-esm-steering.md"
+test -L "$link_dir/.codex/steering/javascript-typescript-steering.md"
 test -L "$link_dir/.codex/steering/frontend-design-steering.md"
 test -L "$link_dir/.codex/skills/context-engineering"
 test -f "$link_dir/.codex/skills/context-engineering/SKILL.md"

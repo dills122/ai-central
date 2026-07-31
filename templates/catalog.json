@@ -19,6 +19,13 @@
       "signals": ["default"]
     },
     {
+      "id": "javascript-typescript",
+      "label": "JavaScript and TypeScript",
+      "type": "language-platform",
+      "description": "Strict JavaScript/TypeScript typing, ESM, dependency, boundary, async, security, performance, and verification guidance.",
+      "signals": ["package.json", "*.js", "*.mjs", "*.cjs", "*.jsx", "*.ts", "*.mts", "*.cts", "*.tsx"]
+    },
+    {
       "id": "angular",
       "label": "Angular",
       "type": "language-framework",
@@ -29,21 +36,21 @@
       "id": "kotlin-jvm",
       "label": "Kotlin/JVM",
       "type": "language-platform",
-      "description": "General Kotlin/JVM Gradle, toolchain, module, language, coroutine, compatibility, boundary, and testing guidance.",
+      "description": "Strict Kotlin/JVM and Gradle toolchain, dependency, API, coroutine, boundary, security, performance, and verification guidance.",
       "signals": ["*.kt", "build.gradle.kts", "settings.gradle.kts"]
     },
     {
       "id": "rust",
       "label": "Rust",
       "type": "language-platform",
-      "description": "Rust architecture, contracts, untrusted-input safety, deterministic behavior, codegen, and testing guidance.",
+      "description": "Strict Rust toolchain, ownership, API, unsafe, dependency, concurrency, performance, and verification guidance.",
       "signals": ["Cargo.toml", "*.rs"]
     },
     {
       "id": "shell-scripting",
       "label": "Shell and Scripting",
       "type": "tooling",
-      "description": "POSIX-first portable repository automation, safety, lifecycle, and verification guidance.",
+      "description": "Strict POSIX-first interfaces, quoting, failure handling, cleanup, security, portability, and verification guidance.",
       "signals": ["*.sh", "scripts/", "Makefile", "Dockerfile"]
     },
     {

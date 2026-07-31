@@ -18,14 +18,27 @@ Installs:
 
 - `AGENTS.md`
 - `.codex/steering/repository-steering.md`
-- `.codex/steering/javascript-esm-steering.md`
 - `.codex/steering/testing-quality-gates-steering.md`
 
-Use for most JavaScript, TypeScript, or mixed web projects.
+Use for stack-neutral repository policy. Language profiles are installed separately so a pure Rust,
+Kotlin, or infrastructure project does not receive unrelated JavaScript rules.
+
+## JavaScript And TypeScript
+
+Includes everything from `base`, plus:
+
+- `.codex/steering/javascript-typescript-steering.md`
+
+Use for JavaScript, TypeScript, Node.js, browser, and mixed web repositories. Guided setup detects
+this profile from `package.json` and JavaScript/TypeScript source files. Replace its runtime,
+source-root, and verification placeholders before treating it as project policy.
+
+This replaces the former `javascript-esm-steering.md` template. Existing copied or linked instances
+of that file are not deleted automatically; review and remove them after installing the new profile.
 
 ## Angular
 
-Includes everything from `base`, plus:
+Includes everything from `base` and the JavaScript/TypeScript language profile, plus:
 
 - `.codex/steering/angular-steering.md`
 
@@ -33,7 +46,7 @@ Use for Angular apps and Angular monorepo packages.
 
 ## Frontend Design
 
-Includes everything from `base`, plus:
+Includes everything from `base` and the JavaScript/TypeScript language profile, plus:
 
 - `.codex/steering/frontend-design-steering.md`
 
@@ -69,7 +82,7 @@ or release automation. Replace the command and scripts-root placeholders before 
 
 ## Payload
 
-Includes everything from `base`, plus:
+Includes everything from `base` and the JavaScript/TypeScript language profile, plus:
 
 - `.cursor/rules/payload-overview.md`
 
