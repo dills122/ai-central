@@ -2,7 +2,7 @@
 set -eu
 
 usage() {
-  echo "Usage: $0 TARGET_DIR [--bundle core|brevity|engineering|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|workflow|all] [--mode copy|link]" >&2
+  echo "Usage: $0 TARGET_DIR [--bundle core|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|workflow|all] [--mode copy|link]" >&2
 }
 
 if [ "$#" -lt 1 ]; then
@@ -41,7 +41,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 case "$bundle" in
-  core|brevity|engineering|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|workflow|all) ;;
+  core|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|workflow|all) ;;
   *)
     echo "Unknown bundle: $bundle" >&2
     usage
@@ -124,6 +124,10 @@ install_engineering() {
   install_find_skills "$repo_root/templates/skills/imported/claude-skills/engineering-team" "claude-"
 }
 
+install_jvm() {
+  install_skill "$repo_root/templates/skills/adapted/kotlin-jvm-engineering" "kotlin-jvm-engineering"
+}
+
 install_rust() {
   install_find_skills "$repo_root/templates/skills/imported/rust-agentic-skills" "rust-"
 }
@@ -190,6 +194,9 @@ case "$bundle" in
   engineering)
     install_engineering
     ;;
+  jvm)
+    install_jvm
+    ;;
   rust)
     install_rust
     ;;
@@ -221,6 +228,7 @@ case "$bundle" in
     install_core
     install_brevity
     install_engineering
+    install_jvm
     install_rust
     install_product
     install_planning
