@@ -20,7 +20,7 @@ Use `--mode link` to symlink reusable skill directories instead of copying them:
 
 | Bundle | Contents |
 | --- | --- |
-| `core` | Lightweight planning, frontend review, context engineering, spec, planning, TDD, review, debugging, source-driven development |
+| `core` | Safe GitHub Keychain authentication, lightweight planning, frontend review, context engineering, spec, planning, TDD, review, debugging, source-driven development |
 | `brevity` | Caveman token-saving skills for terse replies, help, commit messages, code review comments, and memory-file compression |
 | `engineering` | All `addyosmani/agent-skills` plus selected engineering skills from `alirezarezvani/claude-skills` |
 | `jvm` | General Kotlin/JVM implementation, Gradle toolchain, module, coroutine, compatibility, boundary, and verification workflow |
@@ -40,6 +40,10 @@ Use `--mode link` to symlink reusable skill directories instead of copying them:
 `core` is always selected by `setup-ai-context.sh`. Other bundles are opt-in or selected from
 concrete project signals; Kotlin source or Gradle Kotlin DSL selects `jvm`, and `Cargo.toml` selects
 `rust`. This keeps routine context small and avoids loading unrelated tool or persona guidance.
+
+The first-party `github-keychain-auth` skill is part of `core`. It standardizes using the existing
+macOS Keychain-backed GitHub CLI credential while removing stale `GH_TOKEN` and `GITHUB_TOKEN`
+overrides for each command. It never stores, extracts, prints, or transfers credential bytes.
 
 ## Naming
 

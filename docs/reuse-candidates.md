@@ -52,6 +52,12 @@ These look useful across multiple repositories:
 - `sprint-plan`
 - `user-stories`
 
+Promoted as a first-party core skill:
+
+- `github-keychain-auth`: use the existing macOS Keychain-backed GitHub CLI credential across
+  projects, prevent stale token environment variables from overriding it, and prohibit exposing or
+  transferring the credential itself.
+
 Suggested next review question: decide whether these should live as Codex skills in this repo, a personal plugin, or just source material copied into target projects.
 
 ## Gaps To Fill
