@@ -9,7 +9,7 @@ Use GitHub CLI's existing macOS Keychain integration. Treat credential availabil
 
 ## Safe Workflow
 
-1. Do not inspect either token environment variable. Remove both only for the GitHub command so a stale inherited value cannot override Keychain authentication:
+1. Do not inspect either token environment variable. Remove both only for the GitHub command so stale inherited values do not take precedence over the account already configured in GitHub CLI:
 
    ```sh
    env -u GH_TOKEN -u GITHUB_TOKEN gh auth status --hostname github.com
