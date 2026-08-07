@@ -76,6 +76,14 @@ test -f "$tmp_dir/.codex/steering/shell-scripting-steering.md"
 test -f "$tmp_dir/.cursor/rules/payload-overview.md"
 test -f "$tmp_dir/.codex/steering/infrastructure-opentofu-steering.md"
 test -f "$tmp_dir/.codex/skills/planning-files-lite/SKILL.md"
+test -f "$tmp_dir/.codex/skills/github-keychain-auth/SKILL.md"
+test -f "$tmp_dir/.codex/skills/github-keychain-auth/agents/openai.yaml"
+grep -q 'env -u GH_TOKEN -u GITHUB_TOKEN gh auth status' \
+  "$tmp_dir/.codex/skills/github-keychain-auth/SKILL.md"
+test "$(grep -c 'gh auth token' "$tmp_dir/.codex/skills/github-keychain-auth/SKILL.md")" -eq 1
+test "$(grep -c 'find-generic-password -w' "$tmp_dir/.codex/skills/github-keychain-auth/SKILL.md")" -eq 1
+grep -q 'Never run `gh auth token`, `security find-generic-password -w`' \
+  "$tmp_dir/.codex/skills/github-keychain-auth/SKILL.md"
 test -f "$tmp_dir/.codex/skills/frontend-design-review/SKILL.md"
 test -f "$tmp_dir/.codex/skills/context-engineering/SKILL.md"
 test -f "$tmp_dir/.codex/skills/caveman/SKILL.md"
@@ -127,6 +135,8 @@ test -L "$link_dir/.codex/steering/javascript-typescript-steering.md"
 test -L "$link_dir/.codex/steering/frontend-design-steering.md"
 test -L "$link_dir/.codex/skills/context-engineering"
 test -f "$link_dir/.codex/skills/context-engineering/SKILL.md"
+test -L "$link_dir/.codex/skills/github-keychain-auth"
+test -f "$link_dir/.codex/skills/github-keychain-auth/SKILL.md"
 ./scripts/install-skill-bundle.sh "$link_dir" --bundle infra --mode link >/dev/null
 test -L "$link_dir/.codex/skills/terraform-skill"
 test -f "$link_dir/.codex/skills/terraform-skill/SKILL.md"

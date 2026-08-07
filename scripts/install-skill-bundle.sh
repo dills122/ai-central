@@ -99,6 +99,7 @@ install_find_skills() {
 }
 
 install_core() {
+  install_skill "$repo_root/templates/skills/first-party/github-keychain-auth" "github-keychain-auth"
   install_skill "$repo_root/templates/skills/adapted/planning-files-lite" "planning-files-lite"
   install_skill "$repo_root/templates/skills/adapted/frontend-design-review" "frontend-design-review"
   install_skill "$repo_root/templates/skills/imported/agent-skills/context-engineering" "context-engineering"
