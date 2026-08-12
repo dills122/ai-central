@@ -2,14 +2,8 @@ name: Skill Security
 
 on:
   pull_request:
-    paths:
-      - "templates/skills/**"
-      - ".github/workflows/skill-security.yml"
   push:
     branches: [main]
-    paths:
-      - "templates/skills/**"
-      - ".github/workflows/skill-security.yml"
 
 permissions:
   contents: read
