@@ -1,0 +1,20 @@
+name: ai-central-orchestration
+version: 0.2.0
+description: Lead-task planning, multi-agent dispatch, traceability, persistent handoffs, retained research, and reconciliation.
+repository: https://github.com/dills122/ai-central
+keywords:
+  - ai
+  - agent-skills
+  - orchestration
+  - planning
+type: skill
+includes: auto
+
+dependencies:
+  apm:
+    - path: ../../../templates/skills/first-party/orchestrated-delivery
+    - path: ../../../templates/skills/first-party/spec-traceability
+    - path: ../../../templates/skills/first-party/session-handoff
+    - path: ../../../templates/skills/first-party/research-to-decision
+    - path: ../../../templates/skills/imported/planning-with-files/planning-with-files
+    - path: ../../../templates/skills/imported/agent-skills/doubt-driven-development

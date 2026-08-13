@@ -8,9 +8,9 @@ Use `scripts/setup-ai-context.sh` as the guided entrypoint for installing steeri
 
 The setup script:
 
-- detects project signals such as `package.json`, JavaScript/TypeScript source, `angular.json`,
-  Kotlin/Gradle Kotlin DSL files, `Cargo.toml`, Terraform/OpenTofu files, Payload config files,
-  Vue/Nuxt files, frontend source files, and docs/product folders
+- detects concrete project signals such as a root `package.json` or `angular.json`, Kotlin/Gradle
+  Kotlin DSL files, `Cargo.toml`, Terraform/OpenTofu files, Payload config files, and active
+  Vue/Nuxt or frontend source files
 - recommends steering profiles and skill bundles
 - prompts for custom inclusion/exclusion
 - calls the existing non-overwriting installers
@@ -89,7 +89,10 @@ Bundles install reusable skills:
 
 | Bundle | Purpose |
 | --- | --- |
-| `core` | Safe default task, planning, review, debugging, source-driven, and frontend review skills |
+| `core` | Small universal baseline for context, specs, planning, tests, review, debugging, source-driven work, and safe GitHub authentication |
+| `orchestration` | Brain-task planning, multi-agent dispatch, spec traceability, durable handoffs, research, and reconciliation |
+| `documentation` | Canonical documentation, ADRs, drift audits, READMEs, Mermaid, and C4 architecture |
+| `delivery` | Incremental implementation, Git workflow, simplification, CI, self-evaluation, ship gates, and launch readiness |
 | `brevity` | Caveman token-saving skills for terse replies, commit messages, review comments, help, and memory-file compression |
 | `engineering` | Broader engineering lifecycle, architecture, CI, security, observability, migration, and tooling skills |
 | `jvm` | Kotlin/JVM implementation, Gradle toolchain, coroutine, architecture, persistence, contract, and verification skill |
@@ -108,4 +111,9 @@ Bundles install reusable skills:
 
 All underlying installers skip existing files and directories.
 
-This makes setup safe for existing projects, but it also means updates require manual review of skipped files.
+Skills are installed canonically under `.agents/skills`. Fresh installs also receive per-skill
+compatibility symlinks under `.codex/skills`. Existing real legacy skills are left untouched and
+linked into canonical discovery instead of being moved or duplicated.
+
+This makes setup safe for existing projects, but updates to skipped files still require manual
+review. Use `scripts/audit-ai-context.sh /path/to/project` to find layout and placeholder problems.

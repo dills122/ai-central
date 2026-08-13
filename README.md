@@ -8,7 +8,7 @@ Central library for AI steering files, agent instructions, Cursor rules, and Cod
 - `templates/` contains normalized starters intended for reuse in new or existing projects.
 - `templates/skills/` contains reviewed imported and adapted skills.
 - `templates/catalog.json` describes available profiles and bundles.
-- `packages/apm/` contains optional Agent Package Manager package manifests.
+- `packages/apm/` contains optional Agent Package Manager manifests for the compact bundles.
 - `docs/` contains inventory, classification, and review notes.
 - `docs/source-manifest.sha256` records hashes for collected source files.
 - `scripts/` contains local helpers for scaffolding AI context into project repos.
@@ -36,14 +36,14 @@ AI Central has two reusable layers:
 
 - **Profiles** install durable repository guidance such as `AGENTS.md`, language rules, testing
   expectations, and frontend or infrastructure steering.
-- **Bundles** install task-oriented Codex skills under `.codex/skills/`. Skills load when relevant;
-  they are not application runtime dependencies.
+- **Bundles** install task-oriented Codex skills under `.agents/skills/`, with compatibility
+  symlinks under `.codex/skills/`. Skills load when relevant; they are not runtime dependencies.
 
-The current checkout contains 123 reusable `SKILL.md` definitions under `templates/skills/`. The
-`all` meta-bundle installs 121 named skill directories because three imported skills are retained
-but intentionally unbundled, while the Playwright review source is exposed under different names
-by the `engineering` and `frontend` bundles. Another 33 Wap Labs skills are preserved as collected
-source material and are not installed by any bundle.
+The current checkout contains 128 reusable `SKILL.md` definitions under `templates/skills/`. The
+`all` meta-bundle installs 131 named skill directories because three imported skills are retained
+but intentionally unbundled, while Playwright and five compact-bundle dependencies are also
+exposed under historical prefixed names by older broad bundles. Another 33 Wap Labs skills are
+preserved as collected source material and are not installed by any bundle.
 
 For provenance and licenses, see [Skill attribution](docs/skill-attribution.md) and
 [Third-party notices](THIRD_PARTY_NOTICES.md).
@@ -53,6 +53,9 @@ For provenance and licenses, see [Skill attribution](docs/skill-attribution.md) 
 | Project or task | Profiles | Bundles | Notes |
 | --- | --- | --- | --- |
 | Any repository | `base` | `core` | Safe default for planning, testing, review, debugging, and source-driven work. |
+| Larger spec-driven project coordinated from a lead task | matching project profiles | `core,orchestration` | Adds multi-agent dispatch, traceability, retained research, handoffs, and reconciliation without the full catalog. |
+| Documentation or architecture maintenance | matching project profiles | `core,documentation` | Adds doc-drift auditing, ADRs, READMEs, Mermaid, and C4 architecture. |
+| Implementation through release readiness | matching project profiles | `core,delivery` | Adds incremental delivery, Git workflow, simplification, CI, self-evaluation, ship gates, and launch checks. |
 | JavaScript or TypeScript | `base,javascript-typescript` | `core` | Adds strict typing, ESM, dependency, async, boundary, security, and verification rules. |
 | User-facing frontend | `base,javascript-typescript,frontend-design` | `core,frontend` | Adds UI implementation, accessibility, browser testing, Playwright review, and web-quality skills. |
 | Angular frontend | `base,angular,frontend-design` | `core,frontend` | Adds Angular steering on top of the frontend baseline. |
@@ -90,7 +93,10 @@ reusable profiles and skills, and the installers skip existing files instead of 
 
 | Bundle | Skill count | Use it for |
 | --- | ---: | --- |
-| `core` | 10 | Default planning, specification, TDD, review, debugging, source-driven work, frontend review, and safe GitHub authentication |
+| `core` | 9 | Small default for context, specifications, planning, TDD, review, debugging, source-driven work, and safe GitHub authentication |
+| `orchestration` | 6 | Brain-task planning, multi-agent dispatch, traceability, handoffs, research, and doubt-driven investigation |
+| `documentation` | 5 | Canonical docs, drift audits, ADRs, READMEs, Mermaid, and C4 architecture |
+| `delivery` | 7 | Incremental implementation, Git workflow, simplification, CI, self-evaluation, ship gates, and launch readiness |
 | `brevity` | 5 | Opt-in terse responses, help, commit messages, review comments, and context compression |
 | `engineering` | 42 | Full engineering lifecycle plus architecture, CI, security, dependencies, observability, migrations, SLOs, and shipping |
 | `jvm` | 1 | Kotlin/JVM and Gradle implementation workflow |
@@ -103,7 +109,7 @@ reusable profiles and skills, and the installers skip existing files instead of 
 | `hallmark` | 1 | Opt-in creative direction for distinctive pages, redesigns, audits, and design studies |
 | `infra` | 1 | Terraform/OpenTofu review, debugging, state, CI, testing, security, and rollback |
 | `workflow` | 13 | Architecture diagrams, handoffs, requirements, QA planning, READMEs, OpenAPI TypeScript, and React |
-| `all` | 121 installed directories | Every bundle above; useful for auditing, not recommended as a routine project default |
+| `all` | 131 installed directories | Every bundle above; useful for auditing, not recommended as a routine project default |
 
 ### Complete Bundled Skill Catalog
 
@@ -111,11 +117,10 @@ Installed names are shown below. Prefixes such as `claude-`, `pm-`, `rust-`, `to
 `web-` prevent collisions between imported sources.
 
 <details>
-<summary><code>core</code> — 10 skills</summary>
+<summary><code>core</code> — 9 skills</summary>
 
 - `github-keychain-auth`
 - `planning-files-lite`
-- `frontend-design-review`
 - `context-engineering`
 - `spec-driven-development`
 - `planning-and-task-breakdown`
@@ -123,6 +128,42 @@ Installed names are shown below. Prefixes such as `claude-`, `pm-`, `rust-`, `to
 - `code-review-and-quality`
 - `debugging-and-error-recovery`
 - `source-driven-development`
+
+</details>
+
+<details>
+<summary><code>orchestration</code> — 6 skills</summary>
+
+- `orchestrated-delivery`
+- `spec-traceability`
+- `session-handoff`
+- `research-to-decision`
+- `planning-with-files`
+- `doubt-driven-development`
+
+</details>
+
+<details>
+<summary><code>documentation</code> — 5 skills</summary>
+
+- `repository-doc-drift`
+- `documentation-and-adrs`
+- `crafting-effective-readmes`
+- `mermaid-diagrams`
+- `c4-architecture`
+
+</details>
+
+<details>
+<summary><code>delivery</code> — 7 skills</summary>
+
+- `incremental-implementation`
+- `git-workflow-and-versioning`
+- `code-simplification`
+- `ci-cd-and-automation`
+- `shipping-and-launch`
+- `self-eval`
+- `ship-gate`
 
 </details>
 
@@ -408,16 +449,26 @@ Install reviewed skill bundles:
 ./scripts/install-skill-bundle.sh /path/to/project --bundle core
 ```
 
-Bundles: `core`, `brevity`, `engineering`, `jvm`, `rust`, `product`, `planning`, `frontend`, `frontend-tooling`, `frontend-vue`, `hallmark`, `infra`, `workflow`, `all`.
+Bundles: `core`, `orchestration`, `documentation`, `delivery`, `brevity`, `engineering`, `jvm`,
+`rust`, `product`, `planning`, `frontend`, `frontend-tooling`, `frontend-vue`, `hallmark`, `infra`,
+`workflow`, `all`.
 
-Pilot the `core` bundle through [Microsoft APM](https://microsoft.github.io/apm/):
+Audit a project's installed AI context:
 
 ```sh
-apm install dills122/ai-central/packages/apm/core#main
+./scripts/audit-ai-context.sh /path/to/project
 ```
 
-See [Agent Package Manager pilot](docs/apm.md) for target selection, lockfile guidance, and current
-scope.
+Install and verify compact bundles through [Microsoft APM](https://microsoft.github.io/apm/):
+
+```sh
+apm install dills122/ai-central/packages/apm/core#main --target agent-skills
+apm install dills122/ai-central/packages/apm/orchestration#main --target agent-skills
+./scripts/check-apm.sh
+```
+
+See [Agent Package Manager integration](docs/apm.md) for the four package manifests, lockfile
+workflow, compatibility behavior, and the current APM 0.28.0 audit limitation.
 
 Refresh collected source material from local repos:
 
@@ -429,6 +480,7 @@ Run local checks:
 
 ```sh
 ./scripts/check.sh
+./scripts/check-apm.sh
 ```
 
 ## Maintenance Commands
@@ -463,10 +515,11 @@ Run local checks:
 - [External skill review](docs/external-skill-review.md)
 - [Context-management audit (2026-07)](docs/context-management-audit-2026-07.md)
 - [Repository AI-context audit (2026-07-31)](docs/repository-ai-context-audit-2026-07-31.md)
+- [Workflow skill audit and bundle decision (2026-08-12)](docs/workflow-skill-audit-2026-08-12.md)
 - [Language steering research (2026-07-31)](docs/language-steering-research-2026-07-31.md)
 - [External source policy](docs/external-source-policy.md)
 - [Skill attribution](docs/skill-attribution.md)
-- [Agent Package Manager pilot](docs/apm.md)
+- [Agent Package Manager integration](docs/apm.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security notes](SECURITY.md)
 - [Third-party notices](THIRD_PARTY_NOTICES.md)

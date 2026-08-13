@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spec Traceability"
+  short_description: "Link requirements, tasks, tests, evidence"
+  default_prompt: "Use $spec-traceability to make this feature plan traceable from requirements through verification."

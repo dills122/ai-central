@@ -2,6 +2,10 @@
 
 This repo includes third-party skills and adapted guidance from reviewed upstream repositories.
 
+First-party workflow skills live under `templates/skills/first-party/`. They include
+`github-keychain-auth`, `orchestrated-delivery`, `spec-traceability`, `session-handoff`,
+`research-to-decision`, and `repository-doc-drift`; they do not contain copied upstream text.
+
 ## Imported Sources
 
 | Source | Commit | License | Imported Location | Notes |

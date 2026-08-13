@@ -58,7 +58,7 @@
       "label": "Frontend Design",
       "type": "domain",
       "description": "UI quality, accessibility, responsive behavior, and interaction-state steering.",
-      "signals": ["*.tsx", "*.jsx", "*.component.ts", "angular.json"]
+      "signals": ["*.tsx", "*.jsx", "*.astro", "*.component.ts", "angular.json"]
     },
     {
       "id": "payload",
@@ -80,15 +80,36 @@
       "id": "core",
       "label": "Core",
       "type": "general",
-      "description": "Safe default planning, spec, testing, review, debugging, source-driven, and frontend review skills.",
+      "description": "Small universal baseline for planning, specifications, testing, review, debugging, source-driven work, and safe GitHub authentication.",
+      "apmPackage": "packages/apm/core",
       "recommended": true
+    },
+    {
+      "id": "orchestration",
+      "label": "Orchestration",
+      "type": "workflow",
+      "description": "Brain-task planning, multi-agent dispatch, traceability, persistent handoffs, bounded research, and result reconciliation.",
+      "apmPackage": "packages/apm/orchestration"
+    },
+    {
+      "id": "documentation",
+      "label": "Documentation",
+      "type": "workflow",
+      "description": "Canonical documentation maintenance, ADRs, drift audits, READMEs, and architecture diagrams.",
+      "apmPackage": "packages/apm/documentation"
+    },
+    {
+      "id": "delivery",
+      "label": "Delivery",
+      "type": "workflow",
+      "description": "Incremental implementation, Git workflow, simplification, CI, self-evaluation, ship gates, and launch readiness.",
+      "apmPackage": "packages/apm/delivery"
     },
     {
       "id": "brevity",
       "label": "Brevity",
       "type": "workflow",
-      "description": "Caveman token-saving skills for terse agent replies, help, commit messages, code review comments, and memory-file compression.",
-      "recommended": true
+      "description": "Caveman token-saving skills for terse agent replies, help, commit messages, code review comments, and memory-file compression."
     },
     {
       "id": "engineering",
@@ -129,7 +150,7 @@
       "label": "Frontend",
       "type": "domain",
       "description": "General frontend design, browser testing, accessibility, Playwright review, design-system, and web quality skills.",
-      "signals": ["*.tsx", "*.jsx", "*.component.ts", "angular.json", "vite.config.ts", "vite.config.js"]
+      "signals": ["*.tsx", "*.jsx", "*.astro", "*.component.ts", "angular.json", "vite.config.ts", "vite.config.js"]
     },
     {
       "id": "frontend-tooling",

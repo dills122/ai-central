@@ -1,0 +1,4 @@
+interface:
+  display_name: "Session Handoff"
+  short_description: "Persist and resume repository work safely"
+  default_prompt: "Use $session-handoff to record the current repository state for a clean continuation."

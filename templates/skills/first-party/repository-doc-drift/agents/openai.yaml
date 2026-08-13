@@ -1,0 +1,4 @@
+interface:
+  display_name: "Repository Doc Drift"
+  short_description: "Audit canonical docs against repository state"
+  default_prompt: "Use $repository-doc-drift to check whether our canonical documentation has drifted from the implementation."

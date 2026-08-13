@@ -38,7 +38,8 @@ Examples:
 - architect/API review skills
 - debugger, reviewer, tester, security, and source-driven development skills
 
-Skills are installed into `.codex/skills` through bundles.
+Skills are installed into the canonical `.agents/skills` location through bundles. Per-skill
+symlinks under `.codex/skills` preserve compatibility with older project layouts.
 
 ## Selection Model
 
