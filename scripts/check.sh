@@ -9,6 +9,35 @@ for script in scripts/*.sh; do
   sh -n "$script"
 done
 
+apm_core_manifest=packages/apm/core/apm.yml
+test -f "$apm_core_manifest"
+grep -q '^name: ai-central-core$' "$apm_core_manifest"
+grep -Eq '^version: [0-9]+\.[0-9]+\.[0-9]+$' "$apm_core_manifest"
+grep -q '^type: skill$' "$apm_core_manifest"
+grep -q '^includes: auto$' "$apm_core_manifest"
+
+apm_core_dir=$(dirname "$apm_core_manifest")
+apm_core_count=0
+while IFS= read -r dependency_path; do
+  test -f "$apm_core_dir/$dependency_path/SKILL.md"
+  apm_core_count=$((apm_core_count + 1))
+done <<EOF
+$(sed -n 's/^[[:space:]]*- path: \(.*\)$/\1/p' "$apm_core_manifest")
+EOF
+test "$apm_core_count" -eq 10
+
+shell_core_paths=$(
+  sed -n '/^install_core() {/,/^}/p' scripts/install-skill-bundle.sh |
+    sed -n 's#.*"\$repo_root/\([^"]*\)".*#\1#p' |
+    sort
+)
+apm_core_paths=$(
+  sed -n 's#^[[:space:]]*- path: ../../../\(.*\)$#\1#p' "$apm_core_manifest" |
+    sort
+)
+test "$shell_core_paths" = "$apm_core_paths"
+grep -q '^apm_modules/$' .gitignore
+
 if grep -Eiq 'reef|order book|matching engine|trading|market data|settlement' \
   templates/steering/kotlin-jvm-steering.md \
   templates/skills/adapted/kotlin-jvm-engineering/SKILL.md; then
