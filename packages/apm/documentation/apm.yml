@@ -1,0 +1,19 @@
+name: ai-central-documentation
+version: 0.2.0
+description: Canonical documentation maintenance, ADRs, drift audits, READMEs, Mermaid, and C4 architecture.
+repository: https://github.com/dills122/ai-central
+keywords:
+  - ai
+  - agent-skills
+  - documentation
+  - architecture
+type: skill
+includes: auto
+
+dependencies:
+  apm:
+    - path: ../../../templates/skills/first-party/repository-doc-drift
+    - path: ../../../templates/skills/imported/agent-skills/documentation-and-adrs
+    - path: ../../../templates/skills/imported/agent-toolkit/crafting-effective-readmes
+    - path: ../../../templates/skills/imported/agent-toolkit/mermaid-diagrams
+    - path: ../../../templates/skills/imported/agent-toolkit/c4-architecture

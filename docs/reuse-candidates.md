@@ -58,11 +58,28 @@ Promoted as a first-party core skill:
   projects, prevent stale token environment variables from overriding it, and prohibit exposing or
   transferring the credential itself.
 
+Promoted as first-party workflow skills after the 2026-08-12 cross-repository workflow audit:
+
+- `orchestrated-delivery`: keeps a lead task responsible for requirements, dispatch contracts,
+  reconciliation, and parent-level verification across agents or chats;
+- `spec-traceability`: connects requirements and decisions to tasks, tests, evidence, and status;
+- `session-handoff`: persists repo-neutral continuation state without making chat history canonical;
+- `research-to-decision`: turns bounded investigation into cited, decision-ready repository output;
+- `repository-doc-drift`: checks canonical documentation against code, tests, configuration, and
+  recent history before making minimal corrections.
+
+These are intentionally compact and first-party because the imported library already covers most
+execution mechanics; the reusable gap was the contract between planning, delegation, retained
+truth, and final integration. They are grouped into `orchestration` and `documentation` rather than
+expanding the universal `core` bundle.
+
 Suggested next review question: decide whether these should live as Codex skills in this repo, a personal plugin, or just source material copied into target projects.
 
 ## Gaps To Fill
 
-- A project detector that reads `package.json`, `rush.json`, `Cargo.toml`, `go.mod`, `.github/workflows`, and app folders before selecting templates.
+- Extend the project detector for `rush.json`, `go.mod`, Swift packages/Xcode projects,
+  `.github/workflows`, and active monorepo manifests without letting archived nested apps create
+  false positives.
 - A merge/update mode that preserves local project additions instead of overwriting generated files.
 - A provenance manifest with source path, hash, and last collected date for every raw file.
 - Templates for Go, monorepos, CI, and security that are not tied to one project.

@@ -1,0 +1,21 @@
+name: ai-central-delivery
+version: 0.2.0
+description: Incremental implementation, Git workflow, simplification, CI, self-evaluation, ship gates, and launch readiness.
+repository: https://github.com/dills122/ai-central
+keywords:
+  - ai
+  - agent-skills
+  - delivery
+  - release
+type: skill
+includes: auto
+
+dependencies:
+  apm:
+    - path: ../../../templates/skills/imported/agent-skills/incremental-implementation
+    - path: ../../../templates/skills/imported/agent-skills/git-workflow-and-versioning
+    - path: ../../../templates/skills/imported/agent-skills/code-simplification
+    - path: ../../../templates/skills/imported/agent-skills/ci-cd-and-automation
+    - path: ../../../templates/skills/imported/agent-skills/shipping-and-launch
+    - path: ../../../templates/skills/imported/claude-skills/engineering/skills/self-eval
+    - path: ../../../templates/skills/imported/claude-skills/engineering/skills/ship-gate

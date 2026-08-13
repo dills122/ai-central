@@ -49,6 +49,7 @@ find "$source_root" \
     -path '*/.codex/prompts/*' -o \
     -path '*/.codex/agents/*' -o \
     -path '*/.codex/skills/*/SKILL.md' -o \
+    -path '*/.agents/skills/*/SKILL.md' -o \
     -path '*/.claude/agents/*' -o \
     -path '*/.claude/commands/*' -o \
     -path '*/.claude/rules/*' -o \

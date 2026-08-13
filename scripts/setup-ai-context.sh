@@ -8,7 +8,7 @@ Usage: setup-ai-context.sh TARGET_DIR [options]
 Options:
   --yes                    Use detected recommendations without prompts
   --profiles LIST          Comma-separated steering profiles: base,javascript-typescript,angular,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
-  --bundles LIST           Comma-separated skill bundles: core,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,workflow,all
+  --bundles LIST           Comma-separated skill bundles: core,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,workflow,all
   --mode copy|link          copy installs files; link symlinks reusable templates and skills
   --skip-profiles LIST     Comma-separated profiles to exclude
   --skip-bundles LIST      Comma-separated bundles to exclude
@@ -137,11 +137,11 @@ detect_profiles() {
   target_dir=$1
   profiles=base
 
-  if [ -f "$target_dir/package.json" ] || find "$target_dir" -maxdepth 5 \( -name '*.js' -o -name '*.mjs' -o -name '*.cjs' -o -name '*.jsx' -o -name '*.ts' -o -name '*.mts' -o -name '*.cts' -o -name '*.tsx' \) -type f | grep -q .; then
+  if [ -f "$target_dir/package.json" ]; then
     profiles=$(append_unique "$profiles" "javascript-typescript")
   fi
 
-  if [ -f "$target_dir/angular.json" ] || find "$target_dir" -maxdepth 3 -name angular.json -type f | grep -q .; then
+  if [ -f "$target_dir/angular.json" ]; then
     profiles=$(append_unique "$profiles" "javascript-typescript")
     profiles=$(append_unique "$profiles" "angular")
     profiles=$(append_unique "$profiles" "frontend-design")
@@ -160,7 +160,7 @@ detect_profiles() {
     profiles=$(append_unique "$profiles" "payload")
   fi
 
-  if find "$target_dir" -maxdepth 4 \( -name '*.tsx' -o -name '*.jsx' -o -name '*.component.ts' \) -type f | grep -q .; then
+  if [ -f "$target_dir/package.json" ] && find "$target_dir" -maxdepth 4 \( -name '*.tsx' -o -name '*.jsx' -o -name '*.astro' -o -name '*.component.ts' \) -type f ! -path '*/node_modules/*' ! -path '*/dist/*' ! -path '*/build/*' | grep -q .; then
     profiles=$(append_unique "$profiles" "javascript-typescript")
     profiles=$(append_unique "$profiles" "frontend-design")
   fi
@@ -184,30 +184,26 @@ detect_bundles() {
     bundles=$(append_unique "$bundles" "rust")
   fi
 
-  if [ -f "$target_dir/angular.json" ] || find "$target_dir" -maxdepth 3 -name angular.json -type f | grep -q .; then
+  if [ -f "$target_dir/angular.json" ]; then
     bundles=$(append_unique "$bundles" "frontend")
   fi
 
-  if find "$target_dir" -maxdepth 4 \( -name '*.tsx' -o -name '*.jsx' -o -name '*.component.ts' \) -type f | grep -q .; then
+  if [ -f "$target_dir/package.json" ] && find "$target_dir" -maxdepth 4 \( -name '*.tsx' -o -name '*.jsx' -o -name '*.astro' -o -name '*.component.ts' \) -type f ! -path '*/node_modules/*' ! -path '*/dist/*' ! -path '*/build/*' | grep -q .; then
     bundles=$(append_unique "$bundles" "frontend")
   fi
 
-  if find "$target_dir" -maxdepth 5 \( -name '*.vue' -o -name nuxt.config.ts -o -name nuxt.config.js -o -name vite.config.ts -o -name vite.config.js \) -type f | grep -q .; then
+  if [ -f "$target_dir/package.json" ] && find "$target_dir" -maxdepth 5 \( -name '*.vue' -o -name nuxt.config.ts -o -name nuxt.config.js -o -name vite.config.ts -o -name vite.config.js \) -type f ! -path '*/node_modules/*' ! -path '*/dist/*' ! -path '*/build/*' | grep -q .; then
     bundles=$(append_unique "$bundles" "frontend")
   fi
 
-  if find "$target_dir" -maxdepth 5 \( -name '*.vue' -o -name nuxt.config.ts -o -name nuxt.config.js \) -type f | grep -q .; then
+  if [ -f "$target_dir/package.json" ] && find "$target_dir" -maxdepth 5 \( -name '*.vue' -o -name nuxt.config.ts -o -name nuxt.config.js \) -type f ! -path '*/node_modules/*' ! -path '*/dist/*' ! -path '*/build/*' | grep -q .; then
     bundles=$(append_unique "$bundles" "frontend-vue")
-  elif find "$target_dir" -maxdepth 3 -name package.json -type f -exec grep -E '"(vue|nuxt|pinia|@vueuse/core)"[[:space:]]*:' {} \; | grep -q .; then
+  elif [ -f "$target_dir/package.json" ] && grep -E '"(vue|nuxt|pinia|@vueuse/core)"[[:space:]]*:' "$target_dir/package.json" | grep -q .; then
     bundles=$(append_unique "$bundles" "frontend-vue")
   fi
 
   if find "$target_dir" -maxdepth 5 \( -name '*.tf' -o -name '*.tfvars' -o -name '*.tofu' -o -name '*.tofuvars' \) -type f | grep -q .; then
     bundles=$(append_unique "$bundles" "infra")
-  fi
-
-  if [ -d "$target_dir/docs" ] || [ -d "$target_dir/product" ]; then
-    bundles=$(append_unique "$bundles" "product")
   fi
 
   printf "%s" "$bundles"
@@ -287,7 +283,7 @@ if [ ! -d "$target_dir" ]; then
 fi
 
 allowed_profiles=base,javascript-typescript,angular,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
-allowed_bundles=core,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,workflow,all
+allowed_bundles=core,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,workflow,all
 
 case "$mode" in
   copy|link) ;;

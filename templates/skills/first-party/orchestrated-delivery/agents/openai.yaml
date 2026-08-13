@@ -1,0 +1,4 @@
+interface:
+  display_name: "Orchestrated Delivery"
+  short_description: "Plan, dispatch, reconcile agent work"
+  default_prompt: "Use $orchestrated-delivery to split this project into bounded agent assignments and integrate their results."

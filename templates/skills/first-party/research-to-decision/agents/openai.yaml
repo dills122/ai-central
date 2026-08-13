@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research to Decision"
+  short_description: "Turn bounded research into repo decisions"
+  default_prompt: "Use $research-to-decision to investigate this question and retain a decision-ready repository artifact."

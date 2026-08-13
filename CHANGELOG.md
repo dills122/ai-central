@@ -4,8 +4,14 @@ All notable changes to this repository will be documented here.
 
 ## Unreleased
 
-- Added an optional Microsoft APM pilot package for the existing `core` skill bundle, preserving
-  `templates/` as the source of truth through repository-local dependencies.
+- Added Microsoft APM manifests for the compact `core`, `orchestration`, `documentation`, and
+  `delivery` bundles plus a disposable install, frozen-replay, and drift-audit test.
+- Made `.agents/skills` the canonical project skill location with non-overwriting
+  `.codex/skills` compatibility symlinks and a project AI-context audit command.
+- Added compact `orchestration`, `documentation`, and `delivery` bundles and five first-party skills
+  for coordinated delivery, traceability, handoffs, retained research, and documentation drift.
+- Tightened automatic bundle detection to avoid docs-folder product selection and nested legacy
+  Angular/frontend false positives.
 - Replaced the light JavaScript/ESM template with a strict, separately detected
   JavaScript/TypeScript profile and made `base` language-neutral.
 - Strengthened Kotlin/JVM, Rust, and POSIX shell steering with primary-source, domain-neutral

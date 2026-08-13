@@ -26,7 +26,7 @@ Collect AI guidance and reusable context from:
 - `.codex/agents/` and `.codex/prompts/`
 - `docs/steering/` when the project treats it as canonical AI/engineering direction
 - `docs/agents/` when a root AI entrypoint imports it as canonical guidance
-- `.codex/skills/`
+- `.agents/skills/` and legacy `.codex/skills/`
 - `.claude/agents/`, `.claude/commands/`, and `.claude/rules/`
 - `AGENTS.md`
 - `CLAUDE.md`

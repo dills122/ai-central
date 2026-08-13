@@ -1,6 +1,6 @@
 name: ai-central-core
-version: 0.1.0
-description: Safe default planning, testing, review, debugging, source, and frontend skills from AI Central.
+version: 0.2.0
+description: Small universal baseline for specifications, planning, testing, review, debugging, source-driven work, and safe GitHub authentication.
 repository: https://github.com/dills122/ai-central
 keywords:
   - ai
@@ -10,13 +10,12 @@ keywords:
 type: skill
 includes: auto
 
-# Keep templates/ as the source of truth. APM resolves these paths inside the
-# same repository and locks their content in the consuming project.
+# templates/ remains authoritative. APM resolves and locks these repository-local
+# skill packages without introducing a second source tree.
 dependencies:
   apm:
     - path: ../../../templates/skills/first-party/github-keychain-auth
     - path: ../../../templates/skills/adapted/planning-files-lite
-    - path: ../../../templates/skills/adapted/frontend-design-review
     - path: ../../../templates/skills/imported/agent-skills/context-engineering
     - path: ../../../templates/skills/imported/agent-skills/spec-driven-development
     - path: ../../../templates/skills/imported/agent-skills/planning-and-task-breakdown

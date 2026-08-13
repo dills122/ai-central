@@ -1,87 +1,90 @@
-# Agent Package Manager Pilot
+# Agent Package Manager Integration
 
-[Microsoft APM](https://microsoft.github.io/apm/) is an optional distribution layer for AI
-Central. It complements the existing setup scripts with manifests, transitive dependency
-resolution, lockfiles, integrity hashes, policy checks, and deployment to multiple agent
-harnesses.
+[Microsoft Agent Package Manager](https://microsoft.github.io/apm/) is an optional distribution
+and verification layer for AI Central's compact skill bundles. It adds manifests, transitive local
+dependency resolution, lockfiles, deployed-file hashes, frozen replay, and drift auditing.
 
-The initial pilot exposes only the existing `core` skill bundle. The shell installers remain the
-default for profile detection, steering scaffolding, link mode, and non-overwriting setup.
+The shell setup remains the default for project detection, steering, non-overwriting copy/link
+mode, and `.codex/skills` compatibility links. APM is the reproducible managed-install path for
+the canonical `.agents/skills` layout.
 
-## Install The Core Bundle
+## Packages
 
-Install APM by following its
-[official installation guide](https://microsoft.github.io/apm/getting-started/installation/), then
-run this from a consuming project:
+| Bundle | Manifest | Skills |
+| --- | --- | ---: |
+| `core` | `packages/apm/core/apm.yml` | 9 |
+| `orchestration` | `packages/apm/orchestration/apm.yml` | 6 |
+| `documentation` | `packages/apm/documentation/apm.yml` | 5 |
+| `delivery` | `packages/apm/delivery/apm.yml` | 7 |
+
+The manifests reference the reviewed skill directories under `templates/`; they do not maintain a
+second copy of skill content. APM records resolved local paths and content hashes in the consuming
+project's lockfile.
+
+## Install
+
+Install APM using its
+[official installation guide](https://microsoft.github.io/apm/getting-started/installation/).
+After these packages are merged to the selected ref, install the smallest required set from the
+consuming project:
 
 ```sh
-apm install dills122/ai-central/packages/apm/core#main
+apm install dills122/ai-central/packages/apm/core#main --target agent-skills
+apm install dills122/ai-central/packages/apm/orchestration#main --target agent-skills
 ```
 
-For a specific harness, pass an explicit target:
+Documentation and delivery are independently selectable:
 
 ```sh
-apm install dills122/ai-central/packages/apm/core#main --target codex
+apm install dills122/ai-central/packages/apm/documentation#main --target agent-skills
+apm install dills122/ai-central/packages/apm/delivery#main --target agent-skills
 ```
 
-During the pilot, `#main` makes new package revisions available for testing. Production consumers
-should switch to a release tag once AI Central starts publishing tagged APM packages. Commit the
-generated `apm.yml` and `apm.lock.yaml`; do not commit `apm_modules/`.
+Commit the generated `apm.yml` and `apm.lock.yaml`. Do not commit `apm_modules/`. APM's converged
+skills target deploys to `.agents/skills`; see the
+[targets matrix](https://microsoft.github.io/apm/reference/targets-matrix/).
 
-APM 0.28.0 installs the pilot's skills into `.agents/skills/` for Codex, Copilot, Cursor, Gemini,
-OpenCode, Windsurf, and the explicit `agent-skills` target. Harnesses with native skill directories,
-including Claude Code and Kiro, receive their supported layout instead.
+APM does not create AI Central's `.codex/skills` compatibility symlinks. Projects that still need
+those links should use `install-skill-bundle.sh`; running the matching shell bundle after an APM
+install preserves the managed canonical directories and adds only missing compatibility links.
 
-## Why The Package Uses Local Dependencies
+## Verify
 
-AI Central's reviewed source of truth remains under `templates/`. APM normally authors primitives
-under `.apm/`, but copying 123 reviewed skills there would create a second source tree that could
-drift.
+In a consuming project:
 
-The pilot manifest at `packages/apm/core/apm.yml` instead composes repository-local skill paths:
-
-```text
-packages/apm/core/apm.yml
-        |
-        +-- ../../../templates/skills/.../SKILL.md
-        |
-        +-- consuming project/.agents/skills/...
-                           + apm.lock.yaml
+```sh
+apm install --frozen
+apm audit
 ```
 
-When a consumer installs the remote package, APM keeps those relative dependencies inside the same
-checked-out AI Central repository. The consuming lockfile records the resolved Git commit, deployed
-files, and content hashes. This preserves provenance without changing or duplicating the reviewed
-templates.
+In AI Central, run the disposable integration test:
 
-## Scope And Tradeoffs
+```sh
+./scripts/check-apm.sh
+```
 
-The pilot is deliberately narrow:
+The test installs all four packages with APM's `agent-skills` target, verifies the exact 27 names,
+replays the lockfile with `--frozen`, and requires a clean non-CI drift audit. The normal
+`./scripts/check.sh` also verifies that each APM manifest has exact source-and-name parity with its
+shell bundle.
 
-- It packages skills only. Existing steering profiles and the root `AGENTS.md` still use
-  `setup-ai-context.sh` because APM's Codex target compiles instructions into a root `AGENTS.md`
-  and could conflict with project-owned context.
-- It exposes `core` first. Other bundles include installation-time renaming such as `rust-*`,
-  `pm-*`, and `claude-*`; those need explicit alias validation before migration.
-- APM copies managed skills and does not provide AI Central's local symlink-based development mode.
-- APM owns and may update files recorded in its lockfile. Do not hand-edit deployed copies; change
-  the source template or add project-owned context alongside it.
-- Third-party terms still apply. Review `THIRD_PARTY_NOTICES.md`, `docs/skill-attribution.md`, and
-  the license copies under `templates/skills/imported/licenses/` before redistribution.
+## APM 0.28.0 Findings
 
-## Recommended Adoption Path
+The 2026-08-12 integration test found:
 
-1. Pilot `core` in a few projects with `--target codex` or `--target agent-skills`.
-2. Verify clean replay with `apm install --frozen` and drift checks with `apm audit --ci`.
-3. Add tagged AI Central releases so consumers can replace `#main` with immutable version ranges or
-   tags while retaining lockfile reproducibility.
-4. Model bundle membership once in `templates/catalog.json`, then generate both shell and APM
-   package definitions from that data before exposing the larger bundles.
-5. Evaluate steering profiles separately, with explicit rules for merging or preserving an existing
-   root `AGENTS.md`.
+- all four packages resolve from the repository-local source tree and deploy 27 unique skills;
+- initial installs and frozen replays are stable;
+- non-CI audit replay reports no drift;
+- object-form dependency aliases deploy correctly initially but lose the alias during audit replay,
+  producing false orphaned/unintegrated drift. The compact bundles therefore use natural unique
+  skill names and do not rely on APM aliases;
+- `apm audit --ci` reports `config-consistency` failures because each transitive local `SKILL.md`
+  package lacks its own `apm.yml`, even after a successful frozen replay and clean drift audit.
 
-## Validation Performed
+`check-apm.sh` accepts only that final known CI-audit signature as a warning; any other APM failure
+fails the test. Do not make `apm audit --ci` a required repository gate until the local-skill
+behavior is resolved upstream or AI Central adopts a package layout that does not duplicate the
+reviewed template source tree.
 
-The pilot was smoke-tested with APM 0.28.0 against a disposable consumer project using the
-`agent-skills` target. APM resolved one direct package plus ten transitive local skill dependencies,
-installed all ten skills under `.agents/skills/`, and generated a lockfile with deployed-file hashes.
+OpenAPM remains a pre-1.0 working draft, so package behavior should be retested when upgrading the
+CLI. See the [OpenAPM v0.1 specification](https://microsoft.github.io/apm/specs/openapm-v01/).

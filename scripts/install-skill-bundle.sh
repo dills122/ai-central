@@ -2,7 +2,7 @@
 set -eu
 
 usage() {
-  echo "Usage: $0 TARGET_DIR [--bundle core|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|workflow|all] [--mode copy|link]" >&2
+  echo "Usage: $0 TARGET_DIR [--bundle core|orchestration|documentation|delivery|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|workflow|all] [--mode copy|link]" >&2
 }
 
 if [ "$#" -lt 1 ]; then
@@ -41,7 +41,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 case "$bundle" in
-  core|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|workflow|all) ;;
+  core|orchestration|documentation|delivery|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|workflow|all) ;;
   *)
     echo "Unknown bundle: $bundle" >&2
     usage
@@ -64,20 +64,38 @@ if [ ! -d "$target_dir" ]; then
 fi
 
 repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-skills_dir=$target_dir/.codex/skills
+skills_dir=$target_dir/.agents/skills
+legacy_skills_dir=$target_dir/.codex/skills
 mkdir -p "$skills_dir"
+mkdir -p "$legacy_skills_dir"
+
+install_legacy_link() {
+  dest_name=$1
+  legacy_dest=$legacy_skills_dir/$dest_name
+
+  if [ -e "$legacy_dest" ] || [ -L "$legacy_dest" ]; then
+    return 0
+  fi
+
+  ln -s "../../.agents/skills/$dest_name" "$legacy_dest"
+  echo "linked compatibility path $legacy_dest -> ../../.agents/skills/$dest_name"
+}
 
 install_skill() {
   src=$1
   dest_name=$2
   dest=$skills_dir/$dest_name
+  legacy_dest=$legacy_skills_dir/$dest_name
 
   if [ ! -f "$src/SKILL.md" ]; then
     echo "missing SKILL.md: $src" >&2
     exit 1
   fi
 
-  if [ -e "$dest" ]; then
+  if [ ! -e "$dest" ] && [ ! -L "$dest" ] && [ -e "$legacy_dest" ]; then
+    ln -s "../../.codex/skills/$dest_name" "$dest"
+    echo "adopted legacy skill $legacy_dest at canonical path $dest"
+  elif [ -e "$dest" ] || [ -L "$dest" ]; then
     echo "skip existing $dest"
   elif [ "$mode" = "link" ]; then
     ln -s "$src" "$dest"
@@ -86,6 +104,8 @@ install_skill() {
     cp -R "$src" "$dest"
     echo "created $dest"
   fi
+
+  install_legacy_link "$dest_name"
 }
 
 install_find_skills() {
@@ -101,7 +121,6 @@ install_find_skills() {
 install_core() {
   install_skill "$repo_root/templates/skills/first-party/github-keychain-auth" "github-keychain-auth"
   install_skill "$repo_root/templates/skills/adapted/planning-files-lite" "planning-files-lite"
-  install_skill "$repo_root/templates/skills/adapted/frontend-design-review" "frontend-design-review"
   install_skill "$repo_root/templates/skills/imported/agent-skills/context-engineering" "context-engineering"
   install_skill "$repo_root/templates/skills/imported/agent-skills/spec-driven-development" "spec-driven-development"
   install_skill "$repo_root/templates/skills/imported/agent-skills/planning-and-task-breakdown" "planning-and-task-breakdown"
@@ -109,6 +128,33 @@ install_core() {
   install_skill "$repo_root/templates/skills/imported/agent-skills/code-review-and-quality" "code-review-and-quality"
   install_skill "$repo_root/templates/skills/imported/agent-skills/debugging-and-error-recovery" "debugging-and-error-recovery"
   install_skill "$repo_root/templates/skills/imported/agent-skills/source-driven-development" "source-driven-development"
+}
+
+install_orchestration() {
+  install_skill "$repo_root/templates/skills/first-party/orchestrated-delivery" "orchestrated-delivery"
+  install_skill "$repo_root/templates/skills/first-party/spec-traceability" "spec-traceability"
+  install_skill "$repo_root/templates/skills/first-party/session-handoff" "session-handoff"
+  install_skill "$repo_root/templates/skills/first-party/research-to-decision" "research-to-decision"
+  install_skill "$repo_root/templates/skills/imported/planning-with-files/planning-with-files" "planning-with-files"
+  install_skill "$repo_root/templates/skills/imported/agent-skills/doubt-driven-development" "doubt-driven-development"
+}
+
+install_documentation() {
+  install_skill "$repo_root/templates/skills/first-party/repository-doc-drift" "repository-doc-drift"
+  install_skill "$repo_root/templates/skills/imported/agent-skills/documentation-and-adrs" "documentation-and-adrs"
+  install_skill "$repo_root/templates/skills/imported/agent-toolkit/crafting-effective-readmes" "crafting-effective-readmes"
+  install_skill "$repo_root/templates/skills/imported/agent-toolkit/mermaid-diagrams" "mermaid-diagrams"
+  install_skill "$repo_root/templates/skills/imported/agent-toolkit/c4-architecture" "c4-architecture"
+}
+
+install_delivery() {
+  install_skill "$repo_root/templates/skills/imported/agent-skills/incremental-implementation" "incremental-implementation"
+  install_skill "$repo_root/templates/skills/imported/agent-skills/git-workflow-and-versioning" "git-workflow-and-versioning"
+  install_skill "$repo_root/templates/skills/imported/agent-skills/code-simplification" "code-simplification"
+  install_skill "$repo_root/templates/skills/imported/agent-skills/ci-cd-and-automation" "ci-cd-and-automation"
+  install_skill "$repo_root/templates/skills/imported/agent-skills/shipping-and-launch" "shipping-and-launch"
+  install_skill "$repo_root/templates/skills/imported/claude-skills/engineering/skills/self-eval" "self-eval"
+  install_skill "$repo_root/templates/skills/imported/claude-skills/engineering/skills/ship-gate" "ship-gate"
 }
 
 install_brevity() {
@@ -189,6 +235,15 @@ case "$bundle" in
   core)
     install_core
     ;;
+  orchestration)
+    install_orchestration
+    ;;
+  documentation)
+    install_documentation
+    ;;
+  delivery)
+    install_delivery
+    ;;
   brevity)
     install_brevity
     ;;
@@ -227,6 +282,9 @@ case "$bundle" in
     ;;
   all)
     install_core
+    install_orchestration
+    install_documentation
+    install_delivery
     install_brevity
     install_engineering
     install_jvm

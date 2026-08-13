@@ -9,33 +9,46 @@ for script in scripts/*.sh; do
   sh -n "$script"
 done
 
-apm_core_manifest=packages/apm/core/apm.yml
-test -f "$apm_core_manifest"
-grep -q '^name: ai-central-core$' "$apm_core_manifest"
-grep -Eq '^version: [0-9]+\.[0-9]+\.[0-9]+$' "$apm_core_manifest"
-grep -q '^type: skill$' "$apm_core_manifest"
-grep -q '^includes: auto$' "$apm_core_manifest"
+check_apm_bundle() {
+  bundle_name=$1
+  expected_count=$2
+  manifest=packages/apm/$bundle_name/apm.yml
 
-apm_core_dir=$(dirname "$apm_core_manifest")
-apm_core_count=0
-while IFS= read -r dependency_path; do
-  test -f "$apm_core_dir/$dependency_path/SKILL.md"
-  apm_core_count=$((apm_core_count + 1))
-done <<EOF
-$(sed -n 's/^[[:space:]]*- path: \(.*\)$/\1/p' "$apm_core_manifest")
+  test -f "$manifest"
+  grep -q "^name: ai-central-$bundle_name$" "$manifest"
+  grep -Eq '^version: [0-9]+\.[0-9]+\.[0-9]+$' "$manifest"
+  grep -q '^type: skill$' "$manifest"
+  grep -q '^includes: auto$' "$manifest"
+
+  manifest_dir=$(dirname "$manifest")
+  dependency_count=0
+  while IFS= read -r dependency_path; do
+    test -f "$manifest_dir/$dependency_path/SKILL.md"
+    dependency_count=$((dependency_count + 1))
+  done <<EOF
+$(sed -n 's/^[[:space:]]*- path: \(.*\)$/\1/p' "$manifest")
 EOF
-test "$apm_core_count" -eq 10
+  test "$dependency_count" -eq "$expected_count"
 
-shell_core_paths=$(
-  sed -n '/^install_core() {/,/^}/p' scripts/install-skill-bundle.sh |
-    sed -n 's#.*"\$repo_root/\([^"]*\)".*#\1#p' |
-    sort
-)
-apm_core_paths=$(
-  sed -n 's#^[[:space:]]*- path: ../../../\(.*\)$#\1#p' "$apm_core_manifest" |
-    sort
-)
-test "$shell_core_paths" = "$apm_core_paths"
+  shell_pairs=$(
+    sed -n "/^install_${bundle_name}() {$/,/^}$/p" scripts/install-skill-bundle.sh |
+      sed -n 's#.*"\$repo_root/\([^"]*\)" "\([^"]*\)".*#\1|\2#p' |
+      sort
+  )
+  apm_pairs=$(
+    sed -n 's#^[[:space:]]*- path: ../../../\(.*\)$#\1#p' "$manifest" |
+      while IFS= read -r dependency_path; do
+        printf '%s|%s\n' "$dependency_path" "$(basename "$dependency_path")"
+      done |
+      sort
+  )
+  test "$shell_pairs" = "$apm_pairs"
+}
+
+check_apm_bundle core 9
+check_apm_bundle orchestration 6
+check_apm_bundle documentation 5
+check_apm_bundle delivery 7
 grep -q '^apm_modules/$' .gitignore
 
 if grep -Eiq 'reef|order book|matching engine|trading|market data|settlement' \
@@ -85,6 +98,9 @@ infrastructure_hash=$(shasum -a 256 "$tmp_dir/.codex/steering/infrastructure-ope
 test "$infrastructure_hash" = "$(shasum -a 256 "$tmp_dir/.codex/steering/infrastructure-opentofu-steering.md")"
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle core >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle core >/dev/null
+./scripts/install-skill-bundle.sh "$tmp_dir" --bundle orchestration >/dev/null
+./scripts/install-skill-bundle.sh "$tmp_dir" --bundle documentation >/dev/null
+./scripts/install-skill-bundle.sh "$tmp_dir" --bundle delivery >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle brevity >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle jvm >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle frontend-vue >/dev/null
@@ -104,31 +120,50 @@ test -f "$tmp_dir/.codex/steering/rust-steering.md"
 test -f "$tmp_dir/.codex/steering/shell-scripting-steering.md"
 test -f "$tmp_dir/.cursor/rules/payload-overview.md"
 test -f "$tmp_dir/.codex/steering/infrastructure-opentofu-steering.md"
-test -f "$tmp_dir/.codex/skills/planning-files-lite/SKILL.md"
+test -f "$tmp_dir/.agents/skills/planning-files-lite/SKILL.md"
+test -f "$tmp_dir/.agents/skills/github-keychain-auth/SKILL.md"
+test -f "$tmp_dir/.agents/skills/github-keychain-auth/agents/openai.yaml"
+test -L "$tmp_dir/.codex/skills/github-keychain-auth"
 test -f "$tmp_dir/.codex/skills/github-keychain-auth/SKILL.md"
-test -f "$tmp_dir/.codex/skills/github-keychain-auth/agents/openai.yaml"
 grep -q 'env -u GH_TOKEN -u GITHUB_TOKEN gh auth status' \
-  "$tmp_dir/.codex/skills/github-keychain-auth/SKILL.md"
-test "$(grep -c 'gh auth token' "$tmp_dir/.codex/skills/github-keychain-auth/SKILL.md")" -eq 1
-test "$(grep -c 'find-generic-password -w' "$tmp_dir/.codex/skills/github-keychain-auth/SKILL.md")" -eq 1
+  "$tmp_dir/.agents/skills/github-keychain-auth/SKILL.md"
+test "$(grep -c 'gh auth token' "$tmp_dir/.agents/skills/github-keychain-auth/SKILL.md")" -eq 1
+test "$(grep -c 'find-generic-password -w' "$tmp_dir/.agents/skills/github-keychain-auth/SKILL.md")" -eq 1
 grep -q 'Never run `gh auth token`, `security find-generic-password -w`' \
-  "$tmp_dir/.codex/skills/github-keychain-auth/SKILL.md"
-test -f "$tmp_dir/.codex/skills/frontend-design-review/SKILL.md"
-test -f "$tmp_dir/.codex/skills/context-engineering/SKILL.md"
-test -f "$tmp_dir/.codex/skills/caveman/SKILL.md"
-test -f "$tmp_dir/.codex/skills/caveman-compress/SKILL.md"
-test -f "$tmp_dir/.codex/skills/kotlin-jvm-engineering/SKILL.md"
-test -f "$tmp_dir/.codex/skills/kotlin-jvm-engineering/agents/openai.yaml"
-test -f "$tmp_dir/.codex/skills/vue/SKILL.md"
-test -f "$tmp_dir/.codex/skills/hallmark-design/SKILL.md"
-test -f "$tmp_dir/.codex/skills/terraform-skill/SKILL.md"
-test -f "$tmp_dir/.codex/skills/terraform-skill/LICENSE"
-test -f "$tmp_dir/.codex/skills/toolkit-c4-architecture/SKILL.md"
+  "$tmp_dir/.agents/skills/github-keychain-auth/SKILL.md"
+test -f "$tmp_dir/.agents/skills/context-engineering/SKILL.md"
+test -f "$tmp_dir/.agents/skills/orchestrated-delivery/SKILL.md"
+test -f "$tmp_dir/.agents/skills/spec-traceability/SKILL.md"
+test -f "$tmp_dir/.agents/skills/session-handoff/SKILL.md"
+test -f "$tmp_dir/.agents/skills/research-to-decision/SKILL.md"
+test -f "$tmp_dir/.agents/skills/repository-doc-drift/SKILL.md"
+test -f "$tmp_dir/.agents/skills/caveman/SKILL.md"
+test -f "$tmp_dir/.agents/skills/caveman-compress/SKILL.md"
+test -f "$tmp_dir/.agents/skills/kotlin-jvm-engineering/SKILL.md"
+test -f "$tmp_dir/.agents/skills/kotlin-jvm-engineering/agents/openai.yaml"
+test -f "$tmp_dir/.agents/skills/vue/SKILL.md"
+test -f "$tmp_dir/.agents/skills/hallmark-design/SKILL.md"
+test -f "$tmp_dir/.agents/skills/terraform-skill/SKILL.md"
+test -f "$tmp_dir/.agents/skills/terraform-skill/LICENSE"
+test -f "$tmp_dir/.agents/skills/toolkit-c4-architecture/SKILL.md"
 
 frontend_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-frontend-check.XXXXXX")
 ./scripts/install-skill-bundle.sh "$frontend_dir" --bundle frontend >/dev/null
-test -f "$frontend_dir/.codex/skills/frontend-design-review/SKILL.md"
-test ! -e "$frontend_dir/.codex/skills/vite"
+test -f "$frontend_dir/.agents/skills/frontend-design-review/SKILL.md"
+test ! -e "$frontend_dir/.agents/skills/vite"
+
+core_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-core-check.XXXXXX")
+touch "$core_dir/AGENTS.md"
+./scripts/install-skill-bundle.sh "$core_dir" --bundle core >/dev/null
+test "$(find "$core_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 9
+test ! -e "$core_dir/.agents/skills/frontend-design-review"
+test ! -e "$core_dir/.agents/skills/orchestrated-delivery"
+./scripts/audit-ai-context.sh "$core_dir" >/dev/null
+
+all_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-all-check.XXXXXX")
+./scripts/install-skill-bundle.sh "$all_dir" --bundle all >/dev/null
+test "$(find "$all_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 131
+test "$(find "$all_dir/.codex/skills" -mindepth 1 -maxdepth 1 -type l | wc -l | tr -d ' ')" -eq 131
 
 setup_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-setup-check.XXXXXX")
 mkdir -p "$setup_dir/src"
@@ -140,20 +175,43 @@ test -f "$setup_dir/.codex/steering/angular-steering.md"
 test -f "$setup_dir/.codex/steering/kotlin-jvm-steering.md"
 test -f "$setup_dir/.codex/steering/rust-steering.md"
 test -f "$setup_dir/.codex/steering/infrastructure-opentofu-steering.md"
-test -f "$setup_dir/.codex/skills/frontend-design-review/SKILL.md"
-test -f "$setup_dir/.codex/skills/kotlin-jvm-engineering/SKILL.md"
-test -f "$setup_dir/.codex/skills/rust-rust-core/SKILL.md"
-test ! -e "$setup_dir/.codex/skills/caveman"
-test ! -e "$setup_dir/.codex/skills/api-and-interface-design"
-test -f "$setup_dir/.codex/skills/web-web-quality-audit/SKILL.md"
-test -f "$setup_dir/.codex/skills/vue/SKILL.md"
-test -f "$setup_dir/.codex/skills/terraform-skill/SKILL.md"
+test -f "$setup_dir/.agents/skills/frontend-design-review/SKILL.md"
+test -f "$setup_dir/.agents/skills/kotlin-jvm-engineering/SKILL.md"
+test -f "$setup_dir/.agents/skills/rust-rust-core/SKILL.md"
+test ! -e "$setup_dir/.agents/skills/caveman"
+test ! -e "$setup_dir/.agents/skills/api-and-interface-design"
+test -f "$setup_dir/.agents/skills/web-web-quality-audit/SKILL.md"
+test -f "$setup_dir/.agents/skills/vue/SKILL.md"
+test -f "$setup_dir/.agents/skills/terraform-skill/SKILL.md"
 
 rust_setup_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-rust-setup-check.XXXXXX")
 touch "$rust_setup_dir/Cargo.toml"
 ./scripts/setup-ai-context.sh "$rust_setup_dir" --yes >/dev/null
 test -f "$rust_setup_dir/.codex/steering/rust-steering.md"
 test ! -e "$rust_setup_dir/.codex/steering/javascript-typescript-steering.md"
+
+detection_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-detection-check.XXXXXX")
+mkdir -p "$detection_dir/docs/product" "$detection_dir/apps/legacy-admin"
+touch "$detection_dir/apps/legacy-admin/angular.json"
+detection_output=$(./scripts/setup-ai-context.sh "$detection_dir" --yes --dry-run)
+echo "$detection_output" | grep -q '^Detected profiles: base$'
+echo "$detection_output" | grep -q '^Detected bundles: core$'
+
+vendor_detection_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-vendor-detection-check.XXXXXX")
+mkdir -p "$vendor_detection_dir/node_modules/example"
+touch "$vendor_detection_dir/package.json" "$vendor_detection_dir/node_modules/example/page.astro"
+vendor_detection_output=$(./scripts/setup-ai-context.sh "$vendor_detection_dir" --yes --dry-run)
+echo "$vendor_detection_output" | grep -q '^Detected profiles: base,javascript-typescript$'
+echo "$vendor_detection_output" | grep -q '^Detected bundles: core$'
+
+legacy_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-legacy-check.XXXXXX")
+mkdir -p "$legacy_dir/.codex/skills/planning-files-lite"
+printf '%s\n' 'legacy project-owned skill' >"$legacy_dir/.codex/skills/planning-files-lite/SKILL.md"
+legacy_hash=$(shasum -a 256 "$legacy_dir/.codex/skills/planning-files-lite/SKILL.md")
+./scripts/install-skill-bundle.sh "$legacy_dir" --bundle core >/dev/null
+test -L "$legacy_dir/.agents/skills/planning-files-lite"
+test -f "$legacy_dir/.agents/skills/planning-files-lite/SKILL.md"
+test "$legacy_hash" = "$(shasum -a 256 "$legacy_dir/.codex/skills/planning-files-lite/SKILL.md")"
 
 link_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-link-check.XXXXXX")
 touch "$link_dir/package.json"
@@ -162,16 +220,18 @@ test -f "$link_dir/AGENTS.md"
 test ! -L "$link_dir/AGENTS.md"
 test -L "$link_dir/.codex/steering/javascript-typescript-steering.md"
 test -L "$link_dir/.codex/steering/frontend-design-steering.md"
+test -L "$link_dir/.agents/skills/context-engineering"
+test -f "$link_dir/.agents/skills/context-engineering/SKILL.md"
+test -L "$link_dir/.agents/skills/github-keychain-auth"
+test -f "$link_dir/.agents/skills/github-keychain-auth/SKILL.md"
 test -L "$link_dir/.codex/skills/context-engineering"
 test -f "$link_dir/.codex/skills/context-engineering/SKILL.md"
-test -L "$link_dir/.codex/skills/github-keychain-auth"
-test -f "$link_dir/.codex/skills/github-keychain-auth/SKILL.md"
 ./scripts/install-skill-bundle.sh "$link_dir" --bundle infra --mode link >/dev/null
-test -L "$link_dir/.codex/skills/terraform-skill"
-test -f "$link_dir/.codex/skills/terraform-skill/SKILL.md"
+test -L "$link_dir/.agents/skills/terraform-skill"
+test -f "$link_dir/.agents/skills/terraform-skill/SKILL.md"
 ./scripts/install-skill-bundle.sh "$link_dir" --bundle jvm --mode link >/dev/null
-test -L "$link_dir/.codex/skills/kotlin-jvm-engineering"
-test -f "$link_dir/.codex/skills/kotlin-jvm-engineering/SKILL.md"
+test -L "$link_dir/.agents/skills/kotlin-jvm-engineering"
+test -f "$link_dir/.agents/skills/kotlin-jvm-engineering/SKILL.md"
 
 existing_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-existing-check.XXXXXX")
 mkdir -p "$existing_dir/.codex/steering"
@@ -180,5 +240,20 @@ existing_hash=$(shasum -a 256 "$existing_dir/.codex/steering/infrastructure-open
 ./scripts/scaffold-ai-context.sh "$existing_dir" --profile infrastructure-opentofu >/dev/null
 ./scripts/scaffold-ai-context.sh "$existing_dir" --profile infrastructure-opentofu >/dev/null
 test "$existing_hash" = "$(shasum -a 256 "$existing_dir/.codex/steering/infrastructure-opentofu-steering.md")"
+
+placeholder_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-placeholder-check.XXXXXX")
+printf '%s\n' '# {{PROJECT_NAME}}' >"$placeholder_dir/AGENTS.md"
+if ./scripts/audit-ai-context.sh "$placeholder_dir" >/dev/null 2>&1; then
+  echo "audit accepted an unresolved AGENTS.md placeholder" >&2
+  exit 1
+fi
+
+legacy_only_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-legacy-only-check.XXXXXX")
+mkdir -p "$legacy_only_dir/.codex/skills/example"
+touch "$legacy_only_dir/.codex/skills/example/SKILL.md"
+if ./scripts/audit-ai-context.sh "$legacy_only_dir" >/dev/null 2>&1; then
+  echo "audit accepted a legacy-only skill layout" >&2
+  exit 1
+fi
 
 echo "checks passed"

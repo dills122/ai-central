@@ -26,7 +26,8 @@ Symlinked in link mode:
 - reusable steering such as JavaScript/TypeScript, Angular, Kotlin/JVM, Rust, shell, and
   frontend-design
 - Payload Cursor rules
-- `.codex/skills/*` installed from skill bundles
+- `.agents/skills/*` installed from skill bundles
+- `.codex/skills/*` compatibility links pointing to the canonical project skill entries
 
 ## Tradeoffs
 
