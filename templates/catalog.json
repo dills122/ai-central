@@ -109,13 +109,15 @@
       "id": "brevity",
       "label": "Brevity",
       "type": "workflow",
-      "description": "Caveman token-saving skills for terse agent replies, help, commit messages, code review comments, and memory-file compression."
+      "description": "Caveman token-saving skills for terse agent replies, help, commit messages, code review comments, and memory-file compression.",
+      "apmPackage": "packages/apm/brevity"
     },
     {
       "id": "engineering",
       "label": "Engineering",
       "type": "persona-task",
       "description": "Engineering lifecycle, architecture, CI, security, observability, migration, and tooling skills.",
+      "apmPackage": "packages/apm/engineering",
       "signals": ["package.json"]
     },
     {
@@ -123,6 +125,7 @@
       "label": "JVM",
       "type": "language-platform",
       "description": "General Kotlin/JVM implementation, Gradle toolchain, module, coroutine, compatibility, boundary, and verification workflow.",
+      "apmPackage": "packages/apm/jvm",
       "signals": ["*.kt", "build.gradle.kts", "settings.gradle.kts"]
     },
     {
@@ -130,6 +133,7 @@
       "label": "Rust",
       "type": "language",
       "description": "Rust implementation, lint, debug, security, Pest, and RON skills.",
+      "apmPackage": "packages/apm/rust",
       "signals": ["Cargo.toml"]
     },
     {
@@ -137,58 +141,74 @@
       "label": "Product",
       "type": "persona-task",
       "description": "PM, research, analytics, GTM, strategy, and code-to-PRD skills.",
+      "apmPackage": "packages/apm/product",
       "signals": ["docs/", "product/"]
     },
     {
       "id": "planning",
       "label": "Planning",
       "type": "workflow",
-      "description": "Full and lightweight planning-file workflows for long-running tasks."
+      "description": "Full and lightweight planning-file workflows for long-running tasks.",
+      "apmPackage": "packages/apm/planning"
     },
     {
       "id": "frontend",
       "label": "Frontend",
       "type": "domain",
       "description": "General frontend design, browser testing, accessibility, Playwright review, design-system, and web quality skills.",
+      "apmPackage": "packages/apm/frontend",
       "signals": ["*.tsx", "*.jsx", "*.astro", "*.component.ts", "angular.json", "vite.config.ts", "vite.config.js"]
     },
     {
       "id": "frontend-tooling",
       "label": "Frontend Tooling",
       "type": "tooling",
-      "description": "Vite, Vitest, pnpm, Turborepo, VitePress, and Slidev guidance; choose only for matching tools."
+      "description": "Vite, Vitest, pnpm, Turborepo, VitePress, and Slidev guidance; choose only for matching tools.",
+      "apmPackage": "packages/apm/frontend-tooling"
     },
     {
       "id": "frontend-vue",
       "label": "Frontend Vue",
       "type": "language-framework",
       "description": "Vue, Nuxt, Pinia, Vue Router, VueUse, UnoCSS, and Vue testing skills.",
+      "apmPackage": "packages/apm/frontend-vue",
       "signals": ["*.vue", "nuxt.config.ts", "nuxt.config.js", "vue", "nuxt", "pinia"]
     },
     {
       "id": "hallmark",
       "label": "Hallmark Design",
       "type": "domain",
-      "description": "Creative-direction workflow for intentional pages, redesigns, audits, and design studies."
+      "description": "Creative-direction workflow for intentional pages, redesigns, audits, and design studies.",
+      "apmPackage": "packages/apm/hallmark"
     },
     {
       "id": "infra",
       "label": "Infrastructure",
       "type": "domain",
       "description": "Terraform/OpenTofu review, debugging, CI, state, security, testing, and rollback guidance.",
+      "apmPackage": "packages/apm/infra",
       "signals": ["*.tf", "*.tfvars", "*.tofu", "*.tofuvars"]
+    },
+    {
+      "id": "writing",
+      "label": "Technical Writing",
+      "type": "persona-task",
+      "description": "Mine project history, draft evidence-bound technical stories, and run an optional final prose audit.",
+      "apmPackage": "packages/apm/writing"
     },
     {
       "id": "workflow",
       "label": "Workflow",
       "type": "persona-task",
-      "description": "Architecture diagrams, handoffs, requirements clarity, QA planning, docs, OpenAPI TypeScript, and React workflow skills."
+      "description": "Architecture diagrams, handoffs, requirements clarity, QA planning, docs, OpenAPI TypeScript, and React workflow skills.",
+      "apmPackage": "packages/apm/workflow"
     },
     {
       "id": "all",
       "label": "All",
       "type": "meta",
-      "description": "Installs every available skill bundle."
+      "description": "Installs every available skill bundle.",
+      "apmPackage": "packages/apm/all"
     }
   ]
 }

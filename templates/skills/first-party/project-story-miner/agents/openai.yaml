@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Story Miner"
+  short_description: "Mine project history into story-ready evidence"
+  default_prompt: "Use $project-story-miner to reconstruct this project journey into a sourced evidence brief."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Technical Blog Writer"
+  short_description: "Draft evidence-bound engineering stories"
+  default_prompt: "Use $technical-blog-writer to turn these project notes into an accurate, engaging technical post."

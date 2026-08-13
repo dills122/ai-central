@@ -43,6 +43,7 @@ the discovered skill surface small while preserving focused capabilities.
 | `frontend-vue` | Vue, Vue best practices, Vue Router, Vue testing, Nuxt, Pinia, VueUse, and UnoCSS |
 | `hallmark` | Opt-in creative direction for distinctive pages, redesigns, audits, and design studies |
 | `infra` | Terraform/OpenTofu review, debugging, CI, state, security, testing, and rollback |
+| `writing` | Project-story evidence mining, technical blog drafting, and an optional final prose audit |
 | `workflow` | The older broad Agent Toolkit grouping for architecture, handoffs, requirements, QA, docs, OpenAPI, and React |
 | `all` | Every bundle; intended for inventory audits, not normal project setup |
 
@@ -76,5 +77,5 @@ Run an integration audit with:
 The audit catches unresolved `AGENTS.md` placeholders, missing or broken canonical skills,
 legacy-only layouts, broken compatibility links, and unusually large project skill catalogs.
 
-The four recommended layers also have reproducible Microsoft APM manifests. See `docs/apm.md` and
-run `scripts/check-apm.sh` when APM is installed.
+Every bundle has a generated Microsoft APM manifest. See `docs/apm.md` and run
+`scripts/check-apm.sh` when APM is installed.

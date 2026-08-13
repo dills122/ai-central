@@ -1,6 +1,6 @@
 # External Skill Review
 
-Review date: 2026-06-04
+Review dates: initial catalog 2026-06-04; `blader/humanizer` 2026-08-13
 
 Local clone root: `external/`
 
@@ -28,6 +28,7 @@ These upstream repositories were cloned locally for review:
 | `antonbabenko/terraform-skill` | `external/terraform-skill` | Apache-2.0 | 1 | Import/adapt into infrastructure bundle |
 | `softaworks/agent-toolkit` | `external/agent-toolkit` | MIT | 86 total; 43 source plus `dist/` copies | Selectively mine source skills only |
 | `Nutlope/hallmark` | `external/hallmark` | MIT | 1 | Adapt as an opt-in creative-direction skill; do not add to default frontend context |
+| `blader/humanizer` | `external/humanizer` | MIT | 1 | Adapt as an opt-in final prose audit; remove detector framing and rigid punctuation bans; reviewed 2026-08-13 |
 
 ## Reviewed Commits
 
@@ -53,6 +54,7 @@ These upstream repositories were cloned locally for review:
 | `antonbabenko/terraform-skill` | `b59d2be9ff4db8f835c8459e05e325ba11e3a21f` |
 | `softaworks/agent-toolkit` | `3027f20f3181758385a1bb8c022d4041dfb4de84` |
 | `Nutlope/hallmark` | `aeb42fb354ff4efa36ab475773a082315a3af2ce` |
+| `blader/humanizer` | `523374dee72d67c7b2b5f858ea0094ffda49c3ac` |
 
 ## Priority 1: Integrate Soon
 

@@ -104,6 +104,7 @@ Bundles install reusable skills:
 | `frontend-vue` | Vue, Nuxt, Pinia, Vue Router, VueUse, UnoCSS, and Vue testing skills |
 | `hallmark` | Creative-direction workflow for intentional pages, redesigns, audits, and design studies |
 | `infra` | Terraform/OpenTofu review, debugging, CI, state, security, testing, and rollback guidance |
+| `writing` | Project-story evidence mining, technical blog drafting and editing, and final prose auditing |
 | `workflow` | Architecture diagrams, handoffs, requirements clarity, QA planning, docs, Mermaid, OpenAPI TypeScript, and React workflow skills |
 | `all` | Everything above |
 
@@ -117,3 +118,6 @@ linked into canonical discovery instead of being moved or duplicated.
 
 This makes setup safe for existing projects, but updates to skipped files still require manual
 review. Use `scripts/audit-ai-context.sh /path/to/project` to find layout and placeholder problems.
+
+Every bundle also has a generated APM manifest under `packages/apm/<bundle>/`. See `docs/apm.md`
+for managed installation, aliases, lockfiles, and audit limitations.

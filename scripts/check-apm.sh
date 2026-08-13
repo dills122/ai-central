@@ -10,38 +10,58 @@ repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-apm-check.XXXXXX")
 trap 'rm -rf "$tmp_dir"' EXIT HUP INT TERM
 
-consumer_dir=$tmp_dir/consumer
-mkdir -p "$consumer_dir"
+"$repo_root/scripts/generate-apm-bundles.sh" --check >/dev/null
 
 expected_names=$(
-  for bundle in core orchestration documentation delivery; do
-    sed -n 's#^[[:space:]]*- path: ../../../\(.*\)$#\1#p' "$repo_root/packages/apm/$bundle/apm.yml"
-  done |
-    while IFS= read -r dependency_path; do
-      basename "$dependency_path"
-    done |
-    sort -u
+  awk '
+    /^[[:space:]]*- path: / {
+      if (name != "") print name
+      path = $0
+      sub(/^[[:space:]]*- path: /, "", path)
+      count = split(path, parts, "/")
+      name = parts[count]
+      next
+    }
+    /^[[:space:]]+alias: / {
+      alias = $0
+      sub(/^[[:space:]]+alias: /, "", alias)
+      name = alias
+      next
+    }
+    END {
+      if (name != "") print name
+    }
+  ' "$repo_root/packages/apm/all/apm.yml" | sort
 )
 
-cd "$consumer_dir"
-apm install \
-  "$repo_root/packages/apm/core" \
-  "$repo_root/packages/apm/orchestration" \
-  "$repo_root/packages/apm/documentation" \
-  "$repo_root/packages/apm/delivery" \
-  --target agent-skills \
-  --no-policy >"$tmp_dir/install.log"
+all_consumer_dir=$tmp_dir/all-consumer
+mkdir -p "$all_consumer_dir"
+cd "$all_consumer_dir"
+apm install "$repo_root/packages/apm/all" \
+  --target agent-skills --no-policy >"$tmp_dir/install.log"
 
 actual_names=$(
   find .agents/skills -mindepth 1 -maxdepth 1 -type d -exec basename {} \; |
     sort
 )
 test "$actual_names" = "$expected_names"
-test "$(printf '%s\n' "$actual_names" | wc -l | tr -d ' ')" -eq 27
+test "$(printf '%s\n' "$actual_names" | wc -l | tr -d ' ')" -eq 128
+test -f .agents/skills/claude-playwright-review/SKILL.md
+test ! -e .agents/skills/claude-review
+test -f .agents/skills/technical-blog-writer/SKILL.md
+test -f .agents/skills/orchestrated-delivery/SKILL.md
 test -f apm.yml
 test -f apm.lock.yaml
 grep -q '^apm_modules/$' .gitignore
 
+# APM 0.28.0 does not preserve local dependency aliases during frozen replay.
+# Exercise replay and drift detection with the alias-free core package while
+# still checking the complete alias-rich package above through a fresh install.
+core_consumer_dir=$tmp_dir/core-consumer
+mkdir -p "$core_consumer_dir"
+cd "$core_consumer_dir"
+apm install "$repo_root/packages/apm/core" \
+  --target agent-skills --no-policy >"$tmp_dir/core-install.log"
 apm install --frozen --no-policy >"$tmp_dir/frozen.log"
 apm audit --no-policy >"$tmp_dir/audit.log"
 if grep -q 'Drift detected' "$tmp_dir/audit.log"; then
@@ -58,4 +78,4 @@ else
   exit 1
 fi
 
-echo "APM checks passed: 4 bundles, 27 skills, frozen replay, and drift audit"
+echo "APM checks passed: 18 bundles, 128 unique skills, and alias-free frozen replay/audit"
