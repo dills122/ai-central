@@ -8,7 +8,7 @@ Central library for AI steering files, agent instructions, Cursor rules, and Cod
 - `templates/` contains normalized starters intended for reuse in new or existing projects.
 - `templates/skills/` contains reviewed imported and adapted skills.
 - `templates/catalog.json` describes available profiles and bundles.
-- `packages/apm/` contains optional Agent Package Manager manifests for the compact bundles.
+- `packages/apm/` contains generated Agent Package Manager manifests for every skill bundle.
 - `docs/` contains inventory, classification, and review notes.
 - `docs/source-manifest.sha256` records hashes for collected source files.
 - `scripts/` contains local helpers for scaffolding AI context into project repos.
@@ -39,8 +39,8 @@ AI Central has two reusable layers:
 - **Bundles** install task-oriented Codex skills under `.agents/skills/`, with compatibility
   symlinks under `.codex/skills/`. Skills load when relevant; they are not runtime dependencies.
 
-The current checkout contains 128 reusable `SKILL.md` definitions under `templates/skills/`. The
-`all` meta-bundle installs 131 named skill directories because three imported skills are retained
+The current checkout contains 131 reusable `SKILL.md` definitions under `templates/skills/`. The
+`all` meta-bundle installs 134 named skill directories because three imported skills are retained
 but intentionally unbundled, while Playwright and five compact-bundle dependencies are also
 exposed under historical prefixed names by older broad bundles. Another 33 Wap Labs skills are
 preserved as collected source material and are not installed by any bundle.
@@ -67,6 +67,7 @@ For provenance and licenses, see [Skill attribution](docs/skill-attribution.md) 
 | Shared shell, CI, bootstrap, or release automation | `base,shell-scripting` | `core` | Adds POSIX-first interfaces, quoting, cleanup, portability, and safety boundaries. |
 | Terraform or OpenTofu | `base,infrastructure-opentofu` | `core,infra` | Separates durable infrastructure policy from detailed implementation workflow. |
 | Long-running or multi-session work | matching project profiles | `core,planning` | Adds the full persistent planning-files workflow. |
+| Technical blog, engineering retrospective, or project journey | matching project profiles | `writing` | Mines a sourced project timeline, drafts the technical story, and offers an optional final prose audit. |
 | Architecture, handoffs, API contracts, or React workflow | matching project profiles | `core,workflow` | Adds diagrams, requirements, QA, README, OpenAPI, and React skills. |
 | Product discovery or strategy | `base` or matching project profiles | `core,product` | Adds research, analytics, GTM, product strategy, and code-to-PRD skills. |
 | Distinctive landing page, redesign, or design study | matching frontend profiles | `core,frontend,hallmark` | Keeps the creative-direction workflow opt-in instead of applying it to routine product UI. |
@@ -108,8 +109,9 @@ reusable profiles and skills, and the installers skip existing files instead of 
 | `frontend-vue` | 8 | Vue, Nuxt, Pinia, Vue Router, VueUse, UnoCSS, and Vue testing |
 | `hallmark` | 1 | Opt-in creative direction for distinctive pages, redesigns, audits, and design studies |
 | `infra` | 1 | Terraform/OpenTofu review, debugging, state, CI, testing, security, and rollback |
+| `writing` | 3 | Project-story evidence mining, technical blog drafting and editing, and final prose auditing |
 | `workflow` | 13 | Architecture diagrams, handoffs, requirements, QA planning, READMEs, OpenAPI TypeScript, and React |
-| `all` | 131 installed directories | Every bundle above; useful for auditing, not recommended as a routine project default |
+| `all` | 134 installed directories | Every bundle above; useful for auditing, not recommended as a routine project default |
 
 ### Complete Bundled Skill Catalog
 
@@ -350,6 +352,15 @@ Specialist engineering skills:
 </details>
 
 <details>
+<summary><code>writing</code> — 3 skills</summary>
+
+- `project-story-miner`
+- `technical-blog-writer`
+- `humanizer`
+
+</details>
+
+<details>
 <summary><code>workflow</code> — 13 skills</summary>
 
 - `toolkit-backend-to-frontend-handoff-docs`
@@ -451,7 +462,7 @@ Install reviewed skill bundles:
 
 Bundles: `core`, `orchestration`, `documentation`, `delivery`, `brevity`, `engineering`, `jvm`,
 `rust`, `product`, `planning`, `frontend`, `frontend-tooling`, `frontend-vue`, `hallmark`, `infra`,
-`workflow`, `all`.
+`writing`, `workflow`, `all`.
 
 Audit a project's installed AI context:
 
@@ -459,16 +470,18 @@ Audit a project's installed AI context:
 ./scripts/audit-ai-context.sh /path/to/project
 ```
 
-Install and verify compact bundles through [Microsoft APM](https://microsoft.github.io/apm/):
+Install any bundle through [Microsoft APM](https://microsoft.github.io/apm/):
 
 ```sh
 apm install dills122/ai-central/packages/apm/core#main --target agent-skills
 apm install dills122/ai-central/packages/apm/orchestration#main --target agent-skills
+apm install dills122/ai-central/packages/apm/writing#main --target agent-skills
 ./scripts/check-apm.sh
 ```
 
-See [Agent Package Manager integration](docs/apm.md) for the four package manifests, lockfile
-workflow, compatibility behavior, and the current APM 0.28.0 audit limitation.
+Use the matching directory under `packages/apm/` for any listed bundle, including `all`. See
+[Agent Package Manager integration](docs/apm.md) for aliases, lockfile workflow, compatibility
+behavior, and the current APM 0.28.0 audit limitations.
 
 Refresh collected source material from local repos:
 

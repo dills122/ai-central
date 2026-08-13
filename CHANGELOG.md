@@ -4,8 +4,11 @@ All notable changes to this repository will be documented here.
 
 ## Unreleased
 
-- Added Microsoft APM manifests for the compact `core`, `orchestration`, `documentation`, and
-  `delivery` bundles plus a disposable install, frozen-replay, and drift-audit test.
+- Added generated Microsoft APM manifests for every skill bundle plus `all`, preserving prefixed
+  installed names through explicit aliases and validating full-catalog installs plus alias-free
+  frozen replay and drift audits.
+- Added an opt-in `writing` bundle with first-party project-story mining and technical blog writing
+  skills plus a compact, attributed adaptation of `blader/humanizer` for final prose audits.
 - Made `.agents/skills` the canonical project skill location with non-overwriting
   `.codex/skills` compatibility symlinks and a project AI-context audit command.
 - Added compact `orchestration`, `documentation`, and `delivery` bundles and five first-party skills

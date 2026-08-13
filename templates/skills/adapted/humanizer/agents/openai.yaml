@@ -1,0 +1,4 @@
+interface:
+  display_name: "Humanizer"
+  short_description: "Make prose natural without changing its facts"
+  default_prompt: "Use $humanizer to give this draft a natural final edit while preserving its facts and voice."

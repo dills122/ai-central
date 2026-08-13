@@ -2,7 +2,7 @@
 set -eu
 
 usage() {
-  echo "Usage: $0 TARGET_DIR [--bundle core|orchestration|documentation|delivery|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|workflow|all] [--mode copy|link]" >&2
+  echo "Usage: $0 TARGET_DIR [--bundle core|orchestration|documentation|delivery|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|writing|workflow|all] [--mode copy|link]" >&2
 }
 
 if [ "$#" -lt 1 ]; then
@@ -41,7 +41,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 case "$bundle" in
-  core|orchestration|documentation|delivery|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|workflow|all) ;;
+  core|orchestration|documentation|delivery|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|writing|workflow|all) ;;
   *)
     echo "Unknown bundle: $bundle" >&2
     usage
@@ -227,6 +227,12 @@ install_infra() {
   install_skill "$repo_root/templates/skills/imported/terraform-skill/terraform-skill" "terraform-skill"
 }
 
+install_writing() {
+  install_skill "$repo_root/templates/skills/first-party/project-story-miner" "project-story-miner"
+  install_skill "$repo_root/templates/skills/first-party/technical-blog-writer" "technical-blog-writer"
+  install_skill "$repo_root/templates/skills/adapted/humanizer" "humanizer"
+}
+
 install_workflow() {
   install_find_skills "$repo_root/templates/skills/imported/agent-toolkit" "toolkit-"
 }
@@ -277,6 +283,9 @@ case "$bundle" in
   infra)
     install_infra
     ;;
+  writing)
+    install_writing
+    ;;
   workflow)
     install_workflow
     ;;
@@ -296,6 +305,7 @@ case "$bundle" in
     install_frontend_vue
     install_hallmark
     install_infra
+    install_writing
     install_workflow
     ;;
 esac

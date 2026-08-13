@@ -9,46 +9,35 @@ for script in scripts/*.sh; do
   sh -n "$script"
 done
 
-check_apm_bundle() {
-  bundle_name=$1
-  expected_count=$2
-  manifest=packages/apm/$bundle_name/apm.yml
+./scripts/generate-apm-bundles.sh --check >/dev/null
 
-  test -f "$manifest"
-  grep -q "^name: ai-central-$bundle_name$" "$manifest"
-  grep -Eq '^version: [0-9]+\.[0-9]+\.[0-9]+$' "$manifest"
-  grep -q '^type: skill$' "$manifest"
-  grep -q '^includes: auto$' "$manifest"
+catalog_bundle_count=$(
+  sed -n '/^[[:space:]]*"bundles": \[/,/^[[:space:]]*\]/p' templates/catalog.json |
+    sed -n 's/^[[:space:]]*"id": "\([^"]*\)",[[:space:]]*$/\1/p' |
+    wc -l | tr -d ' '
+)
+apm_manifest_count=$(find packages/apm -mindepth 2 -maxdepth 2 -name apm.yml | wc -l | tr -d ' ')
+test "$catalog_bundle_count" -eq 18
+test "$apm_manifest_count" -eq "$catalog_bundle_count"
 
-  manifest_dir=$(dirname "$manifest")
-  dependency_count=0
+for apm_manifest in packages/apm/*/apm.yml; do
+  bundle_name=$(basename "$(dirname "$apm_manifest")")
+  grep -q "^name: ai-central-$bundle_name$" "$apm_manifest"
+  grep -Eq '^version: [0-9]+\.[0-9]+\.[0-9]+$' "$apm_manifest"
+  grep -q '^type: skill$' "$apm_manifest"
+  grep -q '^includes: auto$' "$apm_manifest"
+
+  apm_dir=$(dirname "$apm_manifest")
   while IFS= read -r dependency_path; do
-    test -f "$manifest_dir/$dependency_path/SKILL.md"
-    dependency_count=$((dependency_count + 1))
+    test -f "$apm_dir/$dependency_path/SKILL.md"
   done <<EOF
-$(sed -n 's/^[[:space:]]*- path: \(.*\)$/\1/p' "$manifest")
+$(sed -n 's/^[[:space:]]*- path: \(.*\)$/\1/p' "$apm_manifest")
 EOF
-  test "$dependency_count" -eq "$expected_count"
+done
 
-  shell_pairs=$(
-    sed -n "/^install_${bundle_name}() {$/,/^}$/p" scripts/install-skill-bundle.sh |
-      sed -n 's#.*"\$repo_root/\([^"]*\)" "\([^"]*\)".*#\1|\2#p' |
-      sort
-  )
-  apm_pairs=$(
-    sed -n 's#^[[:space:]]*- path: ../../../\(.*\)$#\1#p' "$manifest" |
-      while IFS= read -r dependency_path; do
-        printf '%s|%s\n' "$dependency_path" "$(basename "$dependency_path")"
-      done |
-      sort
-  )
-  test "$shell_pairs" = "$apm_pairs"
-}
-
-check_apm_bundle core 9
-check_apm_bundle orchestration 6
-check_apm_bundle documentation 5
-check_apm_bundle delivery 7
+test "$(sed -n 's/^[[:space:]]*- path: /x/p' packages/apm/all/apm.yml | wc -l | tr -d ' ')" -eq 128
+grep -q '^      alias: claude-playwright-review$' packages/apm/all/apm.yml
+test "$(grep -c 'playwright-pro/skills/review' packages/apm/all/apm.yml)" -eq 1
 grep -q '^apm_modules/$' .gitignore
 
 if grep -Eiq 'reef|order book|matching engine|trading|market data|settlement' \
@@ -63,6 +52,15 @@ if grep -Eiq 'wap|waves|wml|wsp|wtp|lowband|forage|capsule|liars.?dice' \
   templates/steering/rust-steering.md \
   templates/steering/shell-scripting-steering.md; then
   echo "Reusable language guidance contains source-project terminology" >&2
+  exit 1
+fi
+
+if grep -Eiq '(^|[^[:alpha:]])(reef|wap|waves|forage|capsule|liars.?dice)([^[:alpha:]]|$)' \
+  templates/skills/first-party/project-story-miner/SKILL.md \
+  templates/skills/first-party/project-story-miner/references/evidence-brief.md \
+  templates/skills/first-party/technical-blog-writer/SKILL.md \
+  templates/skills/first-party/technical-blog-writer/references/*.md; then
+  echo "Reusable writing guidance contains source-project terminology" >&2
   exit 1
 fi
 
@@ -107,6 +105,8 @@ test "$infrastructure_hash" = "$(shasum -a 256 "$tmp_dir/.codex/steering/infrast
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle frontend-tooling >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle hallmark >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle infra >/dev/null
+./scripts/install-skill-bundle.sh "$tmp_dir" --bundle writing >/dev/null
+./scripts/install-skill-bundle.sh "$tmp_dir" --bundle writing >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle workflow >/dev/null
 ./scripts/setup-ai-context.sh "$tmp_dir" --yes --dry-run >/dev/null
 ./scripts/setup-ai-context.sh "$tmp_dir" --yes --mode link --dry-run >/dev/null
@@ -145,6 +145,12 @@ test -f "$tmp_dir/.agents/skills/vue/SKILL.md"
 test -f "$tmp_dir/.agents/skills/hallmark-design/SKILL.md"
 test -f "$tmp_dir/.agents/skills/terraform-skill/SKILL.md"
 test -f "$tmp_dir/.agents/skills/terraform-skill/LICENSE"
+test -f "$tmp_dir/.agents/skills/project-story-miner/SKILL.md"
+test -f "$tmp_dir/.agents/skills/project-story-miner/agents/openai.yaml"
+test -f "$tmp_dir/.agents/skills/technical-blog-writer/SKILL.md"
+test -f "$tmp_dir/.agents/skills/technical-blog-writer/assets/article-brief.md"
+test -f "$tmp_dir/.agents/skills/humanizer/SKILL.md"
+test -f "$tmp_dir/.agents/skills/humanizer/references/pattern-catalog.md"
 test -f "$tmp_dir/.agents/skills/toolkit-c4-architecture/SKILL.md"
 
 frontend_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-frontend-check.XXXXXX")
@@ -162,8 +168,8 @@ test ! -e "$core_dir/.agents/skills/orchestrated-delivery"
 
 all_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-all-check.XXXXXX")
 ./scripts/install-skill-bundle.sh "$all_dir" --bundle all >/dev/null
-test "$(find "$all_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 131
-test "$(find "$all_dir/.codex/skills" -mindepth 1 -maxdepth 1 -type l | wc -l | tr -d ' ')" -eq 131
+test "$(find "$all_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 134
+test "$(find "$all_dir/.codex/skills" -mindepth 1 -maxdepth 1 -type l | wc -l | tr -d ' ')" -eq 134
 
 setup_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-setup-check.XXXXXX")
 mkdir -p "$setup_dir/src"
@@ -232,6 +238,10 @@ test -f "$link_dir/.agents/skills/terraform-skill/SKILL.md"
 ./scripts/install-skill-bundle.sh "$link_dir" --bundle jvm --mode link >/dev/null
 test -L "$link_dir/.agents/skills/kotlin-jvm-engineering"
 test -f "$link_dir/.agents/skills/kotlin-jvm-engineering/SKILL.md"
+./scripts/install-skill-bundle.sh "$link_dir" --bundle writing --mode link >/dev/null
+test -L "$link_dir/.agents/skills/technical-blog-writer"
+test -f "$link_dir/.agents/skills/technical-blog-writer/SKILL.md"
+test -L "$link_dir/.codex/skills/technical-blog-writer"
 
 existing_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-existing-check.XXXXXX")
 mkdir -p "$existing_dir/.codex/steering"

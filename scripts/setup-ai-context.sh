@@ -8,7 +8,7 @@ Usage: setup-ai-context.sh TARGET_DIR [options]
 Options:
   --yes                    Use detected recommendations without prompts
   --profiles LIST          Comma-separated steering profiles: base,javascript-typescript,angular,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
-  --bundles LIST           Comma-separated skill bundles: core,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,workflow,all
+  --bundles LIST           Comma-separated skill bundles: core,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all
   --mode copy|link          copy installs files; link symlinks reusable templates and skills
   --skip-profiles LIST     Comma-separated profiles to exclude
   --skip-bundles LIST      Comma-separated bundles to exclude
@@ -283,7 +283,7 @@ if [ ! -d "$target_dir" ]; then
 fi
 
 allowed_profiles=base,javascript-typescript,angular,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
-allowed_bundles=core,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,workflow,all
+allowed_bundles=core,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all
 
 case "$mode" in
   copy|link) ;;

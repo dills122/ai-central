@@ -73,6 +73,18 @@ execution mechanics; the reusable gap was the contract between planning, delegat
 truth, and final integration. They are grouped into `orchestration` and `documentation` rather than
 expanding the universal `core` bundle.
 
+Promoted for evidence-bound technical storytelling:
+
+- `project-story-miner`: builds a claim ledger and project timeline from repository evidence before
+  prose drafting begins;
+- `technical-blog-writer`: turns that evidence into a readable technical journey while separating
+  fact, inference, and author recollection;
+- `humanizer`: a compact adaptation of `blader/humanizer` used only as an optional final prose audit,
+  with factual and technical precision taking precedence over stylistic smoothing.
+
+These are grouped in the opt-in `writing` bundle so editorial guidance does not affect routine
+engineering work.
+
 Suggested next review question: decide whether these should live as Codex skills in this repo, a personal plugin, or just source material copied into target projects.
 
 ## Gaps To Fill
