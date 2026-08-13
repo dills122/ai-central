@@ -8,6 +8,7 @@ Central library for AI steering files, agent instructions, Cursor rules, and Cod
 - `templates/` contains normalized starters intended for reuse in new or existing projects.
 - `templates/skills/` contains reviewed imported and adapted skills.
 - `templates/catalog.json` describes available profiles and bundles.
+- `packages/apm/` contains optional Agent Package Manager package manifests.
 - `docs/` contains inventory, classification, and review notes.
 - `docs/source-manifest.sha256` records hashes for collected source files.
 - `scripts/` contains local helpers for scaffolding AI context into project repos.
@@ -409,6 +410,15 @@ Install reviewed skill bundles:
 
 Bundles: `core`, `brevity`, `engineering`, `jvm`, `rust`, `product`, `planning`, `frontend`, `frontend-tooling`, `frontend-vue`, `hallmark`, `infra`, `workflow`, `all`.
 
+Pilot the `core` bundle through [Microsoft APM](https://microsoft.github.io/apm/):
+
+```sh
+apm install dills122/ai-central/packages/apm/core#main
+```
+
+See [Agent Package Manager pilot](docs/apm.md) for target selection, lockfile guidance, and current
+scope.
+
 Refresh collected source material from local repos:
 
 ```sh
@@ -456,6 +466,7 @@ Run local checks:
 - [Language steering research (2026-07-31)](docs/language-steering-research-2026-07-31.md)
 - [External source policy](docs/external-source-policy.md)
 - [Skill attribution](docs/skill-attribution.md)
+- [Agent Package Manager pilot](docs/apm.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security notes](SECURITY.md)
 - [Third-party notices](THIRD_PARTY_NOTICES.md)

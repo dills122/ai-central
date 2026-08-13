@@ -19,6 +19,7 @@ logs/
 
 # Dependency and build output, in case helper tooling is added later
 node_modules/
+apm_modules/
 dist/
 build/
 coverage/
