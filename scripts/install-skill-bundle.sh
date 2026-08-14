@@ -131,6 +131,7 @@ install_core() {
 }
 
 install_orchestration() {
+  install_skill "$repo_root/templates/skills/first-party/independent-review" "independent-review"
   install_skill "$repo_root/templates/skills/first-party/orchestrated-delivery" "orchestrated-delivery"
   install_skill "$repo_root/templates/skills/first-party/spec-traceability" "spec-traceability"
   install_skill "$repo_root/templates/skills/first-party/session-handoff" "session-handoff"

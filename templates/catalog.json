@@ -88,7 +88,7 @@
       "id": "orchestration",
       "label": "Orchestration",
       "type": "workflow",
-      "description": "Brain-task planning, multi-agent dispatch, traceability, persistent handoffs, bounded research, and result reconciliation.",
+      "description": "Brain-task planning, multi-agent dispatch, independent fresh-context review, traceability, persistent handoffs, bounded research, and result reconciliation.",
       "apmPackage": "packages/apm/orchestration"
     },
     {
