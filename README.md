@@ -158,6 +158,19 @@ Audit an existing installation with:
 ./scripts/audit-ai-context.sh /path/to/project
 ```
 
+### Codex-Managed Worktrees
+
+When project context is intentionally kept in local Git exclusions, configure the Codex Local
+Environment to seed it into every new managed worktree:
+
+```sh
+/path/to/ai-central/scripts/setup-codex-worktree.sh "$PWD"
+```
+
+The setup wrapper mirrors only allowlisted agent instructions, skills, steering, and Codex agent
+definitions from the primary checkout. It preserves real files versus symlinks and never overwrites
+worktree-owned paths. See [Codex worktree context](docs/codex-worktree-context.md).
+
 ### Agent Package Manager
 
 Every bundle has a generated [Microsoft Agent Package Manager](https://microsoft.github.io/apm/)
@@ -210,6 +223,7 @@ adding or promoting reusable material.
 
 - [Setup CLI](docs/setup-cli.md)
 - [Link mode](docs/link-mode.md)
+- [Codex worktree context](docs/codex-worktree-context.md)
 - [Scaffold profiles](docs/scaffold-profiles.md)
 - [Skill bundles](docs/skill-bundles.md)
 - [Agent Package Manager integration](docs/apm.md)
