@@ -16,11 +16,12 @@ Every bundle in `templates/catalog.json` has a generated manifest:
 | Package path | Skills |
 | --- | ---: |
 | `packages/apm/core` | 9 |
-| `packages/apm/orchestration` | 6 |
+| `packages/apm/node` | 1 |
+| `packages/apm/orchestration` | 7 |
 | `packages/apm/documentation` | 5 |
 | `packages/apm/delivery` | 7 |
 | `packages/apm/brevity` | 5 |
-| `packages/apm/engineering` | 42 |
+| `packages/apm/engineering` | 43 |
 | `packages/apm/jvm` | 1 |
 | `packages/apm/rust` | 8 |
 | `packages/apm/product` | 25 |
@@ -32,12 +33,12 @@ Every bundle in `templates/catalog.json` has a generated manifest:
 | `packages/apm/infra` | 1 |
 | `packages/apm/writing` | 3 |
 | `packages/apm/workflow` | 13 |
-| `packages/apm/all` | 128 unique sources |
+| `packages/apm/all` | 130 unique sources |
 
-The shell `all` bundle exposes 134 installed names. Several sources are intentionally reused by
+The shell `all` bundle exposes 136 installed names. Several sources are intentionally reused by
 the compact bundles and older broad bundles, and the Playwright review source has two historical
 aliases. APM 0.28.0 identifies local dependencies by source path and deploys each source once, so
-the APM `all` package contains 128 unique sources and keeps the clearer
+the APM `all` package contains 130 unique sources and keeps the clearer
 `claude-playwright-review` name for the Playwright duplicate. Individual packages preserve their
 documented installed names.
 
@@ -91,7 +92,7 @@ CI-style validation is read-only:
 
 ## Verify
 
-For alias-free bundles (`core`, `orchestration`, `documentation`, `delivery`, `brevity`, `jvm`,
+For alias-free bundles (`core`, `node`, `orchestration`, `documentation`, `delivery`, `brevity`, `jvm`,
 `planning`, `frontend-tooling`, `frontend-vue`, `hallmark`, `infra`, and `writing`), the normal
 locked verification flow works:
 
@@ -112,9 +113,9 @@ In AI Central, run the disposable integration test:
 ./scripts/check-apm.sh
 ```
 
-It installs `packages/apm/all` and verifies all 128 expected unique names. It separately installs
+It installs `packages/apm/all` and verifies all 130 expected unique names. It separately installs
 the alias-free `core` package, replays that lockfile with `--frozen`, and requires a clean drift
-audit. The normal `./scripts/check.sh` verifies all 18 generated manifests, source paths, aliases,
+audit. The normal `./scripts/check.sh` verifies all 19 generated manifests, source paths, aliases,
 and catalog coverage without requiring APM.
 
 `apm audit --ci` may still report `config-consistency` findings because transitive local

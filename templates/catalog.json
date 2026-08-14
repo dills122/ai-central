@@ -85,6 +85,14 @@
       "recommended": true
     },
     {
+      "id": "node",
+      "label": "Node Package API",
+      "type": "language-platform",
+      "description": "Resolve installed Node package entry points, declarations, exports, subpaths, and static runtime API hints without executing dependencies.",
+      "apmPackage": "packages/apm/node",
+      "signals": ["package.json", "node_modules/"]
+    },
+    {
       "id": "orchestration",
       "label": "Orchestration",
       "type": "workflow",

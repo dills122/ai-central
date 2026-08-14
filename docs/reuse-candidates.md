@@ -58,6 +58,15 @@ Promoted as a first-party core skill:
   projects, prevent stale token environment variables from overriding it, and prohibit exposing or
   transferring the credential itself.
 
+Promoted as a first-party Node tooling skill:
+
+- `inspect-node-package-api`: resolves the installed package version and public entry points,
+  traces declaration re-exports, distinguishes conditional and subpath exports, and provides static
+  runtime export hints without importing dependency code. It lives in the auto-detected `node`
+  bundle and the broader opt-in `engineering` bundle. A local skill and deterministic helper were
+  chosen over MCP because inspection is project-local and one-shot; persistent indexing or
+  cross-project symbol queries would be the threshold for revisiting an MCP server.
+
 Promoted as first-party workflow skills after the 2026-08-12 cross-repository workflow audit:
 
 - `independent-review`: separates a maintainer-facing author explanation from a brand-new task's

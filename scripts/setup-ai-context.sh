@@ -8,7 +8,7 @@ Usage: setup-ai-context.sh TARGET_DIR [options]
 Options:
   --yes                    Use detected recommendations without prompts
   --profiles LIST          Comma-separated steering profiles: base,javascript-typescript,angular,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
-  --bundles LIST           Comma-separated skill bundles: core,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all
+  --bundles LIST           Comma-separated skill bundles: core,node,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all
   --mode copy|link          copy installs files; link symlinks reusable templates and skills
   --skip-profiles LIST     Comma-separated profiles to exclude
   --skip-bundles LIST      Comma-separated bundles to exclude
@@ -176,6 +176,10 @@ detect_bundles() {
   target_dir=$1
   bundles=core
 
+  if [ -f "$target_dir/package.json" ]; then
+    bundles=$(append_unique "$bundles" "node")
+  fi
+
   if find "$target_dir" -maxdepth 5 \( -name '*.kt' -o -name build.gradle.kts -o -name settings.gradle.kts \) -type f | grep -q .; then
     bundles=$(append_unique "$bundles" "jvm")
   fi
@@ -283,7 +287,7 @@ if [ ! -d "$target_dir" ]; then
 fi
 
 allowed_profiles=base,javascript-typescript,angular,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
-allowed_bundles=core,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all
+allowed_bundles=core,node,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all
 
 case "$mode" in
   copy|link) ;;

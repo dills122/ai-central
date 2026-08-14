@@ -53,6 +53,9 @@ For a Kotlin/JVM project, explicitly pull both layers with:
 When Kotlin source or Gradle Kotlin DSL is detected, the guided defaults select both
 `kotlin-jvm` and `jvm` automatically.
 
+When a root `package.json` is detected, the guided defaults select the `javascript-typescript`
+profile and the compact `node` package-inspection bundle automatically.
+
 Exclude recommendations:
 
 ```sh
@@ -90,6 +93,7 @@ Bundles install reusable skills:
 | Bundle | Purpose |
 | --- | --- |
 | `core` | Small universal baseline for context, specs, planning, tests, review, debugging, source-driven work, and safe GitHub authentication |
+| `node` | Installed Node package API, declaration, export-condition, and subpath inspection |
 | `orchestration` | Brain-task planning, multi-agent dispatch, spec traceability, durable handoffs, research, and reconciliation |
 | `documentation` | Canonical documentation, ADRs, drift audits, READMEs, Mermaid, and C4 architecture |
 | `delivery` | Incremental implementation, Git workflow, simplification, CI, self-evaluation, ship gates, and launch readiness |

@@ -45,7 +45,7 @@ actual_names=$(
     sort
 )
 test "$actual_names" = "$expected_names"
-test "$(printf '%s\n' "$actual_names" | wc -l | tr -d ' ')" -eq 128
+test "$(printf '%s\n' "$actual_names" | wc -l | tr -d ' ')" -eq 130
 test -f .agents/skills/claude-playwright-review/SKILL.md
 test ! -e .agents/skills/claude-review
 test -f .agents/skills/technical-blog-writer/SKILL.md
@@ -78,4 +78,4 @@ else
   exit 1
 fi
 
-echo "APM checks passed: 18 bundles, 128 unique skills, and alias-free frozen replay/audit"
+echo "APM checks passed: 19 bundles, 130 unique skills, and alias-free frozen replay/audit"
