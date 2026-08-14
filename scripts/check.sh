@@ -9,6 +9,8 @@ for script in scripts/*.sh; do
   sh -n "$script"
 done
 
+./scripts/check-node-package-api.sh >/dev/null
+
 ./scripts/generate-apm-bundles.sh --check >/dev/null
 
 catalog_bundle_count=$(
@@ -17,7 +19,7 @@ catalog_bundle_count=$(
     wc -l | tr -d ' '
 )
 apm_manifest_count=$(find packages/apm -mindepth 2 -maxdepth 2 -name apm.yml | wc -l | tr -d ' ')
-test "$catalog_bundle_count" -eq 18
+test "$catalog_bundle_count" -eq 19
 test "$apm_manifest_count" -eq "$catalog_bundle_count"
 
 for apm_manifest in packages/apm/*/apm.yml; do
@@ -35,7 +37,7 @@ $(sed -n 's/^[[:space:]]*- path: \(.*\)$/\1/p' "$apm_manifest")
 EOF
 done
 
-test "$(sed -n 's/^[[:space:]]*- path: /x/p' packages/apm/all/apm.yml | wc -l | tr -d ' ')" -eq 129
+test "$(sed -n 's/^[[:space:]]*- path: /x/p' packages/apm/all/apm.yml | wc -l | tr -d ' ')" -eq 130
 grep -q '^      alias: claude-playwright-review$' packages/apm/all/apm.yml
 test "$(grep -c 'playwright-pro/skills/review' packages/apm/all/apm.yml)" -eq 1
 grep -q '^apm_modules/$' .gitignore
@@ -96,6 +98,7 @@ infrastructure_hash=$(shasum -a 256 "$tmp_dir/.codex/steering/infrastructure-ope
 test "$infrastructure_hash" = "$(shasum -a 256 "$tmp_dir/.codex/steering/infrastructure-opentofu-steering.md")"
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle core >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle core >/dev/null
+./scripts/install-skill-bundle.sh "$tmp_dir" --bundle node >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle orchestration >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle documentation >/dev/null
 ./scripts/install-skill-bundle.sh "$tmp_dir" --bundle delivery >/dev/null
@@ -134,6 +137,8 @@ grep -q 'Never run `gh auth token`, `security find-generic-password -w`' \
 test -f "$tmp_dir/.agents/skills/context-engineering/SKILL.md"
 test -f "$tmp_dir/.agents/skills/independent-review/SKILL.md"
 test -f "$tmp_dir/.agents/skills/independent-review/agents/openai.yaml"
+test -f "$tmp_dir/.agents/skills/inspect-node-package-api/SKILL.md"
+test -f "$tmp_dir/.agents/skills/inspect-node-package-api/scripts/inspect-package-api.mjs"
 test -f "$tmp_dir/.agents/skills/orchestrated-delivery/SKILL.md"
 test -f "$tmp_dir/.agents/skills/spec-traceability/SKILL.md"
 test -f "$tmp_dir/.agents/skills/session-handoff/SKILL.md"
@@ -170,8 +175,8 @@ test ! -e "$core_dir/.agents/skills/orchestrated-delivery"
 
 all_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-all-check.XXXXXX")
 ./scripts/install-skill-bundle.sh "$all_dir" --bundle all >/dev/null
-test "$(find "$all_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 135
-test "$(find "$all_dir/.codex/skills" -mindepth 1 -maxdepth 1 -type l | wc -l | tr -d ' ')" -eq 135
+test "$(find "$all_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 136
+test "$(find "$all_dir/.codex/skills" -mindepth 1 -maxdepth 1 -type l | wc -l | tr -d ' ')" -eq 136
 
 setup_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-setup-check.XXXXXX")
 mkdir -p "$setup_dir/src"
@@ -184,6 +189,7 @@ test -f "$setup_dir/.codex/steering/kotlin-jvm-steering.md"
 test -f "$setup_dir/.codex/steering/rust-steering.md"
 test -f "$setup_dir/.codex/steering/infrastructure-opentofu-steering.md"
 test -f "$setup_dir/.agents/skills/frontend-design-review/SKILL.md"
+test -f "$setup_dir/.agents/skills/inspect-node-package-api/SKILL.md"
 test -f "$setup_dir/.agents/skills/kotlin-jvm-engineering/SKILL.md"
 test -f "$setup_dir/.agents/skills/rust-rust-core/SKILL.md"
 test ! -e "$setup_dir/.agents/skills/caveman"
@@ -210,7 +216,7 @@ mkdir -p "$vendor_detection_dir/node_modules/example"
 touch "$vendor_detection_dir/package.json" "$vendor_detection_dir/node_modules/example/page.astro"
 vendor_detection_output=$(./scripts/setup-ai-context.sh "$vendor_detection_dir" --yes --dry-run)
 echo "$vendor_detection_output" | grep -q '^Detected profiles: base,javascript-typescript$'
-echo "$vendor_detection_output" | grep -q '^Detected bundles: core$'
+echo "$vendor_detection_output" | grep -q '^Detected bundles: core,node$'
 
 legacy_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-legacy-check.XXXXXX")
 mkdir -p "$legacy_dir/.codex/skills/planning-files-lite"

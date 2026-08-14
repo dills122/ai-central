@@ -1,0 +1,4 @@
+interface:
+  display_name: "Inspect Node Package API"
+  short_description: "Map an installed Node package API"
+  default_prompt: "Use $inspect-node-package-api to map the public API and declarations of this installed dependency."

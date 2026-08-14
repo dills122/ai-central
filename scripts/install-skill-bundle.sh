@@ -2,7 +2,7 @@
 set -eu
 
 usage() {
-  echo "Usage: $0 TARGET_DIR [--bundle core|orchestration|documentation|delivery|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|writing|workflow|all] [--mode copy|link]" >&2
+  echo "Usage: $0 TARGET_DIR [--bundle core|node|orchestration|documentation|delivery|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|writing|workflow|all] [--mode copy|link]" >&2
 }
 
 if [ "$#" -lt 1 ]; then
@@ -41,7 +41,7 @@ while [ "$#" -gt 0 ]; do
 done
 
 case "$bundle" in
-  core|orchestration|documentation|delivery|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|writing|workflow|all) ;;
+  core|node|orchestration|documentation|delivery|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|writing|workflow|all) ;;
   *)
     echo "Unknown bundle: $bundle" >&2
     usage
@@ -130,6 +130,10 @@ install_core() {
   install_skill "$repo_root/templates/skills/imported/agent-skills/source-driven-development" "source-driven-development"
 }
 
+install_node() {
+  install_skill "$repo_root/templates/skills/first-party/inspect-node-package-api" "inspect-node-package-api"
+}
+
 install_orchestration() {
   install_skill "$repo_root/templates/skills/first-party/independent-review" "independent-review"
   install_skill "$repo_root/templates/skills/first-party/orchestrated-delivery" "orchestrated-delivery"
@@ -167,6 +171,7 @@ install_brevity() {
 }
 
 install_engineering() {
+  install_node
   install_find_skills "$repo_root/templates/skills/imported/agent-skills" ""
   install_find_skills "$repo_root/templates/skills/imported/claude-skills/engineering" "claude-"
   install_find_skills "$repo_root/templates/skills/imported/claude-skills/engineering-team" "claude-"
@@ -242,6 +247,9 @@ case "$bundle" in
   core)
     install_core
     ;;
+  node)
+    install_node
+    ;;
   orchestration)
     install_orchestration
     ;;
@@ -292,6 +300,7 @@ case "$bundle" in
     ;;
   all)
     install_core
+    install_node
     install_orchestration
     install_documentation
     install_delivery

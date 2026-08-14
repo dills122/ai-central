@@ -20,7 +20,7 @@ For guided project setup, prefer `scripts/setup-ai-context.sh`.
 | Bundle | Count | Contents |
 | --- | ---: | --- |
 | `core` | 9 | Small default for context, specs, planning, TDD, review, debugging, source-driven work, and safe GitHub authentication |
-| `orchestration` | 6 | Brain-task planning, multi-agent dispatch, spec traceability, persistent handoffs, bounded research, and doubt-driven investigation |
+| `orchestration` | 7 | Brain-task planning, multi-agent dispatch, independent review, spec traceability, persistent handoffs, bounded research, and doubt-driven investigation |
 | `documentation` | 5 | Repository doc-drift audits, ADRs, READMEs, Mermaid, and C4 architecture |
 | `delivery` | 7 | Incremental implementation, Git workflow, simplification, CI, self-evaluation, ship gates, and launch readiness |
 
@@ -32,8 +32,9 @@ the discovered skill surface small while preserving focused capabilities.
 
 | Bundle | Contents |
 | --- | --- |
+| `node` | Installed Node package entry points, declaration graphs, export conditions, subpaths, and static runtime API hints |
 | `brevity` | Caveman skills for terse replies, help, commits, reviews, and memory-file compression |
-| `engineering` | All imported `addyosmani/agent-skills` plus selected engineering skills from `alirezarezvani/claude-skills` |
+| `engineering` | Node package API inspection, all imported `addyosmani/agent-skills`, and selected engineering skills from `alirezarezvani/claude-skills` |
 | `jvm` | Kotlin/JVM implementation, Gradle toolchains, modules, coroutines, compatibility, boundaries, and verification |
 | `rust` | Imported Rust Agentic Skills, prefixed as `rust-*` |
 | `product` | Selected non-duplicate PM Skills and product-team Claude Skills |
@@ -49,7 +50,8 @@ the discovered skill surface small while preserving focused capabilities.
 
 `core` is the only universal default selected by `setup-ai-context.sh`. Other automatic selections
 require concrete stack signals. A `docs/` or `product/` folder alone does not select `product`, and
-nested legacy Angular files do not classify the repository as an active Angular project.
+nested legacy Angular files do not classify the repository as an active Angular project. A root
+`package.json` selects the compact `node` bundle.
 
 `brevity` installs only portable skill content. It does not run the upstream global installer or
 add hooks, statusline files, or an MCP proxy.
