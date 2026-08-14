@@ -274,4 +274,76 @@ if ./scripts/audit-ai-context.sh "$legacy_only_dir" >/dev/null 2>&1; then
   exit 1
 fi
 
+worktree_context_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-worktree-context-check.XXXXXX")
+worktree_context_dir=$(CDPATH= cd -- "$worktree_context_dir" && pwd -P)
+worktree_primary=$worktree_context_dir/primary
+worktree_target=$worktree_context_dir/target
+shared_skills=$worktree_context_dir/shared-skills
+mkdir -p "$worktree_primary" "$shared_skills/canonical" "$shared_skills/legacy"
+printf '%s\n' '# Canonical skill' >"$shared_skills/canonical/SKILL.md"
+printf '%s\n' '# Legacy skill' >"$shared_skills/legacy/SKILL.md"
+
+git -C "$worktree_primary" init -q
+printf '%s\n' 'tracked project file' >"$worktree_primary/README.md"
+git -C "$worktree_primary" add README.md
+git -C "$worktree_primary" \
+  -c user.name='AI Central Test' \
+  -c user.email='ai-central@example.invalid' \
+  -c commit.gpgsign=false \
+  commit -qm 'Initial test fixture'
+git -C "$worktree_primary" worktree add -q --detach "$worktree_target" HEAD
+
+exclude_file=$(git -C "$worktree_primary" rev-parse --path-format=absolute --git-path info/exclude)
+printf '%s\n' \
+  '/AGENTS.md' \
+  '/.agents/skills/' \
+  '/.codex/skills/' \
+  '/.codex/steering/' \
+  '/.codex/agents/' \
+  '/.env' >>"$exclude_file"
+
+mkdir -p \
+  "$worktree_primary/.agents/skills" \
+  "$worktree_primary/.codex/skills" \
+  "$worktree_primary/.codex/steering" \
+  "$worktree_primary/.codex/agents" \
+  "$worktree_target/.codex/steering"
+printf '%s\n' '# Primary instructions' >"$worktree_primary/AGENTS.md"
+printf '%s\n' 'primary steering' >"$worktree_primary/.codex/steering/repository-steering.md"
+printf '%s\n' 'reviewer definition' >"$worktree_primary/.codex/agents/reviewer.toml"
+printf '%s\n' 'do not copy this secret' >"$worktree_primary/.env"
+ln -s "$shared_skills/canonical" "$worktree_primary/.agents/skills/canonical"
+ln -s '../../.agents/skills/canonical' "$worktree_primary/.codex/skills/canonical"
+ln -s "$shared_skills/legacy" "$worktree_primary/.codex/skills/legacy"
+printf '%s\n' 'target-owned steering' >"$worktree_target/.codex/steering/repository-steering.md"
+
+worktree_manifest=$worktree_context_dir/context.tsv
+./scripts/create-worktree-context-manifest.sh "$worktree_primary" --output "$worktree_manifest"
+grep -q "^source$(printf '\t')$worktree_primary$" "$worktree_manifest"
+grep -q "^link$(printf '\t').agents/skills/canonical$(printf '\t')$shared_skills/canonical$" "$worktree_manifest"
+if grep -q '\.env' "$worktree_manifest"; then
+  echo "worktree context manifest included a non-allowlisted secret" >&2
+  exit 1
+fi
+
+worktree_dry_run=$(./scripts/setup-codex-worktree.sh "$worktree_target" --dry-run)
+echo "$worktree_dry_run" | grep -q 'adopt legacy skill .*\.agents/skills/legacy'
+test ! -e "$worktree_target/AGENTS.md"
+
+./scripts/setup-codex-worktree.sh "$worktree_target" >/dev/null
+test -f "$worktree_target/AGENTS.md"
+grep -q '^target-owned steering$' "$worktree_target/.codex/steering/repository-steering.md"
+test -f "$worktree_target/.codex/agents/reviewer.toml"
+test -L "$worktree_target/.agents/skills/canonical"
+test -f "$worktree_target/.agents/skills/canonical/SKILL.md"
+test -L "$worktree_target/.codex/skills/canonical"
+test -f "$worktree_target/.codex/skills/canonical/SKILL.md"
+test -L "$worktree_target/.codex/skills/legacy"
+test -L "$worktree_target/.agents/skills/legacy"
+test -f "$worktree_target/.agents/skills/legacy/SKILL.md"
+test ! -e "$worktree_target/.env"
+
+./scripts/setup-codex-worktree.sh "$worktree_target" >/dev/null
+grep -q '^target-owned steering$' "$worktree_target/.codex/steering/repository-steering.md"
+
 echo "checks passed"
