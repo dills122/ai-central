@@ -35,7 +35,7 @@ $(sed -n 's/^[[:space:]]*- path: \(.*\)$/\1/p' "$apm_manifest")
 EOF
 done
 
-test "$(sed -n 's/^[[:space:]]*- path: /x/p' packages/apm/all/apm.yml | wc -l | tr -d ' ')" -eq 128
+test "$(sed -n 's/^[[:space:]]*- path: /x/p' packages/apm/all/apm.yml | wc -l | tr -d ' ')" -eq 129
 grep -q '^      alias: claude-playwright-review$' packages/apm/all/apm.yml
 test "$(grep -c 'playwright-pro/skills/review' packages/apm/all/apm.yml)" -eq 1
 grep -q '^apm_modules/$' .gitignore
@@ -132,6 +132,8 @@ test "$(grep -c 'find-generic-password -w' "$tmp_dir/.agents/skills/github-keych
 grep -q 'Never run `gh auth token`, `security find-generic-password -w`' \
   "$tmp_dir/.agents/skills/github-keychain-auth/SKILL.md"
 test -f "$tmp_dir/.agents/skills/context-engineering/SKILL.md"
+test -f "$tmp_dir/.agents/skills/independent-review/SKILL.md"
+test -f "$tmp_dir/.agents/skills/independent-review/agents/openai.yaml"
 test -f "$tmp_dir/.agents/skills/orchestrated-delivery/SKILL.md"
 test -f "$tmp_dir/.agents/skills/spec-traceability/SKILL.md"
 test -f "$tmp_dir/.agents/skills/session-handoff/SKILL.md"
@@ -168,8 +170,8 @@ test ! -e "$core_dir/.agents/skills/orchestrated-delivery"
 
 all_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-all-check.XXXXXX")
 ./scripts/install-skill-bundle.sh "$all_dir" --bundle all >/dev/null
-test "$(find "$all_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 134
-test "$(find "$all_dir/.codex/skills" -mindepth 1 -maxdepth 1 -type l | wc -l | tr -d ' ')" -eq 134
+test "$(find "$all_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 135
+test "$(find "$all_dir/.codex/skills" -mindepth 1 -maxdepth 1 -type l | wc -l | tr -d ' ')" -eq 135
 
 setup_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-setup-check.XXXXXX")
 mkdir -p "$setup_dir/src"

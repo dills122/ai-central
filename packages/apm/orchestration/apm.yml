@@ -1,6 +1,6 @@
 name: ai-central-orchestration
 version: 0.2.0
-description: Brain-task planning, multi-agent dispatch, traceability, persistent handoffs, bounded research, and result reconciliation.
+description: Brain-task planning, multi-agent dispatch, independent fresh-context review, traceability, persistent handoffs, bounded research, and result reconciliation.
 repository: https://github.com/dills122/ai-central
 keywords:
   - ai
@@ -15,6 +15,7 @@ includes: auto
 dependencies:
   apm:
     - path: ../../../templates/skills/imported/agent-skills/doubt-driven-development
+    - path: ../../../templates/skills/first-party/independent-review
     - path: ../../../templates/skills/first-party/orchestrated-delivery
     - path: ../../../templates/skills/imported/planning-with-files/planning-with-files
     - path: ../../../templates/skills/first-party/research-to-decision

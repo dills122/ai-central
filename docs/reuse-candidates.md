@@ -60,6 +60,8 @@ Promoted as a first-party core skill:
 
 Promoted as first-party workflow skills after the 2026-08-12 cross-repository workflow audit:
 
+- `independent-review`: separates a maintainer-facing author explanation from a brand-new task's
+  evidence-backed review of both the implementation and its plan;
 - `orchestrated-delivery`: keeps a lead task responsible for requirements, dispatch contracts,
   reconciliation, and parent-level verification across agents or chats;
 - `spec-traceability`: connects requirements and decisions to tasks, tests, evidence, and status;
@@ -69,9 +71,9 @@ Promoted as first-party workflow skills after the 2026-08-12 cross-repository wo
   recent history before making minimal corrections.
 
 These are intentionally compact and first-party because the imported library already covers most
-execution mechanics; the reusable gap was the contract between planning, delegation, retained
-truth, and final integration. They are grouped into `orchestration` and `documentation` rather than
-expanding the universal `core` bundle.
+execution mechanics; the reusable gap was the contract between planning, delegation, independent
+review, retained truth, and final integration. They are grouped into `orchestration` and
+`documentation` rather than expanding the universal `core` bundle.
 
 Promoted for evidence-bound technical storytelling:
 

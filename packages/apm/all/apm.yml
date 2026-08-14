@@ -83,6 +83,7 @@ dependencies:
     - path: ../../../templates/skills/adapted/humanizer
     - path: ../../../templates/skills/imported/agent-skills/idea-refine
     - path: ../../../templates/skills/imported/agent-skills/incremental-implementation
+    - path: ../../../templates/skills/first-party/independent-review
     - path: ../../../templates/skills/imported/agent-skills/interview-me
     - path: ../../../templates/skills/adapted/kotlin-jvm-engineering
     - path: ../../../templates/skills/imported/agent-toolkit/mermaid-diagrams

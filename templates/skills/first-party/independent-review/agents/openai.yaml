@@ -1,0 +1,4 @@
+interface:
+  display_name: "Independent Review"
+  short_description: "Prepare and run fresh-context engineering reviews"
+  default_prompt: "Use $independent-review to prepare this completed work for an independent implementation and plan review."
