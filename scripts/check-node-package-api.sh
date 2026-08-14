@@ -80,6 +80,100 @@ cat >"$legacy_dir/helpers.d.ts" <<'EOF'
 export declare function help(): void;
 EOF
 
+workspace_dir=$fixture_dir/workspace-safe
+mkdir -p "$workspace_dir"
+cat >"$workspace_dir/package.json" <<'EOF'
+{
+  "name": "workspace-safe",
+  "version": "1.0.0",
+  "types": "index.d.ts"
+}
+EOF
+cat >"$workspace_dir/index.d.ts" <<'EOF'
+export declare const workspaceLinked: true;
+EOF
+ln -s ../workspace-safe "$fixture_dir/node_modules/workspace-safe"
+
+escape_dir=$fixture_dir/node_modules/escape-types
+mkdir -p "$escape_dir"
+cat >"$escape_dir/package.json" <<'EOF'
+{
+  "name": "escape-types",
+  "version": "1.0.0",
+  "types": "index.d.ts"
+}
+EOF
+cat >"$fixture_dir/outside-package.d.ts" <<'EOF'
+export declare const OUTSIDE_PACKAGE_CANARY: "must-not-be-read";
+EOF
+ln -s ../../outside-package.d.ts "$escape_dir/index.d.ts"
+
+runtime_escape_dir=$fixture_dir/node_modules/escape-runtime
+mkdir -p "$runtime_escape_dir"
+cat >"$runtime_escape_dir/package.json" <<'EOF'
+{
+  "name": "escape-runtime",
+  "version": "1.0.0",
+  "main": "index.cjs"
+}
+EOF
+cat >"$fixture_dir/outside-package.cjs" <<'EOF'
+exports.OUTSIDE_RUNTIME_CANARY = "must-not-be-read";
+EOF
+ln -s ../../outside-package.cjs "$runtime_escape_dir/index.cjs"
+
+oversize_dir=$fixture_dir/node_modules/oversize-types
+mkdir -p "$oversize_dir"
+cat >"$oversize_dir/package.json" <<'EOF'
+{
+  "name": "oversize-types",
+  "version": "1.0.0",
+  "types": "index.d.ts"
+}
+EOF
+dd if=/dev/zero of="$oversize_dir/index.d.ts" bs=2000001 count=1 2>/dev/null
+
+traversal_report=$fixture_dir/traversal.txt
+if node "$inspector" ../escape-types --project "$fixture_dir" >"$traversal_report" 2>&1; then
+  echo "path-like package specifier was accepted" >&2
+  exit 1
+fi
+grep -q 'invalid package specifier' "$traversal_report"
+
+escape_report=$fixture_dir/escape.txt
+if node "$inspector" escape-types --project "$fixture_dir" >"$escape_report" 2>&1; then
+  echo "declaration symlink outside the package root was read" >&2
+  exit 1
+fi
+grep -q 'outside package root' "$escape_report"
+if grep -q 'OUTSIDE_PACKAGE_CANARY' "$escape_report"; then
+  echo "outside-package declaration content leaked into inspector output" >&2
+  exit 1
+fi
+
+runtime_escape_report=$fixture_dir/runtime-escape.txt
+if node "$inspector" escape-runtime --project "$fixture_dir" >"$runtime_escape_report" 2>&1; then
+  echo "runtime symlink outside the package root was read" >&2
+  exit 1
+fi
+grep -q 'outside package root' "$runtime_escape_report"
+if grep -q 'OUTSIDE_RUNTIME_CANARY' "$runtime_escape_report"; then
+  echo "outside-package runtime content leaked into inspector output" >&2
+  exit 1
+fi
+
+oversize_report=$fixture_dir/oversize.txt
+if node "$inspector" oversize-types --project "$fixture_dir" >"$oversize_report" 2>&1; then
+  echo "oversized declaration file was accepted" >&2
+  exit 1
+fi
+grep -q 'exceeds 2000000 bytes' "$oversize_report"
+
+workspace_report=$fixture_dir/workspace.json
+node "$inspector" workspace-safe --project "$fixture_dir" --json >"$workspace_report"
+grep -q '"relative": "index.d.ts"' "$workspace_report"
+grep -q '"workspaceLinked"' "$workspace_report"
+
 root_report=$fixture_dir/root.json
 node "$inspector" @fixture/conditional --project "$fixture_dir" --symbol Client --json >"$root_report"
 grep -q '"version": "1.2.3"' "$root_report"

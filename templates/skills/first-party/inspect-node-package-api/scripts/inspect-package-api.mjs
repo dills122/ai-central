@@ -6,6 +6,7 @@ import { createRequire } from "node:module";
 
 const DECLARATION_EXTENSIONS = [".d.ts", ".d.mts", ".d.cts"];
 const RUNTIME_EXTENSIONS = [".js", ".mjs", ".cjs", ".jsx"];
+const MAX_PACKAGE_TEXT_BYTES = 2_000_000;
 
 function fail(message, code = 1) {
   process.stderr.write(`inspect-package-api: ${message}\n`);
@@ -79,26 +80,69 @@ function parseArgs(argv) {
 }
 
 function splitSpecifier(specifier) {
-  const segments = specifier.split("/").filter(Boolean);
-  if (specifier.startsWith("@")) {
-    if (segments.length < 2) fail(`invalid scoped package specifier: ${specifier}`, 2);
-    return {
-      packageName: `${segments[0]}/${segments[1]}`,
-      subpath: segments.length > 2 ? `./${segments.slice(2).join("/")}` : ".",
-    };
+  const segments = specifier.split("/");
+  const safeSegment = (segment) => segment.length > 0
+    && segment !== "."
+    && segment !== ".."
+    && !segment.includes("\\")
+    && !segment.includes("\0");
+
+  if (path.isAbsolute(specifier) || !segments.every(safeSegment)) {
+    fail(`invalid package specifier: ${specifier}`, 2);
   }
-  if (segments.length < 1) fail(`invalid package specifier: ${specifier}`, 2);
+
+  let packageName;
+  if (specifier.startsWith("@")) {
+    if (segments.length < 2 || segments[0] === "@") {
+      fail(`invalid scoped package specifier: ${specifier}`, 2);
+    }
+    packageName = `${segments[0]}/${segments[1]}`;
+  } else {
+    packageName = segments[0];
+  }
+
+  if (!/^(?:@[A-Za-z0-9._~-]+\/)?[A-Za-z0-9._~-]+$/.test(packageName)
+    || packageName.split("/").some((segment) => segment === "." || segment === "..")) {
+    fail(`invalid package specifier: ${specifier}`, 2);
+  }
+
+  const packageSegments = packageName.startsWith("@") ? 2 : 1;
   return {
-    packageName: segments[0],
-    subpath: segments.length > 1 ? `./${segments.slice(1).join("/")}` : ".",
+    packageName,
+    subpath: segments.length > packageSegments ? `./${segments.slice(packageSegments).join("/")}` : ".",
   };
 }
 
-function readJson(file) {
+function readBoundedText(file, label = "package file", packageRoot = null) {
+  const canonical = fs.realpathSync(file);
+  if (packageRoot && !isInsidePackage(packageRoot, canonical)) {
+    throw new Error(`${label} resolves outside package root: ${file}`);
+  }
+  const descriptor = fs.openSync(canonical, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW);
   try {
-    return JSON.parse(fs.readFileSync(file, "utf8"));
-  } catch (error) {
-    fail(`cannot read ${file}: ${error.message}`);
+    const stat = fs.fstatSync(descriptor);
+    if (!stat.isFile()) throw new Error(`${label} is not a regular file: ${file}`);
+    if (stat.size > MAX_PACKAGE_TEXT_BYTES) {
+      throw new Error(`${label} exceeds ${MAX_PACKAGE_TEXT_BYTES} bytes: ${file}`);
+    }
+    const content = Buffer.alloc(stat.size);
+    let offset = 0;
+    while (offset < content.length) {
+      const bytesRead = fs.readSync(descriptor, content, offset, content.length - offset, null);
+      if (bytesRead === 0) break;
+      offset += bytesRead;
+    }
+    return { canonical, text: content.subarray(0, offset).toString("utf8") };
+  } finally {
+    fs.closeSync(descriptor);
+  }
+}
+
+function tryReadJson(file, packageRoot) {
+  try {
+    return JSON.parse(readBoundedText(file, "package manifest", packageRoot).text);
+  } catch {
+    return null;
   }
 }
 
@@ -121,12 +165,14 @@ function ascendToPackageRoot(resolvedFile, expectedName) {
   while (true) {
     const manifestFile = path.join(current, "package.json");
     if (fs.existsSync(manifestFile)) {
+      let canonicalCurrent;
       try {
-        const manifest = JSON.parse(fs.readFileSync(manifestFile, "utf8"));
-        if (!expectedName || manifest.name === expectedName) return current;
+        canonicalCurrent = fs.realpathSync(current);
       } catch {
-        // Continue upward; the package's own manifest is validated after resolution.
+        canonicalCurrent = null;
       }
+      const manifest = canonicalCurrent ? tryReadJson(manifestFile, canonicalCurrent) : null;
+      if (manifest && (!expectedName || manifest.name === expectedName)) return current;
     }
     const parent = path.dirname(current);
     if (parent === current) return null;
@@ -137,8 +183,15 @@ function ascendToPackageRoot(resolvedFile, expectedName) {
 function findPackageRoot(project, packageName, requestedSpecifier) {
   for (const directory of walkParents(project)) {
     const candidate = path.join(directory, "node_modules", ...packageName.split("/"));
-    if (fs.existsSync(path.join(candidate, "package.json"))) {
-      return fs.realpathSync(candidate);
+    let candidateRoot;
+    try {
+      candidateRoot = fs.realpathSync(candidate);
+    } catch {
+      continue;
+    }
+    const manifest = tryReadJson(path.join(candidateRoot, "package.json"), candidateRoot);
+    if (manifest?.name === packageName) {
+      return candidateRoot;
     }
   }
 
@@ -320,6 +373,14 @@ function isInsidePackage(packageRoot, file) {
   return relative === "" || (!relative.startsWith("..") && !path.isAbsolute(relative));
 }
 
+function readPackageText(packageRoot, file, label) {
+  try {
+    return readBoundedText(file, label, packageRoot);
+  } catch (error) {
+    fail(`cannot read ${file}: ${error.message}`);
+  }
+}
+
 function resolveDeclarationImport(fromFile, specifier, packageRoot) {
   if (!specifier.startsWith(".")) return null;
   const base = path.resolve(path.dirname(fromFile), specifier);
@@ -354,11 +415,10 @@ function inspectDeclarationGraph(entryFiles, packageRoot, maxFiles) {
 
   while (queue.length > 0 && seen.size < maxFiles) {
     const file = queue.shift();
-    const canonical = fs.realpathSync(file);
+    const { canonical, text } = readPackageText(packageRoot, file, "declaration file");
     if (seen.has(canonical)) continue;
     seen.add(canonical);
 
-    const text = fs.readFileSync(canonical, "utf8");
     const reexports = reexportSpecifiers(text);
     files.push({
       file: canonical,
@@ -381,9 +441,9 @@ function inspectDeclarationGraph(entryFiles, packageRoot, maxFiles) {
   };
 }
 
-function runtimeExportHints(file) {
-  if (!file || !fs.existsSync(file) || fs.statSync(file).size > 2_000_000) return [];
-  const text = fs.readFileSync(file, "utf8");
+function runtimeExportHints(packageRoot, file) {
+  if (!file || !fs.existsSync(file)) return [];
+  const { text } = readPackageText(packageRoot, file, "runtime entry file");
   const names = new Set(exportedNames(text));
   const assignmentPattern = /\b(?:exports|module\.exports)\.([A-Za-z_$][\w$]*)\s*=/g;
   const objectPattern = /\bmodule\.exports\s*=\s*\{([\s\S]*?)\}\s*;?/g;
@@ -420,12 +480,13 @@ function collectDeclarationFiles(root, limit) {
   return output;
 }
 
-function symbolMatches(files, symbol) {
+function symbolMatches(packageRoot, files, symbol) {
   const escaped = symbol.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const pattern = new RegExp(`\\b${escaped}\\b`);
   const matches = [];
   for (const file of files) {
-    const lines = fs.readFileSync(file, "utf8").split(/\r?\n/);
+    const { text } = readPackageText(packageRoot, file, "declaration file");
+    const lines = text.split(/\r?\n/);
     lines.forEach((line, index) => {
       if (pattern.test(line)) {
         matches.push({ file, line: index + 1, text: line.trim().slice(0, 240) });
@@ -447,7 +508,16 @@ function buildReport(options) {
   }
 
   const manifestFile = path.join(packageRoot, "package.json");
-  const manifest = readJson(manifestFile);
+  const { text: manifestText } = readPackageText(packageRoot, manifestFile, "package manifest");
+  let manifest;
+  try {
+    manifest = JSON.parse(manifestText);
+  } catch (error) {
+    fail(`cannot parse ${manifestFile}: ${error.message}`);
+  }
+  if (manifest.name !== packageName) {
+    fail(`package manifest name mismatch: expected ${packageName}, found ${manifest.name ?? "(missing)"}`);
+  }
   const warnings = [];
   const entries = exportEntries(manifest);
   const matched = matchExportEntry(entries, subpath);
@@ -529,11 +599,11 @@ function buildReport(options) {
   let searchedFiles = declarationGraph.files.map((record) => record.file);
   let matches = [];
   if (options.symbol) {
-    matches = symbolMatches(searchedFiles, options.symbol);
+    matches = symbolMatches(packageRoot, searchedFiles, options.symbol);
     if (matches.length === 0) {
       const fallbackFiles = collectDeclarationFiles(packageRoot, options.maxFiles);
       searchedFiles = [...new Set([...searchedFiles, ...fallbackFiles])];
-      matches = symbolMatches(searchedFiles, options.symbol);
+      matches = symbolMatches(packageRoot, searchedFiles, options.symbol);
       if (fallbackFiles.length >= options.maxFiles) {
         warnings.push(`fallback symbol search considered at most ${options.maxFiles} declaration files`);
       }
@@ -544,7 +614,7 @@ function buildReport(options) {
   const runtimeHints = uniqueRuntimeFiles.map((file) => ({
     file,
     relative: path.relative(packageRoot, file),
-    exports: isRuntime(file) ? runtimeExportHints(file) : [],
+    exports: isRuntime(file) ? runtimeExportHints(packageRoot, file) : [],
   }));
 
   return {
