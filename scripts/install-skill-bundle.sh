@@ -248,6 +248,16 @@ install_engineering() {
   install_find_skills "$repo_root/templates/skills/imported/claude-skills/engineering-team" "claude-"
 }
 
+install_dotnet() {
+  install_skill "$repo_root/templates/skills/imported/dotnet-skills/run-tests" "dotnet-run-tests"
+  install_skill "$repo_root/templates/skills/imported/dotnet-skills/platform-detection" "dotnet-test-platform-detection"
+  install_skill "$repo_root/templates/skills/imported/dotnet-skills/filter-syntax" "dotnet-test-filter-syntax"
+  install_skill "$repo_root/templates/skills/imported/dotnet-skills/directory-build-organization" "dotnet-directory-build-organization"
+  install_skill "$repo_root/templates/skills/imported/dotnet-skills/msbuild-antipatterns" "dotnet-msbuild-antipatterns"
+  install_skill "$repo_root/templates/skills/imported/dotnet-skills/binlog-generation" "dotnet-binlog-generation"
+  install_skill "$repo_root/templates/skills/imported/dotnet-skills/binlog-failure-analysis" "dotnet-binlog-failure-analysis"
+}
+
 install_jvm() {
   install_skill "$repo_root/templates/skills/adapted/kotlin-jvm-engineering" "kotlin-jvm-engineering"
 }
@@ -325,6 +335,7 @@ select_bundle() {
     delivery) install_delivery ;;
     brevity) install_brevity ;;
     engineering) install_engineering ;;
+    dotnet) install_dotnet ;;
     jvm) install_jvm ;;
     rust) install_rust ;;
     product) install_product ;;
@@ -344,6 +355,7 @@ select_bundle() {
       install_delivery
       install_brevity
       install_engineering
+      install_dotnet
       install_jvm
       install_rust
       install_product

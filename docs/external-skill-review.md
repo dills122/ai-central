@@ -1,6 +1,6 @@
 # External Skill Review
 
-Review dates: initial catalog 2026-06-04; `blader/humanizer` 2026-08-13
+Review dates: initial catalog 2026-06-04; `blader/humanizer` 2026-08-13; `dotnet/skills` 2026-08-15
 
 Local clone root: `external/`
 
@@ -29,6 +29,7 @@ These upstream repositories were cloned locally for review:
 | `softaworks/agent-toolkit` | `external/agent-toolkit` | MIT | 86 total; 43 source plus `dist/` copies | Selectively mine source skills only |
 | `Nutlope/hallmark` | `external/hallmark` | MIT | 1 | Adapt as an opt-in creative-direction skill; do not add to default frontend context |
 | `blader/humanizer` | `external/humanizer` | MIT | 1 | Adapt as an opt-in final prose audit; remove detector framing and rigid punctuation bans; reviewed 2026-08-13 |
+| `dotnet/skills` | `external/dotnet-skills` | MIT | 106 | Import a compact official .NET test and MSBuild subset |
 
 ## Reviewed Commits
 
@@ -55,6 +56,7 @@ These upstream repositories were cloned locally for review:
 | `softaworks/agent-toolkit` | `3027f20f3181758385a1bb8c022d4041dfb4de84` |
 | `Nutlope/hallmark` | `aeb42fb354ff4efa36ab475773a082315a3af2ce` |
 | `blader/humanizer` | `523374dee72d67c7b2b5f858ea0094ffda49c3ac` |
+| `dotnet/skills` | `7c1ae3fdf2eb64b758bb3a7b7f92cad3fbd95868` |
 
 ## Priority 1: Integrate Soon
 

@@ -23,6 +23,10 @@ These are broadly reusable with placeholders:
 - OpenTofu lifecycle boundaries: exact tool/provider pins, committed cross-platform locks,
   credential-free static checks, runtime-only backend configuration, protected plan/apply,
   state recovery, least-privilege ingress, and explicit live-operation authority
+- C#/.NET SDK and MSBuild reproducibility, nullable/analyzer enforcement, public API compatibility,
+  async/cancellation ownership, dependency auditing, serialization safety, and layered verification
+- ASP.NET Core, EF Core, Orleans, Aspire, OpenTelemetry, and gRPC specializations selected from
+  concrete project/package signals and composed with the shared C#/.NET baseline
 
 ## Keep As Source Reference
 
@@ -204,6 +208,11 @@ Not promoted:
 See `docs/external-skill-review.md` for recommendations from locally cloned upstream skill repositories.
 
 Imported and adapted skills now live under `templates/skills/`. Attribution is maintained in `docs/skill-attribution.md` and `THIRD_PARTY_NOTICES.md`.
+
+The 2026-08-15 .NET review imported seven official `dotnet/skills` test and MSBuild skills into the
+detected `dotnet` bundle. Durable C#/.NET, ASP.NET Core, EF Core, Orleans, Aspire, OpenTelemetry, and
+gRPC rules were written as separate project-neutral steering profiles. Source evidence and selection
+boundaries are documented in `docs/dotnet-steering-research-2026-08-15.md`.
 
 ### `JuliusBrussee/caveman`
 

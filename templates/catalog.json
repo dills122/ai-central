@@ -33,6 +33,55 @@
       "signals": ["angular.json"]
     },
     {
+      "id": "dotnet-csharp",
+      "label": "C# and .NET",
+      "type": "language-platform",
+      "description": "Strict SDK/MSBuild, nullable, analyzer, API, async, dependency, security, performance, and verification guidance for C# and .NET.",
+      "signals": ["*.cs", "*.csproj", "*.sln", "*.slnx", "global.json", "Directory.Build.props", "Directory.Packages.props"]
+    },
+    {
+      "id": "dotnet-aspnetcore",
+      "label": "ASP.NET Core",
+      "type": "language-framework",
+      "description": "HTTP contract, validation, middleware, DI, authorization, abuse-resistance, resilience, operations, and integration-test guidance.",
+      "signals": ["Microsoft.NET.Sdk.Web", "Microsoft.AspNetCore.App"]
+    },
+    {
+      "id": "dotnet-efcore",
+      "label": "Entity Framework Core",
+      "type": "language-framework",
+      "description": "DbContext ownership, query, transaction, concurrency, migration, deployment, and provider-realistic testing guidance.",
+      "signals": ["Microsoft.EntityFrameworkCore"]
+    },
+    {
+      "id": "dotnet-orleans",
+      "label": ".NET Orleans",
+      "type": "language-framework",
+      "description": "Grain identity, scheduler, reentrancy, delivery, persistence, serialization, lifecycle, deployment, and multi-silo testing guidance.",
+      "signals": ["Microsoft.Orleans", "Aspire.Hosting.Orleans"]
+    },
+    {
+      "id": "dotnet-aspire",
+      "label": ".NET Aspire",
+      "type": "platform",
+      "description": "AppHost, ServiceDefaults, resource relationship, secret, health, telemetry, integration-test, and deployment validation guidance.",
+      "signals": ["Aspire.Hosting", "Aspire.AppHost.Sdk", "IsAspireHost"]
+    },
+    {
+      "id": "dotnet-opentelemetry",
+      "label": "OpenTelemetry for .NET",
+      "type": "domain",
+      "description": "Signal ownership, semantic conventions, cardinality, privacy, export, context propagation, and telemetry contract guidance.",
+      "signals": ["OpenTelemetry"]
+    },
+    {
+      "id": "dotnet-grpc",
+      "label": "gRPC for .NET",
+      "type": "language-framework",
+      "description": "Protobuf compatibility, deadlines, cancellation, retry safety, channels, streaming, transport, and interoperability guidance.",
+      "signals": ["*.proto", "Grpc.AspNetCore", "Grpc.Net.Client", "Grpc.Tools", "Google.Protobuf"]
+    },
+    {
       "id": "kotlin-jvm",
       "label": "Kotlin/JVM",
       "type": "language-platform",
@@ -135,6 +184,14 @@
       "description": "General Kotlin/JVM implementation, Gradle toolchain, module, coroutine, compatibility, boundary, and verification workflow.",
       "apmPackage": "packages/apm/jvm",
       "signals": ["*.kt", "build.gradle.kts", "settings.gradle.kts"]
+    },
+    {
+      "id": "dotnet",
+      "label": ".NET",
+      "type": "language-platform",
+      "description": "Official .NET test-platform, test-filter, test-running, MSBuild organization, anti-pattern, and binary-log diagnostic skills.",
+      "apmPackage": "packages/apm/dotnet",
+      "signals": ["*.cs", "*.csproj", "*.sln", "*.slnx", "global.json"]
     },
     {
       "id": "rust",

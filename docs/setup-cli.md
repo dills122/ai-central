@@ -9,8 +9,8 @@ Use `scripts/setup-ai-context.sh` as the guided entrypoint for installing steeri
 The setup script:
 
 - detects concrete project signals such as a root `package.json` or `angular.json`, Kotlin/Gradle
-  Kotlin DSL files, `Cargo.toml`, Terraform/OpenTofu files, Payload config files, and active
-  Vue/Nuxt or frontend source files
+  Kotlin DSL files, C#/.NET project and package references, protobuf contracts, `Cargo.toml`,
+  Terraform/OpenTofu files, Payload config files, and active Vue/Nuxt or frontend source files
 - recommends steering profiles and skill bundles
 - prompts for custom inclusion/exclusion
 - calls the existing non-overwriting installers
@@ -77,6 +77,10 @@ When Kotlin source or Gradle Kotlin DSL is detected, the guided defaults select 
 When a root `package.json` is detected, the guided defaults select the `javascript-typescript`
 profile and the compact `node` package-inspection bundle automatically.
 
+When C# or .NET project signals are detected, guided defaults select `dotnet-csharp`, the compact
+`dotnet` skill bundle, and only the ASP.NET Core, EF Core, Orleans, Aspire, OpenTelemetry, or gRPC
+profiles supported by package/project signals.
+
 Exclude recommendations:
 
 ```sh
@@ -125,6 +129,13 @@ Profiles install steering/context files:
 | `base` | Generic AGENTS and Codex steering |
 | `javascript-typescript` | Strict JavaScript/TypeScript typing, ESM, boundary, async, dependency, security, performance, and verification steering |
 | `angular` | Angular-specific steering |
+| `dotnet-csharp` | Strict C#/.NET SDK, MSBuild, nullable/analyzer, API, async, dependency, security, performance, and verification steering |
+| `dotnet-aspnetcore` | ASP.NET Core HTTP contracts, hosting, security, resilience, health, and integration tests |
+| `dotnet-efcore` | EF Core context ownership, queries, transactions, concurrency, migrations, and provider-realistic tests |
+| `dotnet-orleans` | Orleans grain scheduling, delivery, persistence, serialization, lifecycle, deployment, and multi-silo tests |
+| `dotnet-aspire` | Aspire AppHost, ServiceDefaults, resources, secrets, telemetry, testing, and deployment validation |
+| `dotnet-opentelemetry` | .NET telemetry signal ownership, conventions, cardinality, privacy, export, and propagation |
+| `dotnet-grpc` | Protobuf compatibility, deadlines, cancellation, retry safety, channels, streams, transport, and interop |
 | `kotlin-jvm` | Strict Kotlin/JVM and Gradle toolchain, dependency, API, coroutine, boundary, security, performance, and verification steering |
 | `rust` | Strict Rust toolchain, ownership, API, unsafe, dependency, concurrency, performance, and verification steering |
 | `shell-scripting` | Strict POSIX-first interfaces, quoting, failure handling, cleanup, security, portability, and verification steering |
@@ -145,6 +156,7 @@ Bundles install reusable skills:
 | `delivery` | Incremental implementation, Git workflow, simplification, CI, self-evaluation, ship gates, and launch readiness |
 | `brevity` | Caveman token-saving skills for terse replies, commit messages, review comments, help, and memory-file compression |
 | `engineering` | Broader engineering lifecycle, architecture, CI, security, observability, migration, and tooling skills |
+| `dotnet` | Official .NET test-platform/filter execution and MSBuild organization/diagnostic skills |
 | `jvm` | Kotlin/JVM implementation, Gradle toolchain, coroutine, architecture, persistence, contract, and verification skill |
 | `rust` | Rust implementation, lint, debug, security, Pest, and RON skills |
 | `product` | PM, research, analytics, GTM, strategy, and code-to-PRD skills |

@@ -22,6 +22,7 @@ Every bundle in `templates/catalog.json` has a generated manifest:
 | `packages/apm/delivery` | 7 |
 | `packages/apm/brevity` | 5 |
 | `packages/apm/engineering` | 43 |
+| `packages/apm/dotnet` | 7 |
 | `packages/apm/jvm` | 1 |
 | `packages/apm/rust` | 8 |
 | `packages/apm/product` | 25 |
@@ -33,12 +34,12 @@ Every bundle in `templates/catalog.json` has a generated manifest:
 | `packages/apm/infra` | 1 |
 | `packages/apm/writing` | 3 |
 | `packages/apm/workflow` | 13 |
-| `packages/apm/all` | 130 unique sources |
+| `packages/apm/all` | 137 unique sources |
 
-The shell `all` bundle exposes 136 installed names. Several sources are intentionally reused by
+The shell `all` bundle exposes 143 installed names. Several sources are intentionally reused by
 the compact bundles and older broad bundles, and the Playwright review source has two historical
 aliases. APM 0.28.0 identifies local dependencies by source path and deploys each source once, so
-the APM `all` package contains 130 unique sources and keeps the clearer
+the APM `all` package contains 137 unique sources and keeps the clearer
 `claude-playwright-review` name for the Playwright duplicate. Individual packages preserve their
 documented installed names.
 
@@ -124,7 +125,7 @@ AI Central's reviewed skills remain authoritative under `templates/`. APM manife
 those repository-local paths and never copy them into a second source tree.
 
 `scripts/generate-apm-bundles.sh` derives every manifest from the actual shell installer. When a
-shell bundle renames a skill with a `claude-`, `pm-`, `rust-`, `toolkit-`, or `web-` prefix, the
+shell bundle renames a skill with a `claude-`, `dotnet-`, `pm-`, `rust-`, `toolkit-`, or `web-` prefix, the
 generated APM dependency uses an explicit object-form `alias`.
 
 `scripts/generate-apm-selection.sh` is the consumer-manifest counterpart. It composes any union of
@@ -155,7 +156,7 @@ apm audit
 ```
 
 APM 0.28.0 has a replay limitation for local dependencies with aliases. Fresh installs of
-`engineering`, `rust`, `product`, `frontend`, `workflow`, and `all` preserve AI Central's expected
+`engineering`, `dotnet`, `rust`, `product`, `frontend`, `workflow`, and `all` preserve AI Central's expected
 installed names, but frozen or audit replay redeploys those dependencies under their source names
 and reports the alias changes as drift. Until that upstream behavior changes, refresh an
 alias-bearing bundle with its explicit package install command and review the generated lockfile.
@@ -166,9 +167,9 @@ In AI Central, run the disposable integration test:
 ./scripts/check-apm.sh
 ```
 
-It installs `packages/apm/all` and verifies all 130 expected unique names. It separately installs
+It installs `packages/apm/all` and verifies all 137 expected unique names. It separately installs
 the alias-free `core` package, replays that lockfile with `--frozen`, and requires a clean drift
-audit. The normal `./scripts/check.sh` verifies all 19 generated manifests, source paths, aliases,
+audit. The normal `./scripts/check.sh` verifies all 20 generated manifests, source paths, aliases,
 and catalog coverage without requiring APM.
 
 `apm audit --ci` may still report `config-consistency` findings because transitive local
