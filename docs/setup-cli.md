@@ -41,6 +41,27 @@ Use explicit selections:
   --bundles core,brevity,frontend,product
 ```
 
+Tailor bundle output by exact installed skill name:
+
+```sh
+./scripts/setup-ai-context.sh /path/to/project \
+  --profiles base,angular,frontend-design,infrastructure-opentofu \
+  --bundles core,node,orchestration,brevity,engineering,frontend,frontend-tooling,hallmark,infra \
+  --skip-skills vite,vitest,turborepo,vitepress,slidev,claude-browser-automation \
+  --mode link \
+  --sync \
+  --yes \
+  --dry-run
+```
+
+`--skills` adds comma-separated installed names after bundle expansion. `--skip-skills` removes
+installed names after both bundle expansion and exact additions, so an exclusion wins if a name is
+present in both options. The setup command validates every exact name before it writes profile
+files.
+
+Use `--bundles none --skills name-a,name-b` for a fully explicit skill selection. `none` cannot be
+combined with another bundle.
+
 For a Kotlin/JVM project, explicitly pull both layers with:
 
 ```sh
@@ -69,6 +90,31 @@ Preview without writing:
 ```sh
 ./scripts/setup-ai-context.sh /path/to/project --yes --dry-run
 ```
+
+The preview reports each final create, link, skip, and managed-link removal exactly once. It does
+not create parent directories or otherwise change the target.
+
+## Synchronizing A Link Installation
+
+Normal setup remains additive and non-overwriting. In link mode, opt into exact reconciliation of
+AI Central-managed skill links with `--sync`:
+
+```sh
+./scripts/setup-ai-context.sh /path/to/project \
+  --yes \
+  --bundles core,frontend-tooling \
+  --skip-skills vite,vitest,turborepo,vitepress,slidev \
+  --mode link \
+  --sync \
+  --dry-run
+```
+
+Sync is deliberately conservative. It removes a deselected canonical link only when its installed
+name is in the current AI Central catalog and its symlink target exactly matches that name's source
+in the current checkout. It removes the matching `.codex/skills` compatibility link only when that
+link has the expected canonical target. It leaves real directories, copied skills, adopted legacy
+skills, broken or foreign links, and project-repointed links untouched. This proof is why `--sync`
+requires `--mode link`.
 
 ## Profiles
 
@@ -121,7 +167,9 @@ compatibility symlinks under `.codex/skills`. Existing real legacy skills are le
 linked into canonical discovery instead of being moved or duplicated.
 
 This makes setup safe for existing projects, but updates to skipped files still require manual
-review. Use `scripts/audit-ai-context.sh /path/to/project` to find layout and placeholder problems.
+review. `--sync` changes only the narrow managed-link case described above; it is not a general
+delete or update mode. Use `scripts/audit-ai-context.sh /path/to/project` to find layout and
+placeholder problems.
 
 Every bundle also has a generated APM manifest under `packages/apm/<bundle>/`. See `docs/apm.md`
 for managed installation, aliases, lockfiles, and audit limitations.

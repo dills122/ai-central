@@ -9,6 +9,10 @@ for script in scripts/*.sh; do
   sh -n "$script"
 done
 
+./scripts/install-skill-bundle.sh --help >/dev/null 2>&1
+./scripts/setup-ai-context.sh --help >/dev/null 2>&1
+./scripts/generate-apm-selection.sh --help >/dev/null 2>&1
+
 ./scripts/check-node-package-api.sh >/dev/null
 
 ./scripts/generate-apm-bundles.sh --check >/dev/null
@@ -41,6 +45,35 @@ test "$(sed -n 's/^[[:space:]]*- path: /x/p' packages/apm/all/apm.yml | wc -l | 
 grep -q '^      alias: claude-playwright-review$' packages/apm/all/apm.yml
 test "$(grep -c 'playwright-pro/skills/review' packages/apm/all/apm.yml)" -eq 1
 grep -q '^apm_modules/$' .gitignore
+
+apm_selection_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-apm-selection-check.XXXXXX")
+apm_selection_file=$apm_selection_dir/apm.yml
+./scripts/generate-apm-selection.sh \
+  --bundle core,frontend-tooling \
+  --skills hallmark-design,claude-a11y-audit \
+  --skip-skills vite,vitest,turborepo,vitepress,slidev \
+  --name test-ai-context \
+  --ref test-ref \
+  --output "$apm_selection_file" >/dev/null 2>&1
+test "$(grep -c '^    - git:' "$apm_selection_file")" -eq 12
+grep -q '^name: test-ai-context$' "$apm_selection_file"
+grep -q '^      path: templates/skills/imported/antfu-skills/pnpm$' "$apm_selection_file"
+grep -q '^      path: templates/skills/adapted/hallmark-design$' "$apm_selection_file"
+grep -q '^      alias: claude-a11y-audit$' "$apm_selection_file"
+grep -q '^      ref: test-ref$' "$apm_selection_file"
+if grep -q 'antfu-skills/vite$' "$apm_selection_file"; then
+  echo "exact APM selection retained an excluded skill" >&2
+  exit 1
+fi
+apm_selection_hash=$(shasum -a 256 "$apm_selection_file")
+if ./scripts/generate-apm-selection.sh --output "$apm_selection_file" >/dev/null 2>&1; then
+  echo "APM selection generator overwrote an existing manifest" >&2
+  exit 1
+fi
+test "$apm_selection_hash" = "$(shasum -a 256 "$apm_selection_file")"
+
+empty_apm_selection=$(./scripts/generate-apm-selection.sh --bundle none --name empty-ai-context)
+echo "$empty_apm_selection" | grep -q '^  apm: \[\]$'
 
 if grep -Eiq 'reef|order book|matching engine|trading|market data|settlement' \
   templates/steering/kotlin-jvm-steering.md \
@@ -178,6 +211,52 @@ all_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-all-check.XXXXXX")
 test "$(find "$all_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 136
 test "$(find "$all_dir/.codex/skills" -mindepth 1 -maxdepth 1 -type l | wc -l | tr -d ' ')" -eq 136
 
+selector_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-selector-check.XXXXXX")
+./scripts/install-skill-bundle.sh "$selector_dir" \
+  --bundle core,frontend-tooling \
+  --skills hallmark-design \
+  --skip-skills vite,vitest,turborepo,vitepress,slidev \
+  --mode link >/dev/null
+test "$(find "$selector_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 11
+test -L "$selector_dir/.agents/skills/pnpm"
+test -L "$selector_dir/.agents/skills/hallmark-design"
+test ! -e "$selector_dir/.agents/skills/vite"
+test ! -e "$selector_dir/.agents/skills/vitest"
+test ! -e "$selector_dir/.agents/skills/turborepo"
+test ! -e "$selector_dir/.agents/skills/vitepress"
+test ! -e "$selector_dir/.agents/skills/slidev"
+
+exact_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-exact-check.XXXXXX")
+./scripts/install-skill-bundle.sh "$exact_dir" --bundle none --skills pnpm >/dev/null
+test "$(find "$exact_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 1
+test -f "$exact_dir/.agents/skills/pnpm/SKILL.md"
+
+if ./scripts/install-skill-bundle.sh "$exact_dir" --bundle core --skills not-a-skill >/dev/null 2>&1; then
+  echo "skill installer accepted an unknown exact inclusion" >&2
+  exit 1
+fi
+if ./scripts/install-skill-bundle.sh "$exact_dir" --bundle core --skip-skills not-a-skill >/dev/null 2>&1; then
+  echo "skill installer accepted an unknown exact exclusion" >&2
+  exit 1
+fi
+if ./scripts/install-skill-bundle.sh "$exact_dir" --bundle core --sync >/dev/null 2>&1; then
+  echo "skill installer accepted --sync in copy mode" >&2
+  exit 1
+fi
+
+invalid_setup_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-invalid-setup-check.XXXXXX")
+if ./scripts/setup-ai-context.sh "$invalid_setup_dir" \
+  --yes \
+  --profiles base \
+  --bundles core \
+  --skills not-a-skill >/dev/null 2>&1; then
+  echo "setup accepted an unknown exact inclusion" >&2
+  exit 1
+fi
+test ! -e "$invalid_setup_dir/AGENTS.md"
+test ! -e "$invalid_setup_dir/.agents"
+test ! -e "$invalid_setup_dir/.codex"
+
 setup_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-setup-check.XXXXXX")
 mkdir -p "$setup_dir/src"
 touch "$setup_dir/package.json" "$setup_dir/angular.json" "$setup_dir/Cargo.toml" "$setup_dir/main.tf" "$setup_dir/src/app.component.ts" "$setup_dir/src/App.vue" "$setup_dir/src/App.kt"
@@ -250,6 +329,79 @@ test -f "$link_dir/.agents/skills/kotlin-jvm-engineering/SKILL.md"
 test -L "$link_dir/.agents/skills/technical-blog-writer"
 test -f "$link_dir/.agents/skills/technical-blog-writer/SKILL.md"
 test -L "$link_dir/.codex/skills/technical-blog-writer"
+
+sync_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-sync-check.XXXXXX")
+./scripts/install-skill-bundle.sh "$sync_dir" --bundle core,frontend-tooling --mode link >/dev/null
+mkdir -p "$sync_dir/.agents/skills/project-owned" "$sync_dir/foreign-source"
+printf '%s\n' '# Project-owned skill' >"$sync_dir/.agents/skills/project-owned/SKILL.md"
+printf '%s\n' '# Foreign skill source' >"$sync_dir/foreign-source/SKILL.md"
+ln -s "$sync_dir/foreign-source" "$sync_dir/.agents/skills/foreign-link"
+rm "$sync_dir/.agents/skills/vite"
+ln -s "$sync_dir/foreign-source" "$sync_dir/.agents/skills/vite"
+rm "$sync_dir/.agents/skills/slidev"
+mkdir -p "$sync_dir/.agents/skills/slidev"
+printf '%s\n' '# Project-owned replacement' >"$sync_dir/.agents/skills/slidev/SKILL.md"
+slidev_hash=$(shasum -a 256 "$sync_dir/.agents/skills/slidev/SKILL.md")
+
+sync_dry_output=$(./scripts/install-skill-bundle.sh "$sync_dir" \
+  --bundle core \
+  --skills pnpm \
+  --mode link \
+  --sync \
+  --dry-run)
+echo "$sync_dry_output" | grep -q "would remove managed link $sync_dir/.agents/skills/vitest"
+echo "$sync_dry_output" | grep -q "would remove managed link $sync_dir/.codex/skills/vitest"
+test -L "$sync_dir/.agents/skills/vitest"
+test -L "$sync_dir/.codex/skills/vitest"
+
+./scripts/install-skill-bundle.sh "$sync_dir" \
+  --bundle core \
+  --skills pnpm \
+  --mode link \
+  --sync >/dev/null
+test -L "$sync_dir/.agents/skills/pnpm"
+test ! -e "$sync_dir/.agents/skills/vitest"
+test ! -L "$sync_dir/.agents/skills/vitest"
+test ! -e "$sync_dir/.codex/skills/vitest"
+test ! -L "$sync_dir/.codex/skills/vitest"
+test -d "$sync_dir/.agents/skills/project-owned"
+test -f "$sync_dir/.agents/skills/project-owned/SKILL.md"
+test -L "$sync_dir/.agents/skills/foreign-link"
+test -L "$sync_dir/.agents/skills/vite"
+test "$(readlink "$sync_dir/.agents/skills/vite")" = "$sync_dir/foreign-source"
+test -L "$sync_dir/.codex/skills/vite"
+test -d "$sync_dir/.agents/skills/slidev"
+test ! -L "$sync_dir/.agents/skills/slidev"
+test "$slidev_hash" = "$(shasum -a 256 "$sync_dir/.agents/skills/slidev/SKILL.md")"
+test -L "$sync_dir/.codex/skills/slidev"
+
+setup_dry_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-setup-dry-check.XXXXXX")
+touch "$setup_dry_dir/package.json" "$setup_dry_dir/angular.json"
+setup_dry_output=$(./scripts/setup-ai-context.sh "$setup_dry_dir" \
+  --yes \
+  --profiles base,angular,frontend-design \
+  --bundles core,frontend-tooling \
+  --skills hallmark-design \
+  --skip-skills vite,vitest,turborepo,vitepress,slidev \
+  --mode link \
+  --sync \
+  --dry-run)
+test "$(echo "$setup_dry_output" | grep -c "would create $setup_dry_dir/AGENTS.md")" -eq 1
+test "$(echo "$setup_dry_output" | grep -c "would link $setup_dry_dir/.codex/steering/javascript-typescript-steering.md")" -eq 1
+echo "$setup_dry_output" | grep -q "would link $setup_dry_dir/.agents/skills/pnpm"
+echo "$setup_dry_output" | grep -q "would link $setup_dry_dir/.agents/skills/hallmark-design"
+test ! -e "$setup_dry_dir/AGENTS.md"
+test ! -e "$setup_dry_dir/.agents"
+test ! -e "$setup_dry_dir/.codex"
+
+setup_exact_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-setup-exact-check.XXXXXX")
+./scripts/setup-ai-context.sh "$setup_exact_dir" \
+  --yes \
+  --profiles base \
+  --bundles none \
+  --skills pnpm >/dev/null
+test "$(find "$setup_exact_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 1
+test -f "$setup_exact_dir/.agents/skills/pnpm/SKILL.md"
 
 existing_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-existing-check.XXXXXX")
 mkdir -p "$existing_dir/.codex/steering"

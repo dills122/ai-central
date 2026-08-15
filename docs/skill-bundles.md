@@ -15,6 +15,76 @@ For guided project setup, prefer `scripts/setup-ai-context.sh`.
 ./scripts/install-skill-bundle.sh /path/to/project --bundle orchestration --mode link
 ```
 
+Bundle flags may be comma-separated or repeated. The installer computes their union by installed
+name, so overlap between selected bundles does not create the same destination twice.
+
+## Exact Skill Selection
+
+Use exact selectors when most of a bundle is useful but a project needs a smaller discovered skill
+surface:
+
+```sh
+./scripts/install-skill-bundle.sh /path/to/project \
+  --bundle core,frontend-tooling \
+  --skills hallmark-design \
+  --skip-skills vite,vitest,turborepo,vitepress,slidev \
+  --mode link \
+  --dry-run
+```
+
+Resolution order is:
+
+1. expand and union every selected bundle;
+2. add every name from `--skills`;
+3. remove every name from `--skip-skills`.
+
+Therefore exclusions win. Selectors are exact installed names, not source directory names or fuzzy
+matches. Prefixed imported names such as `rust-rust-core`, `pm-create-prd`, `claude-*`, `web-*`,
+and `toolkit-*` must include their installed prefix. Unknown names fail before the target changes.
+
+For a bespoke set with no bundle baseline:
+
+```sh
+./scripts/install-skill-bundle.sh /path/to/project \
+  --bundle none \
+  --skills pnpm,hallmark-design
+```
+
+`none` cannot be combined with another bundle. Omitting `--bundle` continues to select `core`, so
+existing commands retain their behavior.
+
+For an APM-managed project, pass the same selectors to `scripts/generate-apm-selection.sh` to
+create an exact `apm.yml`. APM then records the resolved selection and deployment ownership in
+`apm.lock.yaml`; see [Agent Package Manager integration](apm.md).
+
+## Safe Link Synchronization
+
+Installation is additive by default. Link-mode projects can opt into pruning deselected managed
+links:
+
+```sh
+./scripts/install-skill-bundle.sh /path/to/project \
+  --bundle core \
+  --skills pnpm \
+  --mode link \
+  --sync \
+  --dry-run
+```
+
+Dry-run reports exact creates, links, skips, and removals without making directories or changing
+the target. After review, omit `--dry-run` to apply the plan.
+
+The installer removes a canonical `.agents/skills/<name>` path only when all of these are true:
+
+- the path is a symlink;
+- `<name>` is known to the current AI Central catalog but is not in the resolved selection; and
+- the symlink target exactly equals that installed name's source in the current checkout.
+
+The corresponding `.codex/skills/<name>` compatibility link is removed only when its target is
+exactly `../../.agents/skills/<name>`. Real directories, copied skills, adopted legacy skills,
+unknown or repointed symlinks, and project-owned compatibility paths are never pruned. `--sync`
+therefore requires `--mode link`; it is intentionally not a general cleanup command.
+
 ## Recommended Layers
 
 | Bundle | Count | Contents |
@@ -65,6 +135,11 @@ Imported skills may be prefixed to avoid collisions:
 - `claude-*` for selected Claude Skills
 - `web-*` for Web Quality Skills
 - `toolkit-*` for selected Agent Toolkit skills
+
+These remain separate installed names even when two names ultimately carry overlapping guidance.
+The installer deduplicates overlapping bundle selections by installed name, not by source identity
+or semantic similarity. Exact exclusions are the current way to hide aliases a project does not
+want to expose.
 
 Original imported sources remain under `templates/skills/imported/`. Third-party payloads retain
 their applicable licenses; the `infra` bundle, for example, installs `terraform-skill/LICENSE`

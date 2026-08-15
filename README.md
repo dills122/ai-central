@@ -35,6 +35,22 @@ For a compact general-purpose installation, install the `core` bundle directly:
 Install the smallest relevant selection. The `all` bundle is intended for inventory audits, not
 routine project setup.
 
+Broad bundles can be tailored by installed skill name without defining a new bundle:
+
+```sh
+./scripts/setup-ai-context.sh /path/to/project \
+  --yes \
+  --bundles core,frontend-tooling,hallmark \
+  --skip-skills vite,vitest,turborepo,vitepress,slidev \
+  --mode link \
+  --sync \
+  --dry-run
+```
+
+Remove `--dry-run` after reviewing the exact creates, links, skips, and removals. `--sync` is
+available only in link mode and removes only deselected symlinks proven to point at the current
+AI Central checkout; it never deletes real skill directories or copied skills.
+
 ## What Is Available
 
 AI Central currently contains 133 reviewed reusable `SKILL.md` definitions. Related skills are
@@ -75,6 +91,11 @@ Some skills appear in more than one bundle, and a few older broad bundles expose
 prefixed aliases. That is why bundle totals and installed names do not equal the number of source
 definitions. See [Skill bundles](docs/skill-bundles.md) for selection guidance and
 [`packages/apm/`](packages/apm/) for exact generated package contents.
+
+Use `--skills name-a,name-b` for exact additions after bundle expansion and
+`--skip-skills name-c,name-d` for exact exclusions. Exclusions take precedence when the same name
+appears in both options. The selectors use installed names such as `pnpm`, `hallmark-design`, or
+`claude-playwright-review`, including any provenance prefix shown by the installed bundle.
 
 ### Steering Profiles
 
@@ -151,7 +172,15 @@ Use the bundle installer when the project already has steering or needs only ski
 ```sh
 ./scripts/install-skill-bundle.sh /path/to/project --bundle core
 ./scripts/install-skill-bundle.sh /path/to/project --bundle documentation --mode link
+./scripts/install-skill-bundle.sh /path/to/project \
+  --bundle none \
+  --skills pnpm,hallmark-design
 ```
+
+Bundle flags may be comma-separated or repeated. Exact selectors are resolved after the union of
+all selected bundles, so they can trim a broad bundle or assemble a small bespoke set without
+changing the shared bundle catalog. See [Skill bundles](docs/skill-bundles.md) for selector and
+safe-sync details.
 
 Audit an existing installation with:
 
@@ -184,7 +213,20 @@ apm install dills122/ai-central/packages/apm/orchestration#main --target agent-s
 
 Replace `core` or `orchestration` with any bundle listed above. APM installs skills only; use the
 guided shell setup when you also need steering profiles or `.codex/skills` compatibility links.
-See [Agent Package Manager integration](docs/apm.md) for lockfiles, aliases, and audit behavior.
+For an exact APM-managed project selection, generate a direct-dependency manifest from the same
+bundle and skill selectors:
+
+```sh
+./scripts/generate-apm-selection.sh \
+  --bundle core,frontend-tooling \
+  --skills hallmark-design \
+  --skip-skills vite,vitest,turborepo,vitepress,slidev \
+  --name my-project-ai-context \
+  --output /path/to/project/apm.yml
+```
+
+See [Agent Package Manager integration](docs/apm.md) for exact composition, lockfiles, safe APM
+pruning, aliases, and audit behavior.
 
 ## Developing AI Central
 

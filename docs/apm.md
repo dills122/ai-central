@@ -69,6 +69,55 @@ APM does not create AI Central's `.codex/skills` compatibility links. Projects t
 those links should run the matching shell bundle after the APM install. The non-overwriting shell
 installer preserves APM's canonical directories and adds only missing compatibility links.
 
+## Exact Project Composition
+
+APM package manifests do not provide a field that excludes selected transitive dependencies from
+a bundle. Generate a consuming project's exact `apm.yml` instead:
+
+```sh
+./scripts/generate-apm-selection.sh \
+  --bundle core,frontend-tooling \
+  --skills hallmark-design \
+  --skip-skills vite,vitest,turborepo,vitepress,slidev \
+  --name my-project-ai-context \
+  --ref main \
+  --output /path/to/project/apm.yml
+```
+
+The generator uses the same bundle expansion and exact installed-name selectors as the shell
+installer. It writes each resolved skill as a direct Git dependency with `path`, `ref`, and an
+explicit `alias` when the installed name differs from the source directory. Omitting `--output`
+prints the manifest for review. Existing files and symlinks are never overwritten.
+
+Use a release tag or commit in `--ref` for shared projects once immutable AI Central releases are
+available. APM resolves that declaration into exact commits and content hashes in the generated
+lockfile:
+
+```sh
+cd /path/to/project
+apm install --target agent-skills
+git add apm.yml apm.lock.yaml .agents/skills
+```
+
+To change the selection later, generate and review a replacement manifest, then use APM's native
+reconciliation flow:
+
+```sh
+apm install
+apm prune --dry-run
+apm prune
+apm audit
+```
+
+[`apm prune`](https://microsoft.github.io/apm/reference/cli/prune/) removes only orphaned packages
+and deployed files recorded in `apm.lock.yaml`; it is the APM equivalent of the shell installer's
+managed-link `--sync`, not a reason to run both against the same installation.
+
+APM identifies a dependency by source path and cannot deploy one source twice under different
+aliases. When overlapping bundles select the same source under multiple installed names, the
+generator keeps the first name in sorted order and reports each omitted alias on stderr. Use
+`--skip-skills` to choose the public name intentionally when that distinction matters.
+
 ## Source Of Truth And Aliases
 
 AI Central's reviewed skills remain authoritative under `templates/`. APM manifests reference
@@ -77,6 +126,10 @@ those repository-local paths and never copy them into a second source tree.
 `scripts/generate-apm-bundles.sh` derives every manifest from the actual shell installer. When a
 shell bundle renames a skill with a `claude-`, `pm-`, `rust-`, `toolkit-`, or `web-` prefix, the
 generated APM dependency uses an explicit object-form `alias`.
+
+`scripts/generate-apm-selection.sh` is the consumer-manifest counterpart. It composes any union of
+bundles plus exact additions and exclusions without adding a permanent shared bundle to
+`templates/catalog.json`.
 
 Regenerate after changing bundle membership or installed names:
 
@@ -128,6 +181,8 @@ signature as a warning; any other APM failure fails the test.
   steering profiles, project detection, link mode, and compatibility links.
 - APM manages files recorded in its lockfile. Do not hand-edit deployed copies; update the source
   skill or add clearly project-owned context alongside it.
+- Use APM's manifest, lockfile, and prune commands for an APM-managed installation. Shell `--sync`
+  proves ownership from AI Central symlink targets and serves a different installation model.
 - Third-party terms still apply. Review `THIRD_PARTY_NOTICES.md`,
   `docs/skill-attribution.md`, and license copies under `templates/skills/imported/licenses/`.
 - OpenAPM remains pre-1.0. Re-run `scripts/check-apm.sh` when upgrading the CLI.

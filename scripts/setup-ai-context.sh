@@ -8,11 +8,14 @@ Usage: setup-ai-context.sh TARGET_DIR [options]
 Options:
   --yes                    Use detected recommendations without prompts
   --profiles LIST          Comma-separated steering profiles: base,javascript-typescript,angular,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
-  --bundles LIST           Comma-separated skill bundles: core,node,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all
+  --bundles LIST           Comma-separated skill bundles: core,node,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all,none
+  --skills LIST            Comma-separated installed skill names to add after bundle expansion
+  --skip-skills LIST       Comma-separated installed skill names to exclude after bundle expansion
   --mode copy|link          copy installs files; link symlinks reusable templates and skills
+  --sync                    In link mode, prune deselected AI Central-managed skill links
   --skip-profiles LIST     Comma-separated profiles to exclude
   --skip-bundles LIST      Comma-separated bundles to exclude
-  --dry-run                Show what would run without writing files
+  --dry-run                Show exact creates, links, skips, and removals without writing
   --help                   Show this help
 
 Examples:
@@ -20,6 +23,7 @@ Examples:
   ./scripts/setup-ai-context.sh /path/to/project --yes
   ./scripts/setup-ai-context.sh /path/to/project --yes --mode link
   ./scripts/setup-ai-context.sh /path/to/project --profiles base,angular --bundles core,frontend,hallmark
+  ./scripts/setup-ai-context.sh /path/to/project --bundles core,frontend-tooling --skip-skills vite,vitest,turborepo,vitepress,slidev --mode link --sync --yes
 EOF
 }
 
@@ -221,6 +225,9 @@ profiles_arg=
 bundles_arg=
 skip_profiles=
 skip_bundles=
+skills=
+skip_skills=
+sync=0
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -246,6 +253,16 @@ while [ "$#" -gt 0 ]; do
       bundles_arg=$2
       shift 2
       ;;
+    --skills)
+      [ "$#" -ge 2 ] || { usage; exit 2; }
+      skills=$2
+      shift 2
+      ;;
+    --skip-skills)
+      [ "$#" -ge 2 ] || { usage; exit 2; }
+      skip_skills=$2
+      shift 2
+      ;;
     --mode)
       [ "$#" -ge 2 ] || { usage; exit 2; }
       mode=$2
@@ -260,6 +277,10 @@ while [ "$#" -gt 0 ]; do
       [ "$#" -ge 2 ] || { usage; exit 2; }
       skip_bundles=$2
       shift 2
+      ;;
+    --sync)
+      sync=1
+      shift
       ;;
     -*)
       usage
@@ -287,7 +308,7 @@ if [ ! -d "$target_dir" ]; then
 fi
 
 allowed_profiles=base,javascript-typescript,angular,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
-allowed_bundles=core,node,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all
+allowed_bundles=core,node,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all,none
 
 case "$mode" in
   copy|link) ;;
@@ -330,31 +351,54 @@ bundles=$(remove_items "$bundles" "$skip_bundles")
 
 echo "Selected profiles: ${profiles:-none}"
 echo "Selected bundles: ${bundles:-none}"
+echo "Additional skills: ${skills:-none}"
+echo "Excluded skills: ${skip_skills:-none}"
 echo "Install mode: $mode"
+echo "Sync managed links: $([ "$sync" -eq 1 ] && echo yes || echo no)"
 
-run_cmd() {
-  if [ "$dry_run" -eq 1 ]; then
-    printf "dry-run:"
-    for arg in "$@"; do
-      printf " %s" "$arg"
-    done
-    printf "\n"
-  else
-    "$@"
+if [ "$sync" -eq 1 ] && [ "$mode" != "link" ]; then
+  echo "--sync requires --mode link because copied or project-owned directories cannot be proven safe to prune" >&2
+  exit 2
+fi
+
+if contains_item "$bundles" "none" && [ "$bundles" != "none" ]; then
+  echo "Bundle 'none' cannot be combined with other bundles" >&2
+  exit 2
+fi
+
+# Validate exact selectors before any profile files are installed.
+if [ -n "$skills" ] || [ -n "$skip_skills" ]; then
+  set -- "$target_dir" --bundle "${bundles:-none}" --mode "$mode" --dry-run
+  if [ -n "$skills" ]; then
+    set -- "$@" --skills "$skills"
   fi
-}
+  if [ -n "$skip_skills" ]; then
+    set -- "$@" --skip-skills "$skip_skills"
+  fi
+  "$repo_root/scripts/install-skill-bundle.sh" "$@" >/dev/null
+fi
 
-old_ifs=$IFS
-IFS=,
-for profile in $profiles; do
-  [ -n "$profile" ] || continue
-  run_cmd "$repo_root/scripts/scaffold-ai-context.sh" "$target_dir" --profile "$profile" --mode "$mode"
-done
+if [ -n "$profiles" ]; then
+  if [ "$dry_run" -eq 1 ]; then
+    "$repo_root/scripts/scaffold-ai-context.sh" "$target_dir" --profile "$profiles" --mode "$mode" --dry-run
+  else
+    "$repo_root/scripts/scaffold-ai-context.sh" "$target_dir" --profile "$profiles" --mode "$mode"
+  fi
+fi
 
-for bundle in $bundles; do
-  [ -n "$bundle" ] || continue
-  run_cmd "$repo_root/scripts/install-skill-bundle.sh" "$target_dir" --bundle "$bundle" --mode "$mode"
-done
-IFS=$old_ifs
+set -- "$target_dir" --bundle "${bundles:-none}" --mode "$mode"
+if [ -n "$skills" ]; then
+  set -- "$@" --skills "$skills"
+fi
+if [ -n "$skip_skills" ]; then
+  set -- "$@" --skip-skills "$skip_skills"
+fi
+if [ "$sync" -eq 1 ]; then
+  set -- "$@" --sync
+fi
+if [ "$dry_run" -eq 1 ]; then
+  set -- "$@" --dry-run
+fi
+"$repo_root/scripts/install-skill-bundle.sh" "$@"
 
 echo "Setup complete"
