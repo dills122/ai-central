@@ -2,7 +2,19 @@
 set -eu
 
 usage() {
-  echo "Usage: $0 TARGET_DIR [--bundle core|node|orchestration|documentation|delivery|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|writing|workflow|all] [--mode copy|link]" >&2
+  cat >&2 <<'EOF'
+Usage: install-skill-bundle.sh TARGET_DIR [options]
+
+Options:
+  --bundle LIST       Comma-separated bundles; repeatable. Defaults to core.
+                      Use none with --skills or --sync to select no bundle.
+  --skills LIST       Comma-separated installed skill names to add.
+  --skip-skills LIST  Comma-separated installed skill names to exclude.
+  --mode copy|link    Copy skills or link them to AI Central. Defaults to copy.
+  --sync              In link mode, prune deselected AI Central-managed links.
+  --dry-run           Show exact creates, links, skips, and removals.
+  --help              Show this help.
+EOF
 }
 
 if [ "$#" -lt 1 ]; then
@@ -10,19 +22,65 @@ if [ "$#" -lt 1 ]; then
   exit 2
 fi
 
+case "$1" in
+  --help|-h)
+    usage
+    exit 0
+    ;;
+esac
+
 target_dir=$1
 shift
 
-bundle=core
+bundles=
+bundle_supplied=0
+skills=
+skip_skills=
 mode=copy
+sync=0
+dry_run=0
+
+append_csv() {
+  current=$1
+  addition=$2
+  if [ -z "$current" ]; then
+    printf "%s" "$addition"
+  elif [ -z "$addition" ]; then
+    printf "%s" "$current"
+  else
+    printf "%s,%s" "$current" "$addition"
+  fi
+}
+
 while [ "$#" -gt 0 ]; do
   case "$1" in
+    --help|-h)
+      usage
+      exit 0
+      ;;
     --bundle)
       if [ "$#" -lt 2 ]; then
         usage
         exit 2
       fi
-      bundle=$2
+      bundles=$(append_csv "$bundles" "$2")
+      bundle_supplied=1
+      shift 2
+      ;;
+    --skills)
+      if [ "$#" -lt 2 ]; then
+        usage
+        exit 2
+      fi
+      skills=$(append_csv "$skills" "$2")
+      shift 2
+      ;;
+    --skip-skills)
+      if [ "$#" -lt 2 ]; then
+        usage
+        exit 2
+      fi
+      skip_skills=$(append_csv "$skip_skills" "$2")
       shift 2
       ;;
     --mode)
@@ -33,6 +91,14 @@ while [ "$#" -gt 0 ]; do
       mode=$2
       shift 2
       ;;
+    --sync)
+      sync=1
+      shift
+      ;;
+    --dry-run)
+      dry_run=1
+      shift
+      ;;
     *)
       usage
       exit 2
@@ -40,14 +106,9 @@ while [ "$#" -gt 0 ]; do
   esac
 done
 
-case "$bundle" in
-  core|node|orchestration|documentation|delivery|brevity|engineering|jvm|rust|product|planning|frontend|frontend-tooling|frontend-vue|hallmark|infra|writing|workflow|all) ;;
-  *)
-    echo "Unknown bundle: $bundle" >&2
-    usage
-    exit 2
-    ;;
-esac
+if [ "$bundle_supplied" -eq 0 ]; then
+  bundles=core
+fi
 
 case "$mode" in
   copy|link) ;;
@@ -58,6 +119,11 @@ case "$mode" in
     ;;
 esac
 
+if [ "$sync" -eq 1 ] && [ "$mode" != "link" ]; then
+  echo "--sync requires --mode link because copied or project-owned directories cannot be proven safe to prune" >&2
+  exit 2
+fi
+
 if [ ! -d "$target_dir" ]; then
   echo "Target directory does not exist: $target_dir" >&2
   exit 1
@@ -66,46 +132,51 @@ fi
 repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 skills_dir=$target_dir/.agents/skills
 legacy_skills_dir=$target_dir/.codex/skills
-mkdir -p "$skills_dir"
-mkdir -p "$legacy_skills_dir"
+plan_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-skill-plan.XXXXXX")
+trap 'rm -rf "$plan_dir"' EXIT HUP INT TERM
+catalog_file=$plan_dir/catalog.tsv
+selected_file=$plan_dir/selected.tsv
+desired_file=$plan_dir/desired.tsv
+: >"$catalog_file"
+: >"$selected_file"
+: >"$desired_file"
+tab=$(printf '\t')
+phase=catalog
 
-install_legacy_link() {
-  dest_name=$1
-  legacy_dest=$legacy_skills_dir/$dest_name
+lookup_source() {
+  lookup_name=$1
+  awk -F '\t' -v name="$lookup_name" '$1 == name { print $2; exit }' "$catalog_file"
+}
 
-  if [ -e "$legacy_dest" ] || [ -L "$legacy_dest" ]; then
+record_skill() {
+  record_file=$1
+  record_name=$2
+  record_src=$3
+  existing_src=$(awk -F '\t' -v name="$record_name" '$1 == name { print $2; exit }' "$record_file")
+  if [ -n "$existing_src" ]; then
+    if [ "$existing_src" != "$record_src" ]; then
+      echo "Installed skill name collision: $record_name maps to both $existing_src and $record_src" >&2
+      exit 1
+    fi
     return 0
   fi
-
-  ln -s "../../.agents/skills/$dest_name" "$legacy_dest"
-  echo "linked compatibility path $legacy_dest -> ../../.agents/skills/$dest_name"
+  printf '%s\t%s\n' "$record_name" "$record_src" >>"$record_file"
 }
 
 install_skill() {
   src=$1
   dest_name=$2
-  dest=$skills_dir/$dest_name
-  legacy_dest=$legacy_skills_dir/$dest_name
 
   if [ ! -f "$src/SKILL.md" ]; then
     echo "missing SKILL.md: $src" >&2
     exit 1
   fi
 
-  if [ ! -e "$dest" ] && [ ! -L "$dest" ] && [ -e "$legacy_dest" ]; then
-    ln -s "../../.codex/skills/$dest_name" "$dest"
-    echo "adopted legacy skill $legacy_dest at canonical path $dest"
-  elif [ -e "$dest" ] || [ -L "$dest" ]; then
-    echo "skip existing $dest"
-  elif [ "$mode" = "link" ]; then
-    ln -s "$src" "$dest"
-    echo "linked $dest -> $src"
+  if [ "$phase" = "catalog" ]; then
+    record_skill "$catalog_file" "$dest_name" "$src"
   else
-    cp -R "$src" "$dest"
-    echo "created $dest"
+    record_skill "$selected_file" "$dest_name" "$src"
   fi
-
-  install_legacy_link "$dest_name"
 }
 
 install_find_skills() {
@@ -243,79 +314,201 @@ install_workflow() {
   install_find_skills "$repo_root/templates/skills/imported/agent-toolkit" "toolkit-"
 }
 
-case "$bundle" in
-  core)
-    install_core
-    ;;
-  node)
-    install_node
-    ;;
-  orchestration)
-    install_orchestration
-    ;;
-  documentation)
-    install_documentation
-    ;;
-  delivery)
-    install_delivery
-    ;;
-  brevity)
-    install_brevity
-    ;;
-  engineering)
-    install_engineering
-    ;;
-  jvm)
-    install_jvm
-    ;;
-  rust)
-    install_rust
-    ;;
-  product)
-    install_product
-    ;;
-  planning)
-    install_planning
-    ;;
-  frontend)
-    install_frontend
-    ;;
-  frontend-tooling)
-    install_frontend_tooling
-    ;;
-  frontend-vue)
-    install_frontend_vue
-    ;;
-  hallmark)
-    install_hallmark
-    ;;
-  infra)
-    install_infra
-    ;;
-  writing)
-    install_writing
-    ;;
-  workflow)
-    install_workflow
-    ;;
-  all)
-    install_core
-    install_node
-    install_orchestration
-    install_documentation
-    install_delivery
-    install_brevity
-    install_engineering
-    install_jvm
-    install_rust
-    install_product
-    install_planning
-    install_frontend
-    install_frontend_tooling
-    install_frontend_vue
-    install_hallmark
-    install_infra
-    install_writing
-    install_workflow
-    ;;
-esac
+select_bundle() {
+  selected_bundle=$1
+  case "$selected_bundle" in
+    none) ;;
+    core) install_core ;;
+    node) install_node ;;
+    orchestration) install_orchestration ;;
+    documentation) install_documentation ;;
+    delivery) install_delivery ;;
+    brevity) install_brevity ;;
+    engineering) install_engineering ;;
+    jvm) install_jvm ;;
+    rust) install_rust ;;
+    product) install_product ;;
+    planning) install_planning ;;
+    frontend) install_frontend ;;
+    frontend-tooling) install_frontend_tooling ;;
+    frontend-vue) install_frontend_vue ;;
+    hallmark) install_hallmark ;;
+    infra) install_infra ;;
+    writing) install_writing ;;
+    workflow) install_workflow ;;
+    all)
+      install_core
+      install_node
+      install_orchestration
+      install_documentation
+      install_delivery
+      install_brevity
+      install_engineering
+      install_jvm
+      install_rust
+      install_product
+      install_planning
+      install_frontend
+      install_frontend_tooling
+      install_frontend_vue
+      install_hallmark
+      install_infra
+      install_writing
+      install_workflow
+      ;;
+    *)
+      echo "Unknown bundle: $selected_bundle" >&2
+      usage
+      exit 2
+      ;;
+  esac
+}
+
+csv_contains() {
+  csv_list=$1
+  csv_item=$2
+  case ",$csv_list," in
+    *,"$csv_item",*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+validate_skill_csv() {
+  skill_csv=$1
+  option_name=$2
+  old_ifs=$IFS
+  IFS=,
+  for skill_name in $skill_csv; do
+    [ -n "$skill_name" ] || continue
+    if [ -z "$(lookup_source "$skill_name")" ]; then
+      echo "Unknown skill for $option_name: $skill_name" >&2
+      exit 2
+    fi
+  done
+  IFS=$old_ifs
+}
+
+# Exact selectors and sync need the authoritative installed-name-to-source
+# catalog. Ordinary additive bundle installs retain the smaller legacy scan.
+if [ -n "$skills" ] || [ -n "$skip_skills" ] || [ "$sync" -eq 1 ]; then
+  phase=catalog
+  select_bundle all
+  validate_skill_csv "$skills" "--skills"
+  validate_skill_csv "$skip_skills" "--skip-skills"
+fi
+
+if csv_contains "$bundles" "none" && [ "$bundles" != "none" ]; then
+  echo "Bundle 'none' cannot be combined with other bundles" >&2
+  exit 2
+fi
+
+phase=select
+old_ifs=$IFS
+IFS=,
+for selected_bundle in $bundles; do
+  [ -n "$selected_bundle" ] || continue
+  select_bundle "$selected_bundle"
+done
+for skill_name in $skills; do
+  [ -n "$skill_name" ] || continue
+  install_skill "$(lookup_source "$skill_name")" "$skill_name"
+done
+IFS=$old_ifs
+
+while IFS="$tab" read -r skill_name skill_src; do
+  [ -n "$skill_name" ] || continue
+  if ! csv_contains "$skip_skills" "$skill_name"; then
+    record_skill "$desired_file" "$skill_name" "$skill_src"
+  fi
+done <"$selected_file"
+
+if [ "$dry_run" -eq 0 ]; then
+  mkdir -p "$skills_dir" "$legacy_skills_dir"
+fi
+
+install_legacy_link() {
+  dest_name=$1
+  legacy_dest=$legacy_skills_dir/$dest_name
+  compatibility_target=../../.agents/skills/$dest_name
+
+  if [ -e "$legacy_dest" ] || [ -L "$legacy_dest" ]; then
+    echo "skip existing $legacy_dest"
+  elif [ "$dry_run" -eq 1 ]; then
+    echo "would link compatibility path $legacy_dest -> $compatibility_target"
+  else
+    ln -s "$compatibility_target" "$legacy_dest"
+    echo "linked compatibility path $legacy_dest -> $compatibility_target"
+  fi
+}
+
+apply_skill() {
+  dest_name=$1
+  src=$2
+  dest=$skills_dir/$dest_name
+  legacy_dest=$legacy_skills_dir/$dest_name
+
+  if [ ! -e "$dest" ] && [ ! -L "$dest" ] && { [ -e "$legacy_dest" ] || [ -L "$legacy_dest" ]; }; then
+    if [ "$dry_run" -eq 1 ]; then
+      echo "would adopt legacy skill $legacy_dest at canonical path $dest"
+    else
+      ln -s "../../.codex/skills/$dest_name" "$dest"
+      echo "adopted legacy skill $legacy_dest at canonical path $dest"
+    fi
+  elif [ -e "$dest" ] || [ -L "$dest" ]; then
+    echo "skip existing $dest"
+  elif [ "$mode" = "link" ]; then
+    if [ "$dry_run" -eq 1 ]; then
+      echo "would link $dest -> $src"
+    else
+      ln -s "$src" "$dest"
+      echo "linked $dest -> $src"
+    fi
+  elif [ "$dry_run" -eq 1 ]; then
+    echo "would create $dest"
+  else
+    cp -R "$src" "$dest"
+    echo "created $dest"
+  fi
+
+  install_legacy_link "$dest_name"
+}
+
+while IFS="$tab" read -r skill_name skill_src; do
+  [ -n "$skill_name" ] || continue
+  apply_skill "$skill_name" "$skill_src"
+done <"$desired_file"
+
+is_desired_skill() {
+  desired_name=$1
+  awk -F '\t' -v name="$desired_name" '$1 == name { found = 1 } END { exit !found }' "$desired_file"
+}
+
+remove_managed_link() {
+  managed_path=$1
+  if [ "$dry_run" -eq 1 ]; then
+    echo "would remove managed link $managed_path"
+  else
+    rm "$managed_path"
+    echo "removed managed link $managed_path"
+  fi
+}
+
+if [ "$sync" -eq 1 ] && [ -d "$skills_dir" ]; then
+  for canonical_dest in "$skills_dir"/*; do
+    [ -L "$canonical_dest" ] || continue
+    dest_name=$(basename "$canonical_dest")
+    if is_desired_skill "$dest_name"; then
+      continue
+    fi
+
+    known_src=$(lookup_source "$dest_name")
+    [ -n "$known_src" ] || continue
+    [ "$(readlink "$canonical_dest")" = "$known_src" ] || continue
+
+    legacy_dest=$legacy_skills_dir/$dest_name
+    if [ -L "$legacy_dest" ] && [ "$(readlink "$legacy_dest")" = "../../.agents/skills/$dest_name" ]; then
+      remove_managed_link "$legacy_dest"
+    fi
+    remove_managed_link "$canonical_dest"
+  done
+fi

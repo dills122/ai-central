@@ -106,6 +106,17 @@ Suggested next review question: decide whether these should live as Codex skills
 - A merge/update mode that preserves local project additions instead of overwriting generated files.
 - A provenance manifest with source path, hash, and last collected date for every raw file.
 - Templates for Go, monorepos, CI, and security that are not tied to one project.
+- Revisit a shell-installer project selection manifest after exact selectors and safe link sync
+  have been exercised across several repositories. APM-managed projects can already generate an
+  exact `apm.yml` and lockfile with `generate-apm-selection.sh`; a shell manifest would additionally
+  need to record steering profiles, install mode, and a resolvable AI Central version without
+  making local absolute paths portable state.
+- Add slim named bundles only when repeated project selections demonstrate a stable shared policy;
+  stack-shaped names such as `frontend-angular` or `frontend-tooling-pnpm` would otherwise duplicate
+  what exact selectors now express and create another catalog to maintain.
+- Define a source-identity and compatibility policy before deduplicating historical aliases. Bundle
+  union is currently deduplicated by installed name; silently choosing one of multiple public names
+  could break existing project prompts or references.
 
 ## Cross-Repository Refresh
 
