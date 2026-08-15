@@ -13,6 +13,9 @@ Examples:
 - `templates/steering/rust-steering.md`
 - `templates/steering/shell-scripting-steering.md`
 - `templates/steering/javascript-typescript-steering.md`
+- `templates/steering/dotnet-csharp-steering.md`
+- `templates/steering/dotnet-orleans-steering.md`
+- `templates/steering/dotnet-grpc-steering.md`
 - `templates/steering/frontend-design-steering.md`
 - `templates/steering/infrastructure-opentofu-steering.md`
 - `templates/cursor-rules/payload-overview.md`
@@ -21,7 +24,7 @@ Use these when a project has a concrete technology or domain signal.
 
 Future project template categories:
 
-- Languages: Go, Python, Java, C#, C, C++, Swift
+- Languages: Go, Python, Java, C, C++, Swift
 - Frameworks: Angular, React, Next.js, Payload, NestJS
 - Platforms: OpenTofu/Terraform, Cloudflare, AWS, Azure, Kubernetes, Tauri
 - Domains: data pipelines, browser extensions, SaaS dashboards, local-first apps

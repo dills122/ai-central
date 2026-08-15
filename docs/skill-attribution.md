@@ -20,6 +20,7 @@ First-party workflow skills live under `templates/skills/first-party/`. They inc
 | `antonbabenko/terraform-skill` | `b59d2be9ff4db8f835c8459e05e325ba11e3a21f` | Apache-2.0 | `templates/skills/imported/terraform-skill/` | Copied Terraform/OpenTofu skill with references. |
 | `softaworks/agent-toolkit` | `3027f20f3181758385a1bb8c022d4041dfb4de84` | MIT | `templates/skills/imported/agent-toolkit/` | Copied selected source skills only; excluded duplicated `dist/` copies and provider/social/persona skills. |
 | `JuliusBrussee/caveman` | `25d22f864ad68cc447a4cb93aefde918aa4aec9f` | MIT | `templates/skills/imported/caveman/` | Copied portable skills and agent presets; installer exposes portable skills through the `brevity` bundle. |
+| `dotnet/skills` | `7c1ae3fdf2eb64b758bb3a7b7f92cad3fbd95868` | MIT | `templates/skills/imported/dotnet-skills/` | Reviewed 2026-08-15. Copied seven official .NET test and MSBuild skills; packaged the license with every installed skill. |
 
 ## Adapted Sources
 

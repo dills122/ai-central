@@ -105,6 +105,7 @@ the discovered skill surface small while preserving focused capabilities.
 | `node` | Installed Node package entry points, declaration graphs, export conditions, subpaths, and static runtime API hints |
 | `brevity` | Caveman skills for terse replies, help, commits, reviews, and memory-file compression |
 | `engineering` | Node package API inspection, all imported `addyosmani/agent-skills`, and selected engineering skills from `alirezarezvani/claude-skills` |
+| `dotnet` | Official .NET test-platform/filter/run workflows plus MSBuild organization, anti-pattern, and binary-log diagnostics |
 | `jvm` | Kotlin/JVM implementation, Gradle toolchains, modules, coroutines, compatibility, boundaries, and verification |
 | `rust` | Imported Rust Agentic Skills, prefixed as `rust-*` |
 | `product` | Selected non-duplicate PM Skills and product-team Claude Skills |
@@ -131,6 +132,7 @@ add hooks, statusline files, or an MCP proxy.
 Imported skills may be prefixed to avoid collisions:
 
 - `rust-*` for Rust Agentic Skills
+- `dotnet-*` for official .NET test and MSBuild skills
 - `pm-*` for PM Skills
 - `claude-*` for selected Claude Skills
 - `web-*` for Web Quality Skills

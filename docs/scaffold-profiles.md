@@ -44,6 +44,54 @@ Includes everything from `base` and the JavaScript/TypeScript language profile, 
 
 Use for Angular apps and Angular monorepo packages.
 
+## C# And .NET
+
+Includes everything from `base`, plus:
+
+- `.codex/steering/dotnet-csharp-steering.md`
+
+Use for C# applications, services, libraries, tools, and .NET solutions. Guided setup detects C#
+source, project/solution files, `global.json`, and shared MSBuild files. Replace the root and command
+placeholders before enforcement.
+
+The specialist .NET profiles below automatically include this baseline when scaffolded directly.
+
+## ASP.NET Core
+
+Adds `.codex/steering/dotnet-aspnetcore-steering.md` for Web SDK or ASP.NET Core projects. It covers
+HTTP contracts, boundary validation, middleware and DI lifetimes, security/abuse limits, outbound
+resilience, operations, and hosted integration tests.
+
+## Entity Framework Core
+
+Adds `.codex/steering/dotnet-efcore-steering.md` when an EF Core package reference is detected. It
+covers `DbContext` ownership, query shape, transactions, optimistic concurrency, reviewed migrations,
+deployment boundaries, and tests against the supported provider.
+
+## .NET Orleans
+
+Adds `.codex/steering/dotnet-orleans-steering.md` when an Orleans reference is detected. It covers
+grain identity, scheduling and reentrancy, cancellation and delivery semantics, persistence and
+serialization evolution, lifecycle, rolling deployment, observability, and multi-silo tests.
+
+## .NET Aspire
+
+Adds `.codex/steering/dotnet-aspire-steering.md` for Aspire AppHost/hosting projects. It covers the
+application model, ServiceDefaults, references and wait relationships, secrets, development versus
+production boundaries, telemetry, resource tests, and deployment-artifact review.
+
+## OpenTelemetry For .NET
+
+Adds `.codex/steering/dotnet-opentelemetry-steering.md` when OpenTelemetry packages are referenced.
+It covers signal ownership, semantic conventions, cardinality and privacy, sampling/export limits,
+context propagation, and telemetry contract tests.
+
+## gRPC For .NET
+
+Adds `.codex/steering/dotnet-grpc-steering.md` for .NET projects containing protobuf contracts or
+gRPC/protobuf package references. It covers field-number compatibility, presence and enums, deadlines,
+cancellation, retry safety, channel reuse, bounded streaming, TLS/operations, and interoperability.
+
 ## Frontend Design
 
 Includes everything from `base` and the JavaScript/TypeScript language profile, plus:

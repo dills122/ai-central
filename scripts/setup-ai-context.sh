@@ -7,8 +7,8 @@ Usage: setup-ai-context.sh TARGET_DIR [options]
 
 Options:
   --yes                    Use detected recommendations without prompts
-  --profiles LIST          Comma-separated steering profiles: base,javascript-typescript,angular,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
-  --bundles LIST           Comma-separated skill bundles: core,node,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all,none
+  --profiles LIST          Comma-separated steering profiles: base,javascript-typescript,angular,dotnet-csharp,dotnet-aspnetcore,dotnet-efcore,dotnet-orleans,dotnet-aspire,dotnet-opentelemetry,dotnet-grpc,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
+  --bundles LIST           Comma-separated skill bundles: core,node,orchestration,documentation,delivery,brevity,engineering,dotnet,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all,none
   --skills LIST            Comma-separated installed skill names to add after bundle expansion
   --skip-skills LIST       Comma-separated installed skill names to exclude after bundle expansion
   --mode copy|link          copy installs files; link symlinks reusable templates and skills
@@ -140,6 +140,7 @@ prompt_mode() {
 detect_profiles() {
   target_dir=$1
   profiles=base
+  dotnet_detected=0
 
   if [ -f "$target_dir/package.json" ]; then
     profiles=$(append_unique "$profiles" "javascript-typescript")
@@ -149,6 +150,68 @@ detect_profiles() {
     profiles=$(append_unique "$profiles" "javascript-typescript")
     profiles=$(append_unique "$profiles" "angular")
     profiles=$(append_unique "$profiles" "frontend-design")
+  fi
+
+  if find "$target_dir" -maxdepth 6 \
+    \( -name '*.cs' -o -name '*.csproj' -o -name '*.sln' -o -name '*.slnx' -o \
+       -name global.json -o -name Directory.Build.props -o -name Directory.Build.targets -o \
+       -name Directory.Packages.props \) \
+    -type f ! -path '*/.git/*' ! -path '*/bin/*' ! -path '*/obj/*' ! -path '*/packages/*' \
+    ! -path '*/node_modules/*' ! -path '*/vendor/*' |
+    grep -q .; then
+    dotnet_detected=1
+    profiles=$(append_unique "$profiles" "dotnet-csharp")
+  fi
+
+  if [ "$dotnet_detected" -eq 1 ] && find "$target_dir" -maxdepth 6 \
+    \( -name '*.csproj' -o -name '*.props' -o -name '*.targets' \) \
+    -type f ! -path '*/.git/*' ! -path '*/bin/*' ! -path '*/obj/*' \
+    ! -path '*/node_modules/*' ! -path '*/vendor/*' \
+    -exec grep -Eil 'Microsoft\.NET\.Sdk\.Web|Microsoft\.AspNetCore\.App' {} + | grep -q .; then
+    profiles=$(append_unique "$profiles" "dotnet-aspnetcore")
+  fi
+
+  if [ "$dotnet_detected" -eq 1 ] && find "$target_dir" -maxdepth 6 \
+    \( -name '*.csproj' -o -name '*.props' -o -name '*.targets' \) \
+    -type f ! -path '*/.git/*' ! -path '*/bin/*' ! -path '*/obj/*' \
+    ! -path '*/node_modules/*' ! -path '*/vendor/*' \
+    -exec grep -Eil 'Microsoft\.EntityFrameworkCore' {} + | grep -q .; then
+    profiles=$(append_unique "$profiles" "dotnet-efcore")
+  fi
+
+  if [ "$dotnet_detected" -eq 1 ] && find "$target_dir" -maxdepth 6 \
+    \( -name '*.csproj' -o -name '*.props' -o -name '*.targets' \) \
+    -type f ! -path '*/.git/*' ! -path '*/bin/*' ! -path '*/obj/*' \
+    ! -path '*/node_modules/*' ! -path '*/vendor/*' \
+    -exec grep -Eil 'Microsoft\.Orleans|Aspire\.Hosting\.Orleans' {} + | grep -q .; then
+    profiles=$(append_unique "$profiles" "dotnet-orleans")
+  fi
+
+  if [ "$dotnet_detected" -eq 1 ] && find "$target_dir" -maxdepth 6 \
+    \( -name '*.csproj' -o -name '*.props' -o -name '*.targets' \) \
+    -type f ! -path '*/.git/*' ! -path '*/bin/*' ! -path '*/obj/*' \
+    ! -path '*/node_modules/*' ! -path '*/vendor/*' \
+    -exec grep -Eil 'Aspire\.Hosting|Aspire\.AppHost\.Sdk|<IsAspireHost>' {} + | grep -q .; then
+    profiles=$(append_unique "$profiles" "dotnet-aspire")
+  fi
+
+  if [ "$dotnet_detected" -eq 1 ] && find "$target_dir" -maxdepth 6 \
+    \( -name '*.csproj' -o -name '*.props' -o -name '*.targets' \) \
+    -type f ! -path '*/.git/*' ! -path '*/bin/*' ! -path '*/obj/*' \
+    ! -path '*/node_modules/*' ! -path '*/vendor/*' \
+    -exec grep -Eil 'OpenTelemetry' {} + | grep -q .; then
+    profiles=$(append_unique "$profiles" "dotnet-opentelemetry")
+  fi
+
+  if [ "$dotnet_detected" -eq 1 ] && { find "$target_dir" -maxdepth 6 -name '*.proto' \
+    -type f ! -path '*/.git/*' ! -path '*/bin/*' ! -path '*/obj/*' \
+    ! -path '*/node_modules/*' ! -path '*/vendor/*' | grep -q . || find "$target_dir" -maxdepth 6 \
+    \( -name '*.csproj' -o -name '*.props' -o -name '*.targets' \) \
+    -type f ! -path '*/.git/*' ! -path '*/bin/*' ! -path '*/obj/*' \
+    ! -path '*/node_modules/*' ! -path '*/vendor/*' \
+    -exec grep -Eil 'Grpc\.AspNetCore|Grpc\.Net\.Client|Grpc\.Tools|Google\.Protobuf|<Protobuf' {} + |
+    grep -q .; }; then
+    profiles=$(append_unique "$profiles" "dotnet-grpc")
   fi
 
   if find "$target_dir" -maxdepth 5 \( -name '*.kt' -o -name build.gradle.kts -o -name settings.gradle.kts \) -type f | grep -q .; then
@@ -182,6 +245,16 @@ detect_bundles() {
 
   if [ -f "$target_dir/package.json" ]; then
     bundles=$(append_unique "$bundles" "node")
+  fi
+
+  if find "$target_dir" -maxdepth 6 \
+    \( -name '*.cs' -o -name '*.csproj' -o -name '*.sln' -o -name '*.slnx' -o \
+       -name global.json -o -name Directory.Build.props -o -name Directory.Build.targets -o \
+       -name Directory.Packages.props \) \
+    -type f ! -path '*/.git/*' ! -path '*/bin/*' ! -path '*/obj/*' ! -path '*/packages/*' \
+    ! -path '*/node_modules/*' ! -path '*/vendor/*' |
+    grep -q .; then
+    bundles=$(append_unique "$bundles" "dotnet")
   fi
 
   if find "$target_dir" -maxdepth 5 \( -name '*.kt' -o -name build.gradle.kts -o -name settings.gradle.kts \) -type f | grep -q .; then
@@ -307,8 +380,8 @@ if [ ! -d "$target_dir" ]; then
   exit 1
 fi
 
-allowed_profiles=base,javascript-typescript,angular,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
-allowed_bundles=core,node,orchestration,documentation,delivery,brevity,engineering,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all,none
+allowed_profiles=base,javascript-typescript,angular,dotnet-csharp,dotnet-aspnetcore,dotnet-efcore,dotnet-orleans,dotnet-aspire,dotnet-opentelemetry,dotnet-grpc,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
+allowed_bundles=core,node,orchestration,documentation,delivery,brevity,engineering,dotnet,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all,none
 
 case "$mode" in
   copy|link) ;;

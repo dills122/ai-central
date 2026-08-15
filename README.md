@@ -53,7 +53,7 @@ AI Central checkout; it never deletes real skill directories or copied skills.
 
 ## What Is Available
 
-AI Central currently contains 133 reviewed reusable `SKILL.md` definitions. Related skills are
+AI Central currently contains 140 reviewed reusable `SKILL.md` definitions. Related skills are
 distributed as bundles so a project can expose only the capabilities it needs.
 
 ### Recommended Layers
@@ -74,6 +74,7 @@ distributed as bundles so a project can expose only the capabilities it needs.
 | `node` | 1 | Installed Node package entry points, declarations, export conditions, subpaths, and static runtime API hints |
 | `brevity` | 5 | Terse replies, help, commits, review comments, and context compression |
 | `engineering` | 43 | Node package API inspection, architecture, APIs, CI, security, observability, migrations, performance, and shipping |
+| `dotnet` | 7 | Official .NET test-platform/filter execution and MSBuild organization/diagnostic workflows |
 | `jvm` | 1 | Kotlin/JVM and Gradle implementation workflow |
 | `rust` | 8 | Rust implementation, syntax, linting, debugging, security, Pest, and RON |
 | `product` | 25 | Discovery, analytics, market research, GTM, product strategy, and code-to-PRD |
@@ -85,7 +86,7 @@ distributed as bundles so a project can expose only the capabilities it needs.
 | `infra` | 1 | Terraform/OpenTofu review, debugging, state, CI, testing, security, and rollback |
 | `writing` | 3 | Project-history research, technical story drafting, editing, and prose review |
 | `workflow` | 13 | Architecture, handoffs, requirements, QA, documentation, OpenAPI, and React workflows |
-| `all` | 136 installed names | Every bundle above, including compatibility aliases; useful for auditing only |
+| `all` | 143 installed names | Every bundle above, including compatibility aliases; useful for auditing only |
 
 Some skills appear in more than one bundle, and a few older broad bundles expose historical
 prefixed aliases. That is why bundle totals and installed names do not equal the number of source
@@ -106,6 +107,13 @@ Profiles complement skills by installing durable repository guidance.
 | `base` | Generic `AGENTS.md`, testing expectations, and repository policy |
 | `javascript-typescript` | JavaScript, TypeScript, Node.js, browser, typing, async, dependency, security, and verification guidance |
 | `angular` | Angular architecture and implementation guidance |
+| `dotnet-csharp` | C#/.NET SDK, MSBuild, nullable/analyzers, APIs, async, dependencies, security, and verification |
+| `dotnet-aspnetcore` | ASP.NET Core HTTP boundaries, hosting, security, resilience, health, and integration tests |
+| `dotnet-efcore` | EF Core context ownership, queries, transactions, migrations, deployment, and provider-realistic tests |
+| `dotnet-orleans` | Orleans grains, scheduling, delivery, persistence, serialization, lifecycle, and multi-silo tests |
+| `dotnet-aspire` | Aspire AppHost, ServiceDefaults, resources, secrets, telemetry, and deployment validation |
+| `dotnet-opentelemetry` | .NET telemetry signal ownership, conventions, cardinality, privacy, export, and propagation |
+| `dotnet-grpc` | Protobuf compatibility, gRPC deadlines, retry safety, channels, streams, transport, and interop |
 | `kotlin-jvm` | Kotlin, Gradle, JVM toolchains, coroutines, APIs, compatibility, and testing |
 | `rust` | Rust toolchains, ownership, APIs, unsafe code, dependencies, concurrency, and verification |
 | `shell-scripting` | POSIX-first scripting, quoting, cleanup, portability, and safety boundaries |
@@ -293,3 +301,4 @@ adding or promoting reusable material.
 - [Repository AI-context audit (2026-07-31)](docs/repository-ai-context-audit-2026-07-31.md)
 - [Workflow skill audit and bundle decision (2026-08-12)](docs/workflow-skill-audit-2026-08-12.md)
 - [Language steering research (2026-07-31)](docs/language-steering-research-2026-07-31.md)
+- [.NET steering research (2026-08-15)](docs/dotnet-steering-research-2026-08-15.md)
