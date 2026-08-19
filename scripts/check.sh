@@ -199,11 +199,17 @@ grep -q 'env -u GH_TOKEN -u GITHUB_TOKEN gh auth status' \
   "$tmp_dir/.agents/skills/github-keychain-auth/SKILL.md"
 test "$(grep -c 'gh auth token' "$tmp_dir/.agents/skills/github-keychain-auth/SKILL.md")" -eq 1
 test "$(grep -c 'find-generic-password -w' "$tmp_dir/.agents/skills/github-keychain-auth/SKILL.md")" -eq 1
+grep -q 'Run every credential-dependent.*outside the sandbox' \
+  "$tmp_dir/.agents/skills/github-keychain-auth/SKILL.md"
 grep -q 'Never run `gh auth token`, `security find-generic-password -w`' \
   "$tmp_dir/.agents/skills/github-keychain-auth/SKILL.md"
 test -f "$tmp_dir/.agents/skills/context-engineering/SKILL.md"
 test -f "$tmp_dir/.agents/skills/independent-review/SKILL.md"
 test -f "$tmp_dir/.agents/skills/independent-review/agents/openai.yaml"
+grep -q 'Default to at most three review instances' \
+  "$tmp_dir/.agents/skills/independent-review/SKILL.md"
+grep -q 'Hard-stop the flow when a review concludes' \
+  "$tmp_dir/.agents/skills/independent-review/SKILL.md"
 test -f "$tmp_dir/.agents/skills/inspect-node-package-api/SKILL.md"
 test -f "$tmp_dir/.agents/skills/inspect-node-package-api/scripts/inspect-package-api.mjs"
 test -f "$tmp_dir/.agents/skills/orchestrated-delivery/SKILL.md"

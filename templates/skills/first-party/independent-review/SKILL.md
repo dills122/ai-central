@@ -86,7 +86,7 @@ Use this author packet:
 End with this clean-task instruction:
 
 ```text
-Use $independent-review in reviewer mode. Work from the Fresh Review Bootstrap first and record a preliminary review before reading the Author Explanation. Then verify the explanation against the repository, review both the implementation and its plan, run proportionate non-mutating checks, and return an evidence-backed verdict. Do not implement fixes.
+Use $independent-review in reviewer mode. This is review instance <N> of <MAX>. Work from the Fresh Review Bootstrap first and record a preliminary review before reading the Author Explanation. Then verify the explanation against the repository, review both the implementation and its plan, run proportionate non-mutating checks, and return an evidence-backed verdict. Do not implement fixes, create further review instances, or split the work into new workstreams.
 ```
 
 ## Role B: Conduct The Independent Review
@@ -153,6 +153,28 @@ Finish with:
 
 Choose one verdict: `Ready`, `Ready with non-blocking follow-ups`, `Not ready`, or `Unable to verify`. A ready verdict requires evidence against both the implementation and the plan, not merely passing tests or a persuasive author explanation.
 
+## Bound The Review Loop
+
+Treat each fresh-context reviewer pass as one review instance. Default to at most three review instances for the complete implementation flow, counting the initial review. Honor a different limit only when the developer or worker task that initiated the review flow explicitly sets it; a reviewer, follow-up reviewer, or newly created task must not raise its own limit.
+
+Include `Review instance: <N> of <MAX>` in every bootstrap and report. Return each report to the initiating task before another instance begins. That task decides whether fixes materially changed reviewed behavior and justify another independent pass. Do not create a replacement reviewer merely because the verdict is unfavorable or the remaining budget allows one.
+
+When the configured maximum is reached, stop the review loop. Return remaining findings, unresolved risks, the last verdict, and the reason no further review instance will start to the initiating task for the human in the loop. Do not silently reset the count by creating a new task or changing delivery units.
+
+## Stop For A Heavy Pivot
+
+Hard-stop the flow when a review concludes that credible remediation requires a heavy pivot, including splitting the implementation into separate workstreams, materially replacing the agreed architecture or plan, or expanding scope beyond the review target. The reviewer must not dispatch those streams, implement the pivot, or start another review instance.
+
+Return a decision gate to the initiating developer or worker task with:
+
+- the evidence that makes the pivot necessary;
+- the proposed workstreams or material plan change;
+- affected requirements, scope, dependencies, and review-count state;
+- risks of proceeding and of ending the flow;
+- the exact approval needed from the human in the loop.
+
+The initiating task must surface that gate to the human. Continue only after explicit human approval, using any revised review limit the human or initiating task specifies. If approval is denied or unavailable, end the flow with the current verdict and residual risks; do not continue recursively.
+
 ## Close The Loop
 
-Return the independent report to the implementation task. Let that task respond finding by finding with `Accept`, `Dispute with evidence`, or `Defer with owner and rationale`. Require a new independent pass when fixes materially change reviewed behavior, architecture, migration, or plan scope.
+Return the independent report to the implementation task. Let that task respond finding by finding with `Accept`, `Dispute with evidence`, or `Defer with owner and rationale`. Require a new independent pass when fixes materially change reviewed behavior, architecture, migration, or plan scope, subject to the configured review-instance limit and heavy-pivot gate.

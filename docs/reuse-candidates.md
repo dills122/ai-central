@@ -59,7 +59,8 @@ These look useful across multiple repositories:
 Promoted as a first-party core skill:
 
 - `github-keychain-auth`: use the existing macOS Keychain-backed GitHub CLI credential across
-  projects, prevent stale token environment variables from overriding it, and prohibit exposing or
+  projects outside the sandbox so short-lived sandbox credential state cannot invalidate the flow,
+  prevent stale token environment variables from overriding it, and prohibit exposing or
   transferring the credential itself.
 
 Promoted as a first-party Node tooling skill:
@@ -74,7 +75,9 @@ Promoted as a first-party Node tooling skill:
 Promoted as first-party workflow skills after the 2026-08-12 cross-repository workflow audit:
 
 - `independent-review`: separates a maintainer-facing author explanation from a brand-new task's
-  evidence-backed review of both the implementation and its plan;
+  evidence-backed review of both the implementation and its plan, caps review loops at three
+  instances by default, and requires human approval before a heavy pivot can split or materially
+  rescope the work;
 - `orchestrated-delivery`: keeps a lead task responsible for requirements, dispatch contracts,
   reconciliation, and parent-level verification across agents or chats;
 - `spec-traceability`: connects requirements and decisions to tasks, tests, evidence, and status;
