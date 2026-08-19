@@ -1,4 +1,4 @@
 interface:
   display_name: "GitHub Keychain Auth"
-  short_description: "Use GitHub Keychain credentials without leaks"
-  default_prompt: "Use $github-keychain-auth to authenticate this GitHub operation safely."
+  short_description: "Use GitHub Keychain credentials outside the sandbox"
+  default_prompt: "Use $github-keychain-auth to run this GitHub operation outside the sandbox without exposing credentials."
