@@ -75,7 +75,9 @@ When Kotlin source or Gradle Kotlin DSL is detected, the guided defaults select 
 `kotlin-jvm` and `jvm` automatically.
 
 When a root `package.json` is detected, the guided defaults select the `javascript-typescript`
-profile and the compact `node` package-inspection bundle automatically.
+profile and compact `node` engineering bundle automatically. Select `node-service` explicitly for
+a server, API, worker, consumer, scheduler, or operational CLI; package metadata alone does not
+distinguish those targets from frontend applications and libraries.
 
 When C# or .NET project signals are detected, guided defaults select `dotnet-csharp`, the compact
 `dotnet` skill bundle, and only the ASP.NET Core, EF Core, Orleans, Aspire, OpenTelemetry, or gRPC
@@ -128,6 +130,7 @@ Profiles install steering/context files:
 | --- | --- |
 | `base` | Generic AGENTS and Codex steering |
 | `javascript-typescript` | Strict JavaScript/TypeScript typing, ESM, boundary, async, dependency, security, performance, and verification steering |
+| `node-service` | Node.js lifecycle, event-loop, backpressure, HTTP boundary, isolation, observability, dependency, and production verification steering |
 | `angular` | Angular-specific steering |
 | `dotnet-csharp` | Strict C#/.NET SDK, MSBuild, nullable/analyzer, API, async, dependency, security, performance, and verification steering |
 | `dotnet-aspnetcore` | ASP.NET Core HTTP contracts, hosting, security, resilience, health, and integration tests |
@@ -150,7 +153,7 @@ Bundles install reusable skills:
 | Bundle | Purpose |
 | --- | --- |
 | `core` | Small universal baseline for context, specs, planning, tests, review, debugging, source-driven work, and safe GitHub authentication |
-| `node` | Installed Node package API, declaration, export-condition, and subpath inspection |
+| `node` | Node service engineering plus installed package API, declaration, export-condition, and subpath inspection |
 | `orchestration` | Brain-task planning, multi-agent dispatch, spec traceability, durable handoffs, research, and reconciliation |
 | `documentation` | Canonical documentation, ADRs, drift audits, READMEs, Mermaid, and C4 architecture |
 | `delivery` | Incremental implementation, Git workflow, simplification, CI, self-evaluation, ship gates, and launch readiness |

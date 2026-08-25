@@ -41,7 +41,7 @@ $(sed -n 's/^[[:space:]]*- path: \(.*\)$/\1/p' "$apm_manifest")
 EOF
 done
 
-test "$(sed -n 's/^[[:space:]]*- path: /x/p' packages/apm/all/apm.yml | wc -l | tr -d ' ')" -eq 137
+test "$(sed -n 's/^[[:space:]]*- path: /x/p' packages/apm/all/apm.yml | wc -l | tr -d ' ')" -eq 138
 grep -q '^      alias: claude-playwright-review$' packages/apm/all/apm.yml
 test "$(grep -c 'playwright-pro/skills/review' packages/apm/all/apm.yml)" -eq 1
 grep -q '^apm_modules/$' .gitignore
@@ -96,6 +96,7 @@ fi
 
 if grep -Eiq 'wap|waves|wml|wsp|wtp|lowband|forage|capsule|liars.?dice' \
   templates/steering/javascript-typescript-steering.md \
+  templates/steering/node-service-steering.md \
   templates/steering/rust-steering.md \
   templates/steering/shell-scripting-steering.md; then
   echo "Reusable language guidance contains source-project terminology" >&2
@@ -113,6 +114,7 @@ fi
 
 for language_template in \
   templates/steering/javascript-typescript-steering.md \
+  templates/steering/node-service-steering.md \
   templates/steering/dotnet-csharp-steering.md \
   templates/steering/dotnet-aspnetcore-steering.md \
   templates/steering/dotnet-efcore-steering.md \
@@ -137,6 +139,8 @@ tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-check.XXXXXX")
 
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile javascript-typescript >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile javascript-typescript >/dev/null
+./scripts/scaffold-ai-context.sh "$tmp_dir" --profile node-service >/dev/null
+./scripts/scaffold-ai-context.sh "$tmp_dir" --profile node-service >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile angular >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile angular >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile dotnet-csharp >/dev/null
@@ -177,6 +181,7 @@ test "$infrastructure_hash" = "$(shasum -a 256 "$tmp_dir/.codex/steering/infrast
 test -f "$tmp_dir/AGENTS.md"
 test -f "$tmp_dir/.codex/steering/repository-steering.md"
 test -f "$tmp_dir/.codex/steering/javascript-typescript-steering.md"
+test -f "$tmp_dir/.codex/steering/node-service-steering.md"
 test -f "$tmp_dir/.codex/steering/angular-steering.md"
 test -f "$tmp_dir/.codex/steering/dotnet-csharp-steering.md"
 test -f "$tmp_dir/.codex/steering/dotnet-aspnetcore-steering.md"
@@ -212,6 +217,11 @@ grep -q 'Hard-stop the flow when a review concludes' \
   "$tmp_dir/.agents/skills/independent-review/SKILL.md"
 test -f "$tmp_dir/.agents/skills/inspect-node-package-api/SKILL.md"
 test -f "$tmp_dir/.agents/skills/inspect-node-package-api/scripts/inspect-package-api.mjs"
+test -f "$tmp_dir/.agents/skills/node-service-engineering/SKILL.md"
+test -f "$tmp_dir/.agents/skills/node-service-engineering/agents/openai.yaml"
+test -f "$tmp_dir/.agents/skills/node-service-engineering/references/runtime-lifecycle.md"
+test -f "$tmp_dir/.agents/skills/node-service-engineering/references/performance-and-resources.md"
+test -f "$tmp_dir/.agents/skills/node-service-engineering/references/production-readiness.md"
 test -f "$tmp_dir/.agents/skills/orchestrated-delivery/SKILL.md"
 test -f "$tmp_dir/.agents/skills/spec-traceability/SKILL.md"
 test -f "$tmp_dir/.agents/skills/session-handoff/SKILL.md"
@@ -255,6 +265,13 @@ for direct_profile in \
   done
 done
 
+node_service_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-node-service-check.XXXXXX")
+./scripts/scaffold-ai-context.sh "$node_service_dir" --profile node-service >/dev/null
+./scripts/scaffold-ai-context.sh "$node_service_dir" --profile node-service >/dev/null
+test -f "$node_service_dir/.codex/steering/javascript-typescript-steering.md"
+test -f "$node_service_dir/.codex/steering/node-service-steering.md"
+test ! -e "$node_service_dir/.codex/steering/angular-steering.md"
+
 dotnet_composed_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-dotnet-composed-check.XXXXXX")
 ./scripts/scaffold-ai-context.sh "$dotnet_composed_dir" \
   --profile dotnet-orleans,dotnet-grpc >/dev/null
@@ -278,8 +295,8 @@ test ! -e "$core_dir/.agents/skills/orchestrated-delivery"
 
 all_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-all-check.XXXXXX")
 ./scripts/install-skill-bundle.sh "$all_dir" --bundle all >/dev/null
-test "$(find "$all_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 143
-test "$(find "$all_dir/.codex/skills" -mindepth 1 -maxdepth 1 -type l | wc -l | tr -d ' ')" -eq 143
+test "$(find "$all_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 144
+test "$(find "$all_dir/.codex/skills" -mindepth 1 -maxdepth 1 -type l | wc -l | tr -d ' ')" -eq 144
 
 selector_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-selector-check.XXXXXX")
 ./scripts/install-skill-bundle.sh "$selector_dir" \
@@ -350,6 +367,8 @@ test -f "$setup_dir/.codex/steering/rust-steering.md"
 test -f "$setup_dir/.codex/steering/infrastructure-opentofu-steering.md"
 test -f "$setup_dir/.agents/skills/frontend-design-review/SKILL.md"
 test -f "$setup_dir/.agents/skills/inspect-node-package-api/SKILL.md"
+test -f "$setup_dir/.agents/skills/node-service-engineering/SKILL.md"
+test ! -e "$setup_dir/.codex/steering/node-service-steering.md"
 test -f "$setup_dir/.agents/skills/kotlin-jvm-engineering/SKILL.md"
 test -f "$setup_dir/.agents/skills/rust-rust-core/SKILL.md"
 test ! -e "$setup_dir/.agents/skills/caveman"

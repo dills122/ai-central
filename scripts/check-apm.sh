@@ -45,11 +45,12 @@ actual_names=$(
     sort
 )
 test "$actual_names" = "$expected_names"
-test "$(printf '%s\n' "$actual_names" | wc -l | tr -d ' ')" -eq 137
+test "$(printf '%s\n' "$actual_names" | wc -l | tr -d ' ')" -eq 138
 test -f .agents/skills/claude-playwright-review/SKILL.md
 test ! -e .agents/skills/claude-review
 test -f .agents/skills/technical-blog-writer/SKILL.md
 test -f .agents/skills/orchestrated-delivery/SKILL.md
+test -f .agents/skills/node-service-engineering/SKILL.md
 test -f .agents/skills/dotnet-run-tests/SKILL.md
 test -f .agents/skills/dotnet-run-tests/LICENSE
 test -f apm.yml
@@ -80,4 +81,4 @@ else
   exit 1
 fi
 
-echo "APM checks passed: 20 bundles, 137 unique skills, and alias-free frozen replay/audit"
+echo "APM checks passed: 20 bundles, 138 unique skills, and alias-free frozen replay/audit"

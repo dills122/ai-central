@@ -80,6 +80,13 @@ High-value reusable skills include:
 - Generic repository docs unless they were in known AI context locations.
 - Temporary third-party skill dumps under `wap-labs/tmp`; these should be reviewed separately before importing because provenance and licensing may differ.
 
+## External Node Review — 2026-08-24
+
+`goldbergyoni/nodebestpractices` was cloned into ignored `external/` at commit
+`dc3d60c29d5483d9ea99cf261bbd6203516a2ba7` and reviewed as a discovery index. No CC BY-SA 4.0
+source files were collected, copied, or adapted. See
+`docs/node-best-practices-review-2026-08-24.md` for the promotion boundary and official sources.
+
 ## Promoted Infrastructure Steering
 
 - `templates/steering/infrastructure-opentofu-steering.md` is a normalized, provider-neutral

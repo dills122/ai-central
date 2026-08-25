@@ -13,6 +13,7 @@ Examples:
 - `templates/steering/rust-steering.md`
 - `templates/steering/shell-scripting-steering.md`
 - `templates/steering/javascript-typescript-steering.md`
+- `templates/steering/node-service-steering.md`
 - `templates/steering/dotnet-csharp-steering.md`
 - `templates/steering/dotnet-orleans-steering.md`
 - `templates/steering/dotnet-grpc-steering.md`

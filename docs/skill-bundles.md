@@ -102,9 +102,9 @@ the discovered skill surface small while preserving focused capabilities.
 
 | Bundle | Contents |
 | --- | --- |
-| `node` | Installed Node package entry points, declaration graphs, export conditions, subpaths, and static runtime API hints |
+| `node` | Node service lifecycle, resources, production readiness, and installed package API inspection |
 | `brevity` | Caveman skills for terse replies, help, commits, reviews, and memory-file compression |
-| `engineering` | Node package API inspection, all imported `addyosmani/agent-skills`, and selected engineering skills from `alirezarezvani/claude-skills` |
+| `engineering` | Node service and package engineering, all imported `addyosmani/agent-skills`, and selected engineering skills from `alirezarezvani/claude-skills` |
 | `dotnet` | Official .NET test-platform/filter/run workflows plus MSBuild organization, anti-pattern, and binary-log diagnostics |
 | `jvm` | Kotlin/JVM implementation, Gradle toolchains, modules, coroutines, compatibility, boundaries, and verification |
 | `rust` | Imported Rust Agentic Skills, prefixed as `rust-*` |

@@ -1,6 +1,6 @@
 name: ai-central-node
 version: 0.2.0
-description: Resolve installed Node package entry points, declarations, exports, subpaths, and static runtime API hints without executing dependencies.
+description: Engineer Node services and resolve installed package entry points, declarations, exports, subpaths, and static runtime API hints.
 repository: https://github.com/dills122/ai-central
 keywords:
   - ai
@@ -15,3 +15,4 @@ includes: auto
 dependencies:
   apm:
     - path: ../../../templates/skills/first-party/inspect-node-package-api
+    - path: ../../../templates/skills/first-party/node-service-engineering

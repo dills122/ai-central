@@ -7,7 +7,7 @@ Usage: setup-ai-context.sh TARGET_DIR [options]
 
 Options:
   --yes                    Use detected recommendations without prompts
-  --profiles LIST          Comma-separated steering profiles: base,javascript-typescript,angular,dotnet-csharp,dotnet-aspnetcore,dotnet-efcore,dotnet-orleans,dotnet-aspire,dotnet-opentelemetry,dotnet-grpc,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
+  --profiles LIST          Comma-separated steering profiles: base,javascript-typescript,node-service,angular,dotnet-csharp,dotnet-aspnetcore,dotnet-efcore,dotnet-orleans,dotnet-aspire,dotnet-opentelemetry,dotnet-grpc,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
   --bundles LIST           Comma-separated skill bundles: core,node,orchestration,documentation,delivery,brevity,engineering,dotnet,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all,none
   --skills LIST            Comma-separated installed skill names to add after bundle expansion
   --skip-skills LIST       Comma-separated installed skill names to exclude after bundle expansion
@@ -380,7 +380,7 @@ if [ ! -d "$target_dir" ]; then
   exit 1
 fi
 
-allowed_profiles=base,javascript-typescript,angular,dotnet-csharp,dotnet-aspnetcore,dotnet-efcore,dotnet-orleans,dotnet-aspire,dotnet-opentelemetry,dotnet-grpc,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
+allowed_profiles=base,javascript-typescript,node-service,angular,dotnet-csharp,dotnet-aspnetcore,dotnet-efcore,dotnet-orleans,dotnet-aspire,dotnet-opentelemetry,dotnet-grpc,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
 allowed_bundles=core,node,orchestration,documentation,delivery,brevity,engineering,dotnet,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all,none
 
 case "$mode" in

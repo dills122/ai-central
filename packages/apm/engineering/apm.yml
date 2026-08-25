@@ -68,6 +68,7 @@ dependencies:
     - path: ../../../templates/skills/imported/agent-skills/incremental-implementation
     - path: ../../../templates/skills/first-party/inspect-node-package-api
     - path: ../../../templates/skills/imported/agent-skills/interview-me
+    - path: ../../../templates/skills/first-party/node-service-engineering
     - path: ../../../templates/skills/imported/agent-skills/performance-optimization
     - path: ../../../templates/skills/imported/agent-skills/planning-and-task-breakdown
     - path: ../../../templates/skills/imported/agent-skills/security-and-hardening

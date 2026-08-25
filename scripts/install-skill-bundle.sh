@@ -203,6 +203,7 @@ install_core() {
 
 install_node() {
   install_skill "$repo_root/templates/skills/first-party/inspect-node-package-api" "inspect-node-package-api"
+  install_skill "$repo_root/templates/skills/first-party/node-service-engineering" "node-service-engineering"
 }
 
 install_orchestration() {
