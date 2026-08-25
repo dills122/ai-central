@@ -49,7 +49,7 @@ old_ifs=$IFS
 IFS=,
 for selected_profile in $profile; do
   case "$selected_profile" in
-    base|javascript-typescript|angular|dotnet-csharp|dotnet-aspnetcore|dotnet-efcore|dotnet-orleans|dotnet-aspire|dotnet-opentelemetry|dotnet-grpc|kotlin-jvm|rust|shell-scripting|payload|frontend-design|infrastructure-opentofu) ;;
+    base|javascript-typescript|node-service|angular|dotnet-csharp|dotnet-aspnetcore|dotnet-efcore|dotnet-orleans|dotnet-aspire|dotnet-opentelemetry|dotnet-grpc|kotlin-jvm|rust|shell-scripting|payload|frontend-design|infrastructure-opentofu) ;;
     *)
       echo "Unknown profile: $selected_profile" >&2
       usage
@@ -127,8 +127,12 @@ copy_if_missing "$repo_root/templates/agents/AGENTS.md" "$target_dir/AGENTS.md"
 copy_if_missing "$repo_root/templates/steering/repository-steering.md" "$target_dir/.codex/steering/repository-steering.md"
 copy_if_missing "$repo_root/templates/steering/testing-quality-gates-steering.md" "$target_dir/.codex/steering/testing-quality-gates-steering.md"
 
-if profile_selected javascript-typescript || profile_selected angular || profile_selected frontend-design || profile_selected payload; then
+if profile_selected javascript-typescript || profile_selected node-service || profile_selected angular || profile_selected frontend-design || profile_selected payload; then
   install_reusable_if_missing "$repo_root/templates/steering/javascript-typescript-steering.md" "$target_dir/.codex/steering/javascript-typescript-steering.md"
+fi
+
+if profile_selected node-service; then
+  install_reusable_if_missing "$repo_root/templates/steering/node-service-steering.md" "$target_dir/.codex/steering/node-service-steering.md"
 fi
 
 if profile_selected dotnet-csharp || profile_selected dotnet-aspnetcore || profile_selected dotnet-efcore || profile_selected dotnet-orleans || profile_selected dotnet-aspire || profile_selected dotnet-opentelemetry || profile_selected dotnet-grpc; then

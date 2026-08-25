@@ -26,6 +26,13 @@
       "signals": ["package.json", "*.js", "*.mjs", "*.cjs", "*.jsx", "*.ts", "*.mts", "*.cts", "*.tsx"]
     },
     {
+      "id": "node-service",
+      "label": "Node.js Service",
+      "type": "runtime-service",
+      "description": "Node.js lifecycle, event-loop, backpressure, HTTP boundary, isolation, observability, dependency, and production verification guidance.",
+      "signals": ["explicit: Node.js server, API, worker, consumer, scheduler, or operational CLI"]
+    },
+    {
       "id": "angular",
       "label": "Angular",
       "type": "language-framework",
@@ -135,9 +142,9 @@
     },
     {
       "id": "node",
-      "label": "Node Package API",
+      "label": "Node Engineering",
       "type": "language-platform",
-      "description": "Resolve installed Node package entry points, declarations, exports, subpaths, and static runtime API hints without executing dependencies.",
+      "description": "Engineer Node services and resolve installed package entry points, declarations, exports, subpaths, and static runtime API hints.",
       "apmPackage": "packages/apm/node",
       "signals": ["package.json", "node_modules/"]
     },

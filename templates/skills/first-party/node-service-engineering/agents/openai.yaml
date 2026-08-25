@@ -1,0 +1,4 @@
+interface:
+  display_name: "Node Service Engineering"
+  short_description: "Build and operate reliable Node services"
+  default_prompt: "Use $node-service-engineering to make this Node service reliable across runtime, resource, and production boundaries."

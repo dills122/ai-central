@@ -10,6 +10,8 @@ These are broadly reusable with placeholders:
 - Local command map
 - JavaScript/TypeScript strict typing, ESM, boundary validation, async ownership, dependency, security,
   performance, and verification rules
+- Node.js service lifecycle, event-loop and worker-pool fairness, backpressure, HTTP limits,
+  isolation, observability, dependency execution risk, and production verification
 - Testing and quality gates
 - Angular coding standards
 - Kotlin/JVM Gradle/toolchain alignment, project-fit module boundaries, language design, structured
@@ -71,6 +73,10 @@ Promoted as a first-party Node tooling skill:
   bundle and the broader opt-in `engineering` bundle. A local skill and deterministic helper were
   chosen over MCP because inspection is project-local and one-shot; persistent indexing or
   cross-project symbol queries would be the threshold for revisiting an MCP server.
+- `node-service-engineering`: establishes the actual runtime and deployment contract, then routes
+  lifecycle, resource/performance, HTTP/security, dependency, observability, and service-test work
+  through focused official-source references. It is included in `node` and `engineering` but is
+  narrowly triggered so frontend-only work does not acquire backend assumptions.
 
 Promoted as first-party workflow skills after the 2026-08-12 cross-repository workflow audit:
 
@@ -216,6 +222,12 @@ The 2026-08-15 .NET review imported seven official `dotnet/skills` test and MSBu
 detected `dotnet` bundle. Durable C#/.NET, ASP.NET Core, EF Core, Orleans, Aspire, OpenTelemetry, and
 gRPC rules were written as separate project-neutral steering profiles. Source evidence and selection
 boundaries are documented in `docs/dotnet-steering-research-2026-08-15.md`.
+
+The 2026-08-24 Node review used `goldbergyoni/nodebestpractices` as a discovery index only because
+its CC BY-SA 4.0 license would require an explicit share-alike import strategy. Independent
+first-party service steering and a Node engineering skill were written from official Node.js and
+npm sources. The source boundary and rejected universal prescriptions are documented in
+`docs/node-best-practices-review-2026-08-24.md`.
 
 ### `JuliusBrussee/caveman`
 

@@ -4,7 +4,8 @@ This repo includes third-party skills and adapted guidance from reviewed upstrea
 
 First-party workflow skills live under `templates/skills/first-party/`. They include
 `github-keychain-auth`, `orchestrated-delivery`, `spec-traceability`, `session-handoff`,
-`research-to-decision`, and `repository-doc-drift`; they do not contain copied upstream text.
+`research-to-decision`, `repository-doc-drift`, `inspect-node-package-api`, and
+`node-service-engineering`; they do not contain copied upstream text.
 
 ## Imported Sources
 
@@ -44,6 +45,7 @@ First-party workflow skills live under `templates/skills/first-party/`. They inc
 | `trailofbits/skills` | CC BY-SA 4.0. High-value security reference, but not imported until this repo has an explicit share-alike strategy. |
 | `heilcheng/awesome-agent-skills` | Catalog only; no local `SKILL.md` files. |
 | `microsoft/skills` | Reviewed as an MIT-licensed Azure/Microsoft profile candidate; not imported because it is large and vendor-specific. |
+| `goldbergyoni/nodebestpractices` | CC BY-SA 4.0. Reviewed at `dc3d60c29d5483d9ea99cf261bbd6203516a2ba7` as a discovery index only; no text or assets copied or adapted. Independent Node guidance uses official Node.js and npm sources. |
 
 ## Attribution Practice
 

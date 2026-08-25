@@ -53,7 +53,7 @@ AI Central checkout; it never deletes real skill directories or copied skills.
 
 ## What Is Available
 
-AI Central currently contains 140 reviewed reusable `SKILL.md` definitions. Related skills are
+AI Central currently contains 141 reviewed reusable `SKILL.md` definitions. Related skills are
 distributed as bundles so a project can expose only the capabilities it needs.
 
 ### Recommended Layers
@@ -71,9 +71,9 @@ distributed as bundles so a project can expose only the capabilities it needs.
 
 | Bundle | Skills | Use it for |
 | --- | ---: | --- |
-| `node` | 1 | Installed Node package entry points, declarations, export conditions, subpaths, and static runtime API hints |
+| `node` | 2 | Node service lifecycle, resources, production readiness, and installed package API inspection |
 | `brevity` | 5 | Terse replies, help, commits, review comments, and context compression |
-| `engineering` | 43 | Node package API inspection, architecture, APIs, CI, security, observability, migrations, performance, and shipping |
+| `engineering` | 44 | Node service and package engineering, architecture, APIs, CI, security, observability, migrations, performance, and shipping |
 | `dotnet` | 7 | Official .NET test-platform/filter execution and MSBuild organization/diagnostic workflows |
 | `jvm` | 1 | Kotlin/JVM and Gradle implementation workflow |
 | `rust` | 8 | Rust implementation, syntax, linting, debugging, security, Pest, and RON |
@@ -86,7 +86,7 @@ distributed as bundles so a project can expose only the capabilities it needs.
 | `infra` | 1 | Terraform/OpenTofu review, debugging, state, CI, testing, security, and rollback |
 | `writing` | 3 | Project-history research, technical story drafting, editing, and prose review |
 | `workflow` | 13 | Architecture, handoffs, requirements, QA, documentation, OpenAPI, and React workflows |
-| `all` | 143 installed names | Every bundle above, including compatibility aliases; useful for auditing only |
+| `all` | 144 installed names | Every bundle above, including compatibility aliases; useful for auditing only |
 
 Some skills appear in more than one bundle, and a few older broad bundles expose historical
 prefixed aliases. That is why bundle totals and installed names do not equal the number of source
@@ -106,6 +106,7 @@ Profiles complement skills by installing durable repository guidance.
 | --- | --- |
 | `base` | Generic `AGENTS.md`, testing expectations, and repository policy |
 | `javascript-typescript` | JavaScript, TypeScript, Node.js, browser, typing, async, dependency, security, and verification guidance |
+| `node-service` | Node.js lifecycle, event-loop, streams, HTTP, isolation, observability, dependencies, and production verification |
 | `angular` | Angular architecture and implementation guidance |
 | `dotnet-csharp` | C#/.NET SDK, MSBuild, nullable/analyzers, APIs, async, dependencies, security, and verification |
 | `dotnet-aspnetcore` | ASP.NET Core HTTP boundaries, hosting, security, resilience, health, and integration tests |

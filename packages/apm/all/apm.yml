@@ -102,6 +102,7 @@ dependencies:
     - path: ../../../templates/skills/imported/agent-skills/interview-me
     - path: ../../../templates/skills/adapted/kotlin-jvm-engineering
     - path: ../../../templates/skills/imported/agent-toolkit/mermaid-diagrams
+    - path: ../../../templates/skills/first-party/node-service-engineering
     - path: ../../../templates/skills/imported/antfu-skills/nuxt
     - path: ../../../templates/skills/first-party/orchestrated-delivery
     - path: ../../../templates/skills/imported/agent-skills/performance-optimization

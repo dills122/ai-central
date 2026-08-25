@@ -36,6 +36,16 @@ source-root, and verification placeholders before treating it as project policy.
 This replaces the former `javascript-esm-steering.md` template. Existing copied or linked instances
 of that file are not deleted automatically; review and remove them after installing the new profile.
 
+## Node.js Service
+
+Includes everything from `base` and the JavaScript/TypeScript language profile, plus:
+
+- `.codex/steering/node-service-steering.md`
+
+Use explicitly for Node.js servers, APIs, workers, consumers, schedulers, and operational CLIs. A
+root `package.json` does not select this profile automatically because that signal also describes
+frontend applications, libraries, and tooling repositories.
+
 ## Angular
 
 Includes everything from `base` and the JavaScript/TypeScript language profile, plus:

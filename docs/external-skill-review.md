@@ -30,6 +30,7 @@ These upstream repositories were cloned locally for review:
 | `Nutlope/hallmark` | `external/hallmark` | MIT | 1 | Adapt as an opt-in creative-direction skill; do not add to default frontend context |
 | `blader/humanizer` | `external/humanizer` | MIT | 1 | Adapt as an opt-in final prose audit; remove detector framing and rigid punctuation bans; reviewed 2026-08-13 |
 | `dotnet/skills` | `external/dotnet-skills` | MIT | 106 | Import a compact official .NET test and MSBuild subset |
+| `goldbergyoni/nodebestpractices` | `external/nodebestpractices` | CC BY-SA 4.0 | Documentation corpus | Discovery only; write independent Node guidance from official primary sources |
 
 ## Reviewed Commits
 

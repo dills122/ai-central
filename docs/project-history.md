@@ -44,6 +44,13 @@ The 2026-08-12 workflow audit established smaller task-oriented layers for orche
 documentation, and delivery instead of requiring consumers to install broad catalogs. The
 decision record is [Workflow skill audit and bundle decision](workflow-skill-audit-2026-08-12.md).
 
+### Node Service Review
+
+On 2026-08-24, `goldbergyoni/nodebestpractices` was reviewed as a topic-discovery index. Its CC
+BY-SA 4.0 content was not imported or adapted. Current official Node.js and npm sources instead
+informed an explicit Node service steering profile and a first-party service-engineering skill.
+The decision record is [Node Best Practices review](node-best-practices-review-2026-08-24.md).
+
 ## Historical Collected Skills
 
 The initial Wap Labs collection preserved the following 33 skills as raw source material. They

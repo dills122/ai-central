@@ -4,6 +4,9 @@ All notable changes to this repository will be documented here.
 
 ## Unreleased
 
+- Added explicit Node.js service steering and a first-party Node service engineering skill grounded
+  in official Node.js/npm guidance after a discovery-only review of CC BY-SA source material.
+
 - Added generated Microsoft APM manifests for every skill bundle plus `all`, preserving prefixed
   installed names through explicit aliases and validating full-catalog installs plus alias-free
   frozen replay and drift audits.
