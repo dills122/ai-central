@@ -214,6 +214,14 @@ detected `dotnet` bundle. Durable C#/.NET, ASP.NET Core, EF Core, Orleans, Aspir
 gRPC rules were written as separate project-neutral steering profiles. Source evidence and selection
 boundaries are documented in `docs/dotnet-steering-research-2026-08-15.md`.
 
+The 2026-08-24 `ardalis/CleanArchitecture` review added an explicit, framework-neutral
+`dotnet-clean-architecture` steering profile and the `dotnet-architecture` skill. It promotes inward
+dependency direction, proportionate single- versus multi-project boundaries, cohesive vertical
+slices, domain/application/adapter ownership, transaction and event semantics, architecture tests,
+and layered verification. It does not auto-detect architecture or require the upstream endpoint,
+mediator, repository, result, specification, persistence, or hosting choices. Provenance and detailed
+decisions are in `docs/dotnet-clean-architecture-review-2026-08-24.md`.
+
 ### `JuliusBrussee/caveman`
 
 Why: Portable token-saving skills fit this repo's goal of reusable agent context across projects. The main `caveman` skill can be installed everywhere without running machine-wide hooks, while commit/review/help/compress skills give focused workflows for shorter outputs and lower context cost.

@@ -249,6 +249,7 @@ install_engineering() {
 }
 
 install_dotnet() {
+  install_skill "$repo_root/templates/skills/adapted/dotnet-architecture" "dotnet-architecture"
   install_skill "$repo_root/templates/skills/imported/dotnet-skills/run-tests" "dotnet-run-tests"
   install_skill "$repo_root/templates/skills/imported/dotnet-skills/platform-detection" "dotnet-test-platform-detection"
   install_skill "$repo_root/templates/skills/imported/dotnet-skills/filter-syntax" "dotnet-test-filter-syntax"

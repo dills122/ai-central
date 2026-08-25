@@ -122,3 +122,10 @@ instructions were not imported: they do not provide one coherent, strict, framew
 - The `dotnet` bundle and generated APM manifest must contain the seven reviewed skills and licenses.
 - Bundle unions, exact `--skills` additions, `--skip-skills` exclusions, and link-mode `--sync` must
   treat the installed `dotnet-*` names as part of the authoritative configurable skill catalog.
+
+## Later Architecture Review
+
+The 2026-08-24 review of `ardalis/CleanArchitecture` retained the rule that architecture must not be
+imposed on every .NET repository. It added an explicit `dotnet-clean-architecture` profile and the
+narrowly activated `dotnet-architecture` skill. See
+`docs/dotnet-clean-architecture-review-2026-08-24.md`.

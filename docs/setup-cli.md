@@ -81,6 +81,11 @@ When C# or .NET project signals are detected, guided defaults select `dotnet-csh
 `dotnet` skill bundle, and only the ASP.NET Core, EF Core, Orleans, Aspire, OpenTelemetry, or gRPC
 profiles supported by package/project signals.
 
+`dotnet-clean-architecture` remains an explicit profile because generic project names and references
+do not prove that a repository has deliberately chosen Clean Architecture, ports and adapters, or an
+equivalent dependency model. The detected `dotnet` bundle still includes the narrowly activated
+`dotnet-architecture` task skill.
+
 Exclude recommendations:
 
 ```sh
@@ -130,6 +135,7 @@ Profiles install steering/context files:
 | `javascript-typescript` | Strict JavaScript/TypeScript typing, ESM, boundary, async, dependency, security, performance, and verification steering |
 | `angular` | Angular-specific steering |
 | `dotnet-csharp` | Strict C#/.NET SDK, MSBuild, nullable/analyzer, API, async, dependency, security, performance, and verification steering |
+| `dotnet-clean-architecture` | Explicit dependency direction, domain/application/adapter ownership, vertical slices, transactions, events, evolution, and architecture-test steering |
 | `dotnet-aspnetcore` | ASP.NET Core HTTP contracts, hosting, security, resilience, health, and integration tests |
 | `dotnet-efcore` | EF Core context ownership, queries, transactions, concurrency, migrations, and provider-realistic tests |
 | `dotnet-orleans` | Orleans grain scheduling, delivery, persistence, serialization, lifecycle, deployment, and multi-silo tests |
@@ -156,7 +162,7 @@ Bundles install reusable skills:
 | `delivery` | Incremental implementation, Git workflow, simplification, CI, self-evaluation, ship gates, and launch readiness |
 | `brevity` | Caveman token-saving skills for terse replies, commit messages, review comments, help, and memory-file compression |
 | `engineering` | Broader engineering lifecycle, architecture, CI, security, observability, migration, and tooling skills |
-| `dotnet` | Official .NET test-platform/filter execution and MSBuild organization/diagnostic skills |
+| `dotnet` | .NET architecture design/review plus official test-platform/filter execution and MSBuild organization/diagnostic skills |
 | `jvm` | Kotlin/JVM implementation, Gradle toolchain, coroutine, architecture, persistence, contract, and verification skill |
 | `rust` | Rust implementation, lint, debug, security, Pest, and RON skills |
 | `product` | PM, research, analytics, GTM, strategy, and code-to-PRD skills |

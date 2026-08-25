@@ -12,4 +12,6 @@ Adapted skills should include an attribution note in `SKILL.md` with:
 Use adapted skills when the upstream project is too large, too tool-specific, or too executable-heavy to import directly.
 
 Current adaptations include `humanizer`, a compact, voice-relative final prose audit derived from
-`blader/humanizer` without detector-oriented framing or hard punctuation bans.
+`blader/humanizer` without detector-oriented framing or hard punctuation bans, and
+`dotnet-architecture`, a framework-neutral architecture workflow derived from the full and minimal
+`ardalis/CleanArchitecture` templates.

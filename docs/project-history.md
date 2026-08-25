@@ -44,6 +44,14 @@ The 2026-08-12 workflow audit established smaller task-oriented layers for orche
 documentation, and delivery instead of requiring consumers to install broad catalogs. The
 decision record is [Workflow skill audit and bundle decision](workflow-skill-audit-2026-08-12.md).
 
+### .NET Architecture Review
+
+The 2026-08-24 review of `ardalis/CleanArchitecture` used its full and minimal templates as a case
+study, then promoted framework-neutral architecture steering and a task-oriented .NET architecture
+skill. The review preserved useful dependency and feature-boundary ideas without imposing the
+upstream project count, packages, endpoint framework, mediator, repository, or persistence choices.
+See [.NET Clean Architecture review](dotnet-clean-architecture-review-2026-08-24.md).
+
 ## Historical Collected Skills
 
 The initial Wap Labs collection preserved the following 33 skills as raw source material. They
