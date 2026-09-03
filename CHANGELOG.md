@@ -4,6 +4,10 @@ All notable changes to this repository will be documented here.
 
 ## Unreleased
 
+- Added an explicit `.NET Clean Architecture` steering profile and an adapted `dotnet-architecture`
+  skill based on a provenance-recorded review of the full and minimal `ardalis/CleanArchitecture`
+  templates, with proportionate boundary selection, transaction/event cautions, architecture
+  enforcement, and layered verification.
 - Added generated Microsoft APM manifests for every skill bundle plus `all`, preserving prefixed
   installed names through explicit aliases and validating full-catalog installs plus alias-free
   frozen replay and drift audits.

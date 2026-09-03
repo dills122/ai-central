@@ -40,6 +40,13 @@
       "signals": ["*.cs", "*.csproj", "*.sln", "*.slnx", "global.json", "Directory.Build.props", "Directory.Packages.props"]
     },
     {
+      "id": "dotnet-clean-architecture",
+      "label": ".NET Clean Architecture",
+      "type": "architecture",
+      "description": "Dependency direction, domain/application ownership, ports and adapters, vertical slices, transactions, events, evolution, and architecture-test guidance for deliberately selected .NET architectures.",
+      "signals": ["explicit selection", "documented Clean Architecture", "ports and adapters", "onion architecture"]
+    },
+    {
       "id": "dotnet-aspnetcore",
       "label": "ASP.NET Core",
       "type": "language-framework",
@@ -189,7 +196,7 @@
       "id": "dotnet",
       "label": ".NET",
       "type": "language-platform",
-      "description": "Official .NET test-platform, test-filter, test-running, MSBuild organization, anti-pattern, and binary-log diagnostic skills.",
+      "description": ".NET architecture design and review plus official test-platform, test-filter, test-running, MSBuild organization, anti-pattern, and binary-log diagnostic skills.",
       "apmPackage": "packages/apm/dotnet",
       "signals": ["*.cs", "*.csproj", "*.sln", "*.slnx", "global.json"]
     },

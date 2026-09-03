@@ -56,6 +56,17 @@ placeholders before enforcement.
 
 The specialist .NET profiles below automatically include this baseline when scaffolded directly.
 
+## .NET Clean Architecture
+
+Adds `.codex/steering/dotnet-clean-architecture-steering.md` for repositories that have deliberately
+selected Clean Architecture, ports and adapters, onion architecture, or an equivalent dependency-
+inverted vertical-slice model. It covers proportionate project boundaries, domain/application/adapter
+ownership, ports, composition, queries and repositories, transactions, domain/integration events,
+evolution, architecture enforcement, and layered tests.
+
+This profile is explicit rather than auto-detected. Generic names such as `Core`, `Application`,
+`Infrastructure`, and `Web` are not reliable architecture signals.
+
 ## ASP.NET Core
 
 Adds `.codex/steering/dotnet-aspnetcore-steering.md` for Web SDK or ASP.NET Core projects. It covers

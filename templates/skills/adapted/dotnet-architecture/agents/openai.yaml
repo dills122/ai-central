@@ -1,0 +1,4 @@
+interface:
+  display_name: ".NET Architecture"
+  short_description: "Design and verify useful .NET boundaries"
+  default_prompt: "Use $dotnet-architecture to map this change across the repository's boundaries and verify the result."

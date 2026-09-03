@@ -1,6 +1,6 @@
 name: ai-central-dotnet
 version: 0.2.0
-description: Official .NET test-platform, test-filter, test-running, MSBuild organization, anti-pattern, and binary-log diagnostic skills.
+description: .NET architecture design and review plus official test-platform, test-filter, test-running, MSBuild organization, anti-pattern, and binary-log diagnostic skills.
 repository: https://github.com/dills122/ai-central
 keywords:
   - ai
@@ -14,6 +14,7 @@ includes: auto
 # templates/ remains the authoritative skill source.
 dependencies:
   apm:
+    - path: ../../../templates/skills/adapted/dotnet-architecture
     - path: ../../../templates/skills/imported/dotnet-skills/binlog-failure-analysis
       alias: dotnet-binlog-failure-analysis
     - path: ../../../templates/skills/imported/dotnet-skills/binlog-generation

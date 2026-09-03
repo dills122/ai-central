@@ -41,7 +41,7 @@ $(sed -n 's/^[[:space:]]*- path: \(.*\)$/\1/p' "$apm_manifest")
 EOF
 done
 
-test "$(sed -n 's/^[[:space:]]*- path: /x/p' packages/apm/all/apm.yml | wc -l | tr -d ' ')" -eq 137
+test "$(sed -n 's/^[[:space:]]*- path: /x/p' packages/apm/all/apm.yml | wc -l | tr -d ' ')" -eq 138
 grep -q '^      alias: claude-playwright-review$' packages/apm/all/apm.yml
 test "$(grep -c 'playwright-pro/skills/review' packages/apm/all/apm.yml)" -eq 1
 grep -q '^apm_modules/$' .gitignore
@@ -79,7 +79,8 @@ dotnet_apm_selection=$(./scripts/generate-apm-selection.sh \
   --bundle dotnet \
   --skip-skills dotnet-binlog-generation \
   --name dotnet-ai-context)
-test "$(echo "$dotnet_apm_selection" | grep -c '^    - git:')" -eq 6
+test "$(echo "$dotnet_apm_selection" | grep -c '^    - git:')" -eq 7
+echo "$dotnet_apm_selection" | grep -q '^      path: templates/skills/adapted/dotnet-architecture$'
 echo "$dotnet_apm_selection" | grep -q '^      path: templates/skills/imported/dotnet-skills/run-tests$'
 echo "$dotnet_apm_selection" | grep -q '^      alias: dotnet-run-tests$'
 if echo "$dotnet_apm_selection" | grep -q 'dotnet-skills/binlog-generation$'; then
@@ -114,6 +115,7 @@ fi
 for language_template in \
   templates/steering/javascript-typescript-steering.md \
   templates/steering/dotnet-csharp-steering.md \
+  templates/steering/dotnet-clean-architecture-steering.md \
   templates/steering/dotnet-aspnetcore-steering.md \
   templates/steering/dotnet-efcore-steering.md \
   templates/steering/dotnet-orleans-steering.md \
@@ -140,6 +142,7 @@ tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-check.XXXXXX")
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile angular >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile angular >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile dotnet-csharp >/dev/null
+./scripts/scaffold-ai-context.sh "$tmp_dir" --profile dotnet-clean-architecture >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile dotnet-aspnetcore >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile dotnet-efcore >/dev/null
 ./scripts/scaffold-ai-context.sh "$tmp_dir" --profile dotnet-orleans >/dev/null
@@ -179,6 +182,7 @@ test -f "$tmp_dir/.codex/steering/repository-steering.md"
 test -f "$tmp_dir/.codex/steering/javascript-typescript-steering.md"
 test -f "$tmp_dir/.codex/steering/angular-steering.md"
 test -f "$tmp_dir/.codex/steering/dotnet-csharp-steering.md"
+test -f "$tmp_dir/.codex/steering/dotnet-clean-architecture-steering.md"
 test -f "$tmp_dir/.codex/steering/dotnet-aspnetcore-steering.md"
 test -f "$tmp_dir/.codex/steering/dotnet-efcore-steering.md"
 test -f "$tmp_dir/.codex/steering/dotnet-orleans-steering.md"
@@ -220,6 +224,9 @@ test -f "$tmp_dir/.agents/skills/repository-doc-drift/SKILL.md"
 test -f "$tmp_dir/.agents/skills/caveman/SKILL.md"
 test -f "$tmp_dir/.agents/skills/caveman-compress/SKILL.md"
 test -f "$tmp_dir/.agents/skills/dotnet-run-tests/SKILL.md"
+test -f "$tmp_dir/.agents/skills/dotnet-architecture/SKILL.md"
+test -f "$tmp_dir/.agents/skills/dotnet-architecture/agents/openai.yaml"
+test -f "$tmp_dir/.agents/skills/dotnet-architecture/references/architecture-selection.md"
 test -f "$tmp_dir/.agents/skills/dotnet-test-platform-detection/SKILL.md"
 test -f "$tmp_dir/.agents/skills/dotnet-test-filter-syntax/SKILL.md"
 test -f "$tmp_dir/.agents/skills/dotnet-directory-build-organization/SKILL.md"
@@ -242,13 +249,13 @@ test -f "$tmp_dir/.agents/skills/humanizer/references/pattern-catalog.md"
 test -f "$tmp_dir/.agents/skills/toolkit-c4-architecture/SKILL.md"
 
 for direct_profile in \
-  dotnet-aspnetcore dotnet-efcore dotnet-orleans dotnet-aspire dotnet-opentelemetry dotnet-grpc; do
+  dotnet-clean-architecture dotnet-aspnetcore dotnet-efcore dotnet-orleans dotnet-aspire dotnet-opentelemetry dotnet-grpc; do
   direct_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-$direct_profile-check.XXXXXX")
   ./scripts/scaffold-ai-context.sh "$direct_dir" --profile "$direct_profile" >/dev/null
   ./scripts/scaffold-ai-context.sh "$direct_dir" --profile "$direct_profile" >/dev/null
   test -f "$direct_dir/.codex/steering/dotnet-csharp-steering.md"
   test -f "$direct_dir/.codex/steering/$direct_profile-steering.md"
-  for sibling_profile in aspnetcore efcore orleans aspire opentelemetry grpc; do
+  for sibling_profile in clean-architecture aspnetcore efcore orleans aspire opentelemetry grpc; do
     if [ "$direct_profile" != "dotnet-$sibling_profile" ]; then
       test ! -e "$direct_dir/.codex/steering/dotnet-$sibling_profile-steering.md"
     fi
@@ -262,6 +269,7 @@ test -f "$dotnet_composed_dir/.codex/steering/dotnet-csharp-steering.md"
 test -f "$dotnet_composed_dir/.codex/steering/dotnet-orleans-steering.md"
 test -f "$dotnet_composed_dir/.codex/steering/dotnet-grpc-steering.md"
 test ! -e "$dotnet_composed_dir/.codex/steering/dotnet-aspnetcore-steering.md"
+test ! -e "$dotnet_composed_dir/.codex/steering/dotnet-clean-architecture-steering.md"
 
 frontend_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-frontend-check.XXXXXX")
 ./scripts/install-skill-bundle.sh "$frontend_dir" --bundle frontend >/dev/null
@@ -278,8 +286,8 @@ test ! -e "$core_dir/.agents/skills/orchestrated-delivery"
 
 all_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-all-check.XXXXXX")
 ./scripts/install-skill-bundle.sh "$all_dir" --bundle all >/dev/null
-test "$(find "$all_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 143
-test "$(find "$all_dir/.codex/skills" -mindepth 1 -maxdepth 1 -type l | wc -l | tr -d ' ')" -eq 143
+test "$(find "$all_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 144
+test "$(find "$all_dir/.codex/skills" -mindepth 1 -maxdepth 1 -type l | wc -l | tr -d ' ')" -eq 144
 
 selector_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-selector-check.XXXXXX")
 ./scripts/install-skill-bundle.sh "$selector_dir" \
@@ -302,7 +310,8 @@ dotnet_selector_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-dotnet-selector-chec
   --skills pnpm \
   --skip-skills dotnet-binlog-generation \
   --mode link >/dev/null
-test "$(find "$dotnet_selector_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 7
+test "$(find "$dotnet_selector_dir/.agents/skills" -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 8
+test -L "$dotnet_selector_dir/.agents/skills/dotnet-architecture"
 test -L "$dotnet_selector_dir/.agents/skills/dotnet-run-tests"
 test -L "$dotnet_selector_dir/.agents/skills/pnpm"
 test ! -e "$dotnet_selector_dir/.agents/skills/dotnet-binlog-generation"
@@ -391,6 +400,7 @@ test -f "$dotnet_setup_dir/.codex/steering/dotnet-aspire-steering.md"
 test -f "$dotnet_setup_dir/.codex/steering/dotnet-opentelemetry-steering.md"
 test -f "$dotnet_setup_dir/.codex/steering/dotnet-grpc-steering.md"
 test -f "$dotnet_setup_dir/.agents/skills/dotnet-run-tests/SKILL.md"
+test -f "$dotnet_setup_dir/.agents/skills/dotnet-architecture/SKILL.md"
 test -f "$dotnet_setup_dir/.agents/skills/dotnet-run-tests/LICENSE"
 
 proto_only_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-proto-only-check.XXXXXX")
@@ -443,6 +453,7 @@ test -f "$link_dir/.agents/skills/terraform-skill/SKILL.md"
 test -L "$link_dir/.agents/skills/kotlin-jvm-engineering"
 test -f "$link_dir/.agents/skills/kotlin-jvm-engineering/SKILL.md"
 ./scripts/install-skill-bundle.sh "$link_dir" --bundle dotnet --mode link >/dev/null
+test -L "$link_dir/.agents/skills/dotnet-architecture"
 test -L "$link_dir/.agents/skills/dotnet-run-tests"
 test -f "$link_dir/.agents/skills/dotnet-run-tests/SKILL.md"
 test -f "$link_dir/.agents/skills/dotnet-run-tests/LICENSE"

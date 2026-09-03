@@ -30,6 +30,7 @@ First-party workflow skills live under `templates/skills/first-party/`. They inc
 | `OthmanAdi/planning-with-files` | `6f94643bd2b77dad9ac30b68ace14a536e2e5619` | MIT | `templates/skills/adapted/planning-files-lite/` | Condensed into a lightweight planning-files pattern for projects that do not want hooks/scripts. |
 | `Nutlope/hallmark` | `aeb42fb354ff4efa36ab475773a082315a3af2ce` | MIT | `templates/skills/adapted/hallmark-design/` | Substantially adapted into a compact, opt-in creative-direction skill; upstream reference library retained in ignored `external/hallmark/` for review. |
 | `blader/humanizer` | `523374dee72d67c7b2b5f858ea0094ffda49c3ac` | MIT | `templates/skills/adapted/humanizer/` | Reviewed 2026-08-13. Condensed the upstream 33-pattern catalog into a voice-relative final prose audit; removed detector-oriented framing, hard punctuation bans, and in-place editing by default. |
+| `ardalis/CleanArchitecture` | `fbdc0951879f5e8dca1bebc273d4b28cb2934469` | MIT | `templates/skills/adapted/dotnet-architecture/` | Reviewed 2026-08-24. Generalized the full and minimal templates into framework-neutral architecture selection, feature-flow, transaction/event, enforcement, and verification guidance. |
 
 ## Not Imported
 

@@ -74,6 +74,7 @@ dependencies:
     - path: ../../../templates/skills/imported/agent-skills/debugging-and-error-recovery
     - path: ../../../templates/skills/imported/agent-skills/deprecation-and-migration
     - path: ../../../templates/skills/imported/agent-skills/documentation-and-adrs
+    - path: ../../../templates/skills/adapted/dotnet-architecture
     - path: ../../../templates/skills/imported/dotnet-skills/binlog-failure-analysis
       alias: dotnet-binlog-failure-analysis
     - path: ../../../templates/skills/imported/dotnet-skills/binlog-generation

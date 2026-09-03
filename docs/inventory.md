@@ -158,3 +158,11 @@ enforcement and verification sections, and added cross-install regression covera
 
 Sources, decisions, and future-profile criteria are documented in
 `docs/language-steering-research-2026-07-31.md`.
+
+### .NET Clean Architecture Review — 2026-08-24
+
+The `ardalis/CleanArchitecture` full and minimal templates were reviewed at commit
+`fbdc0951879f5e8dca1bebc273d4b28cb2934469`. The review promoted an explicit
+`dotnet-clean-architecture` steering profile and an adapted `dotnet-architecture` skill. The ignored
+review clone is `external/ardalis-cleanarchitecture`; no upstream application source was vendored.
+See `docs/dotnet-clean-architecture-review-2026-08-24.md` for provenance and decisions.
