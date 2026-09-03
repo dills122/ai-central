@@ -44,9 +44,24 @@ Use the combined check script when possible:
 ./scripts/check.sh
 ```
 
+## Pull Requests And Releases
+
+Use a Conventional Commit pull request title. Squash merges retain that title and Release Please
+uses it to classify the next repository-wide release:
+
+- `feat(skills): ...` for a new skill or material compatible skill change;
+- `fix(skills): ...` for a narrow compatible correction;
+- `feat(skills)!: ...` for a breaking skill or bundle contract change;
+- `docs: ...`, `test: ...`, or `chore: ...` for non-releasing maintenance.
+
+Major version changes require the `release:major-approved` label. See
+[Release and versioning workflow](docs/releases.md) for the automated release process and consumer
+versioning policy.
+
 ## Review Checklist
 
 - Raw source material and reusable templates are not mixed.
 - New templates have clear placeholders.
 - Scaffold behavior is idempotent.
 - Documentation reflects new profiles, scripts, or workflows.
+- The pull request title communicates the intended release impact.

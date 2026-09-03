@@ -4,6 +4,12 @@ All notable changes to this repository will be documented here.
 
 ## Unreleased
 
+- Added repository-wide semantic versioning and Release Please automation, approval-gated major
+  releases, annotated APM release tags, release metadata validation, and stable-tag defaults for
+  downstream project manifests.
+- Reviewed the APM integration against APM 0.29.0, made generated project manifests pin explicit
+  targets and the current AI Central commit by default, documented the production and CI workflow,
+  and added pinned APM package integration checks to CI.
 - Added an explicit `.NET Clean Architecture` steering profile and an adapted `dotnet-architecture`
   skill based on a provenance-recorded review of the full and minimal `ardalis/CleanArchitecture`
   templates, with proportionate boundary selection, transaction/event cautions, architecture

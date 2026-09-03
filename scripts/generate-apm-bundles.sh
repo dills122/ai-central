@@ -20,6 +20,12 @@ case "$mode" in
 esac
 
 repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+package_version=$(sed -n '1p' "$repo_root/version.txt")
+if ! printf '%s\n' "$package_version" |
+  grep -Eq '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$'; then
+  echo "Invalid repository version: $package_version" >&2
+  exit 1
+fi
 tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-apm-generate.XXXXXX")
 trap 'rm -rf "$tmp_dir"' EXIT HUP INT TERM
 
@@ -59,7 +65,7 @@ render_manifest() {
 
   {
     echo "name: ai-central-$bundle"
-    echo "version: 0.2.0"
+    echo "version: $package_version"
     echo "description: $description"
     echo "repository: https://github.com/dills122/ai-central"
     echo "keywords:"

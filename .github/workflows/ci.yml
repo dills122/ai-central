@@ -15,9 +15,41 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check pull request title
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+        run: ./scripts/check-pr-title.sh "$PR_TITLE" "$PR_LABELS"
+
+      - name: Check release impact classification
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: ./scripts/check-release-impact.sh "$BASE_SHA" "$PR_TITLE"
 
       - name: Run local checks
         run: ./scripts/check.sh
+
+      - name: Check release change policy
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+        run: ./scripts/check-release.sh --base-ref "$BASE_SHA" --labels "$PR_LABELS"
+
+      - name: Install pinned Agent Package Manager
+        uses: microsoft/apm-action@v1
+        with:
+          setup-only: 'true'
+          apm-version: '0.29.0'
+
+      - name: Run APM package integration checks
+        run: ./scripts/check-apm.sh
 
       - name: Validate catalog JSON
         run: |
@@ -51,4 +83,3 @@ jobs:
             fi
           done
           exit "$missing"
-

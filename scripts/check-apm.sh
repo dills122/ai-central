@@ -57,7 +57,7 @@ test -f apm.yml
 test -f apm.lock.yaml
 grep -q '^apm_modules/$' .gitignore
 
-# APM 0.28.0 does not preserve local dependency aliases during frozen replay.
+# APM 0.29.0 does not preserve local dependency aliases during audit replay.
 # Exercise replay and drift detection with the alias-free core package while
 # still checking the complete alias-rich package above through a fresh install.
 core_consumer_dir=$tmp_dir/core-consumer
@@ -72,13 +72,11 @@ if grep -q 'Drift detected' "$tmp_dir/audit.log"; then
   exit 1
 fi
 
-if apm audit --ci --no-policy >"$tmp_dir/audit-ci.log" 2>&1; then
-  echo "APM CI audit passed"
-elif grep -q 'config-consistency' "$tmp_dir/audit-ci.log"; then
-  echo "WARN: APM CI audit hit the documented local SKILL.md config-consistency limitation" >&2
-else
+if ! apm audit --ci --no-policy >"$tmp_dir/audit-ci.log" 2>&1; then
   cat "$tmp_dir/audit-ci.log" >&2
   exit 1
 fi
+echo "APM CI audit passed"
 
-echo "APM checks passed: 20 bundles, 138 unique skills, and alias-free frozen replay/audit"
+apm_version=$(apm --version | sed -n '1p')
+echo "APM checks passed with $apm_version: 20 bundles, 138 unique skills, and alias-free frozen replay/audit"

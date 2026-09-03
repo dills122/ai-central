@@ -12,7 +12,9 @@ Options:
   --skip-skills LIST  Comma-separated installed skill names to exclude.
   --name NAME         Project manifest name. Defaults to ai-central-selection.
   --version VERSION   Project manifest version. Defaults to 0.1.0.
-  --ref REF           AI Central Git ref. Defaults to main.
+  --targets LIST      Comma-separated stable APM targets. Defaults to agent-skills.
+  --ref REF           AI Central Git ref. Defaults to the release tag when this
+                      checkout is tagged, otherwise its full commit SHA.
   --output FILE       Create FILE instead of printing the manifest to stdout.
                       Existing files and symlinks are never overwritten.
   --help              Show this help.
@@ -52,13 +54,36 @@ validate_ref() {
   fi
 }
 
+validate_targets() {
+  value=$1
+  if ! printf '%s\n' "$value" | grep -Eq '^[a-z0-9-]+(,[a-z0-9-]+)*$'; then
+    echo "Invalid APM targets: $value" >&2
+    exit 2
+  fi
+
+  old_ifs=$IFS
+  IFS=,
+  set -- $value
+  IFS=$old_ifs
+  for target do
+    case "$target" in
+      agent-skills|antigravity|claude|codex|copilot|cursor|gemini|grok-build|intellij|kiro|opencode|windsurf) ;;
+      *)
+        echo "Unsupported stable APM target: $target" >&2
+        exit 2
+        ;;
+    esac
+  done
+}
+
 bundles=
 bundle_supplied=0
 skills=
 skip_skills=
 manifest_name=ai-central-selection
 manifest_version=0.1.0
-ref=main
+targets=agent-skills
+ref=
 output_file=
 
 while [ "$#" -gt 0 ]; do
@@ -93,6 +118,11 @@ while [ "$#" -gt 0 ]; do
       manifest_version=$2
       shift 2
       ;;
+    --targets)
+      [ "$#" -ge 2 ] || { usage; exit 2; }
+      targets=$2
+      shift 2
+      ;;
     --ref)
       [ "$#" -ge 2 ] || { usage; exit 2; }
       ref=$2
@@ -114,8 +144,25 @@ if [ "$bundle_supplied" -eq 0 ]; then
   bundles=core
 fi
 
+repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+if [ -z "$ref" ]; then
+  if ! checkout_commit=$(git -C "$repo_root" rev-parse --verify HEAD 2>/dev/null); then
+    echo "Unable to resolve the AI Central checkout commit; pass --ref explicitly." >&2
+    exit 1
+  fi
+  release_version=$(sed -n '1p' "$repo_root/version.txt")
+  release_tag=v$release_version
+  tagged_commit=$(git -C "$repo_root" rev-parse --verify "$release_tag^{commit}" 2>/dev/null || true)
+  if [ "$tagged_commit" = "$checkout_commit" ]; then
+    ref=$release_tag
+  else
+    ref=$checkout_commit
+  fi
+fi
+
 validate_identifier "$manifest_name" "manifest name"
 validate_identifier "$manifest_version" "manifest version"
+validate_targets "$targets"
 validate_ref "$ref"
 
 if [ -n "$output_file" ] && { [ -e "$output_file" ] || [ -L "$output_file" ]; }; then
@@ -123,7 +170,6 @@ if [ -n "$output_file" ] && { [ -e "$output_file" ] || [ -L "$output_file" ]; };
   exit 1
 fi
 
-repo_root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 tmp_dir=$(mktemp -d "${TMPDIR:-/tmp}/ai-central-apm-selection.XXXXXX")
 trap 'rm -rf "$tmp_dir"' EXIT HUP INT TERM
 install_dir=$tmp_dir/install
@@ -150,6 +196,10 @@ skill_count=$(
   echo "name: $manifest_name"
   echo "version: $manifest_version"
   echo "description: Exact AI Central skill selection generated from bundles and installed-name selectors."
+  echo "targets:"
+  printf '%s\n' "$targets" | tr ',' '\n' | while IFS= read -r target; do
+    echo "  - $target"
+  done
   echo "dependencies:"
   if [ "$skill_count" -eq 0 ]; then
     echo "  apm: []"

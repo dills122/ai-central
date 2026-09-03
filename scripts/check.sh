@@ -12,10 +12,30 @@ done
 ./scripts/install-skill-bundle.sh --help >/dev/null 2>&1
 ./scripts/setup-ai-context.sh --help >/dev/null 2>&1
 ./scripts/generate-apm-selection.sh --help >/dev/null 2>&1
+./scripts/check-pr-title.sh --help >/dev/null 2>&1
+./scripts/check-release-impact.sh --help >/dev/null 2>&1
+./scripts/check-release.sh --help >/dev/null 2>&1
+./scripts/check-pr-title.sh 'feat(skills): validate release classification'
+./scripts/check-pr-title.sh \
+  'feat(skills)!: validate breaking release classification' \
+  'release:major-approved'
+if ./scripts/check-pr-title.sh 'update some skills' >/dev/null 2>&1; then
+  echo "Pull request title check accepted a non-conventional title" >&2
+  exit 1
+fi
+if ./scripts/check-pr-title.sh \
+  'feat(skills)!: unapproved breaking release classification' >/dev/null 2>&1; then
+  echo "Pull request title check accepted an unapproved breaking change" >&2
+  exit 1
+fi
 
 ./scripts/check-node-package-api.sh >/dev/null
 
+node -e "JSON.parse(require('fs').readFileSync('release-please-config.json', 'utf8'))"
+node -e "JSON.parse(require('fs').readFileSync('.release-please-manifest.json', 'utf8'))"
+
 ./scripts/generate-apm-bundles.sh --check >/dev/null
+./scripts/check-release.sh
 
 catalog_bundle_count=$(
   sed -n '/^[[:space:]]*"bundles": \[/,/^[[:space:]]*\]/p' templates/catalog.json |
@@ -29,7 +49,7 @@ test "$apm_manifest_count" -eq "$catalog_bundle_count"
 for apm_manifest in packages/apm/*/apm.yml; do
   bundle_name=$(basename "$(dirname "$apm_manifest")")
   grep -q "^name: ai-central-$bundle_name$" "$apm_manifest"
-  grep -Eq '^version: [0-9]+\.[0-9]+\.[0-9]+$' "$apm_manifest"
+  grep -Eq '^version: (0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$' "$apm_manifest"
   grep -q '^type: skill$' "$apm_manifest"
   grep -q '^includes: auto$' "$apm_manifest"
 
@@ -57,6 +77,8 @@ apm_selection_file=$apm_selection_dir/apm.yml
   --output "$apm_selection_file" >/dev/null 2>&1
 test "$(grep -c '^    - git:' "$apm_selection_file")" -eq 12
 grep -q '^name: test-ai-context$' "$apm_selection_file"
+grep -q '^targets:$' "$apm_selection_file"
+grep -q '^  - agent-skills$' "$apm_selection_file"
 grep -q '^      path: templates/skills/imported/antfu-skills/pnpm$' "$apm_selection_file"
 grep -q '^      path: templates/skills/adapted/hallmark-design$' "$apm_selection_file"
 grep -q '^      alias: claude-a11y-audit$' "$apm_selection_file"
@@ -74,6 +96,28 @@ test "$apm_selection_hash" = "$(shasum -a 256 "$apm_selection_file")"
 
 empty_apm_selection=$(./scripts/generate-apm-selection.sh --bundle none --name empty-ai-context)
 echo "$empty_apm_selection" | grep -q '^  apm: \[\]$'
+
+targeted_apm_selection=$(./scripts/generate-apm-selection.sh \
+  --bundle none \
+  --targets codex,claude \
+  --ref main \
+  --name targeted-ai-context)
+test "$(echo "$targeted_apm_selection" | sed -n '/^targets:$/,/^dependencies:$/p' | grep -c '^  - ')" -eq 2
+echo "$targeted_apm_selection" | grep -q '^  - codex$'
+echo "$targeted_apm_selection" | grep -q '^  - claude$'
+
+checkout_commit=$(git rev-parse --verify HEAD)
+release_tag=v$(sed -n '1p' version.txt)
+tagged_commit=$(git rev-parse --verify "$release_tag^{commit}" 2>/dev/null || true)
+if [ "$tagged_commit" = "$checkout_commit" ]; then
+  default_ref=$release_tag
+else
+  default_ref=$checkout_commit
+fi
+default_ref_apm_selection=$(./scripts/generate-apm-selection.sh \
+  --bundle node \
+  --name pinned-ai-context)
+echo "$default_ref_apm_selection" | grep -q "^      ref: $default_ref$"
 
 dotnet_apm_selection=$(./scripts/generate-apm-selection.sh \
   --bundle dotnet \
