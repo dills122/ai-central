@@ -1,13 +1,18 @@
 # CI
 
-This repo uses GitHub Actions for baseline validation and skill security scanning.
+This repo uses GitHub Actions for baseline validation, skill security scanning, and release
+automation.
 
 ## Workflows
 
 | Workflow | Purpose |
 | --- | --- |
-| `CI` | Runs local repository checks, validates `templates/catalog.json`, prevents tracked `external/` clones, and verifies imported source license copies. |
+| `CI` | Runs local repository and APM checks, validates pull request titles, release-bearing paths, and version metadata, prevents tracked `external/` clones, and verifies imported source license copies. |
 | `Skill Security` | Runs Cisco AI Skill Scanner against `templates/skills` when skill templates change. |
+| `Release` | After successful `main` CI, finalizes an annotated version tag and GitHub Release, then maintains the next Release Please pull request. |
+
+See [Release and versioning workflow](releases.md) for required labels, token setup, and the release
+sequence.
 
 ## Skill Scanner Policy
 

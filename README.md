@@ -215,15 +215,19 @@ worktree-owned paths. See [Codex worktree context](docs/codex-worktree-context.m
 Every bundle has a generated [Microsoft Agent Package Manager](https://microsoft.github.io/apm/)
 package:
 
+<!-- x-release-please-start-version -->
 ```sh
-apm install dills122/ai-central/packages/apm/core#main --target agent-skills
-apm install dills122/ai-central/packages/apm/orchestration#main --target agent-skills
+apm install dills122/ai-central/packages/apm/core#v0.2.0 --target agent-skills
+apm install dills122/ai-central/packages/apm/orchestration#v0.2.0 --target agent-skills
 ```
+<!-- x-release-please-end -->
 
 Replace `core` or `orchestration` with any bundle listed above. APM installs skills only; use the
 guided shell setup when you also need steering profiles or `.codex/skills` compatibility links.
+Use `#main` only when deliberately evaluating unreleased changes.
 For an exact APM-managed project selection, generate a direct-dependency manifest from the same
-bundle and skill selectors:
+bundle and skill selectors. The generator uses the matching release tag when run at a release
+commit, otherwise the current commit SHA; it pins the `agent-skills` target by default:
 
 ```sh
 ./scripts/generate-apm-selection.sh \
@@ -231,11 +235,13 @@ bundle and skill selectors:
   --skills hallmark-design \
   --skip-skills vite,vitest,turborepo,vitepress,slidev \
   --name my-project-ai-context \
+  --targets agent-skills \
   --output /path/to/project/apm.yml
 ```
 
 See [Agent Package Manager integration](docs/apm.md) for exact composition, lockfiles, safe APM
-pruning, aliases, and audit behavior.
+pruning, aliases, and audit behavior. See [Release and versioning workflow](docs/releases.md) for
+release automation and downstream update policy.
 
 ## Developing AI Central
 
@@ -279,6 +285,7 @@ adding or promoting reusable material.
 - [Scaffold profiles](docs/scaffold-profiles.md)
 - [Skill bundles](docs/skill-bundles.md)
 - [Agent Package Manager integration](docs/apm.md)
+- [Release and versioning workflow](docs/releases.md)
 - [CI](docs/ci.md)
 
 ### Authoring And Governance
