@@ -30,6 +30,8 @@ if ./scripts/check-pr-title.sh \
 fi
 
 ./scripts/check-node-package-api.sh >/dev/null
+python3 -B ./scripts/check-cce-worktree.py
+python3 -B ./scripts/check-worktree-context-hook.py
 
 node -e "JSON.parse(require('fs').readFileSync('release-please-config.json', 'utf8'))"
 node -e "JSON.parse(require('fs').readFileSync('.release-please-manifest.json', 'utf8'))"

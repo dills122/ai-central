@@ -3,11 +3,12 @@ set -eu
 
 usage() {
   cat >&2 <<'EOF'
-Usage: setup-codex-worktree.sh TARGET_DIR [--source SOURCE_DIR] [--dry-run]
+Usage: setup-codex-worktree.sh TARGET_DIR [--source SOURCE_DIR] [--cce] [--dry-run]
 
 Discover a managed worktree's primary checkout, capture its locally ignored
 Codex context, and seed that context into the new worktree without overwriting.
 Use this command as a Codex Local Environment setup script.
+Add --cce to seed CCE embeddings and index the worktree before starting its MCP.
 EOF
 }
 
@@ -20,6 +21,7 @@ target_dir=$1
 shift
 source_dir=
 dry_run=0
+cce=0
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -33,6 +35,10 @@ while [ "$#" -gt 0 ]; do
       ;;
     --dry-run)
       dry_run=1
+      shift
+      ;;
+    --cce)
+      cce=1
       shift
       ;;
     --help)
@@ -111,4 +117,12 @@ if [ "$dry_run" -eq 1 ]; then
 else
   "$repo_root/scripts/seed-worktree-context.sh" "$target_dir" --manifest "$manifest"
   "$repo_root/scripts/audit-ai-context.sh" "$target_dir"
+fi
+
+if [ "$cce" -eq 1 ]; then
+  if [ "$dry_run" -eq 1 ]; then
+    "$repo_root/scripts/seed-cce-worktree.sh" "$target_dir" --source "$source_dir" --dry-run
+  else
+    "$repo_root/scripts/seed-cce-worktree.sh" "$target_dir" --source "$source_dir"
+  fi
 fi

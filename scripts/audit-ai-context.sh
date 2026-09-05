@@ -31,6 +31,14 @@ warn() {
   warnings=$((warnings + 1))
 }
 
+# Missing optional roots are fine; supplied but unusable roots are not.
+# Check after seeding has completed so valid internal link chains can settle.
+for context_root in "$canonical_dir" "$legacy_dir" "$target_dir/.codex/steering" "$target_dir/.codex/agents"; do
+  if { [ -e "$context_root" ] || [ -L "$context_root" ]; } && [ ! -d "$context_root" ]; then
+    error "context directory is dangling or not a directory: $context_root"
+  fi
+done
+
 if [ ! -f "$target_dir/AGENTS.md" ]; then
   warn "missing repository AGENTS.md"
 else

@@ -199,12 +199,22 @@ Audit an existing installation with:
 
 ### Codex-Managed Worktrees
 
-When project context is intentionally kept in local Git exclusions, configure the Codex Local
-Environment to seed it into every new managed worktree:
+When project context is intentionally kept in local Git exclusions, install a local Git hook
+to seed it synchronously into new worktrees:
+
+```sh
+/path/to/ai-central/scripts/install-worktree-context-hook.sh /path/to/primary-checkout
+```
+
+Use `--dry-run` to preview, and explicitly add `--replace-hook` if a hook already exists.
+Keep the Codex Local Environment setup command as an idempotent fallback:
 
 ```sh
 /path/to/ai-central/scripts/setup-codex-worktree.sh "$PWD"
 ```
+
+For Code Context Engine projects, append `--cce` to reuse the primary checkout's embedding cache
+and prepare an independent worktree index. See [CCE worktree seeding](docs/cce-worktrees.md).
 
 The setup wrapper mirrors only allowlisted agent instructions, skills, steering, and Codex agent
 definitions from the primary checkout. It preserves real files versus symlinks and never overwrites
