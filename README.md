@@ -216,6 +216,11 @@ Keep the Codex Local Environment setup command as an idempotent fallback:
 For Code Context Engine projects, append `--cce` to reuse the primary checkout's embedding cache
 and prepare an independent worktree index. See [CCE worktree seeding](docs/cce-worktrees.md).
 
+Before indexing, seed the reusable CCE ignore policy with
+`scripts/seed-cce-ignore.sh /path/to/project --dry-run`, or add `--cce-ignore` to guided setup.
+It covers common framework/build caches and test output, preserves existing policy, and flows
+into new worktrees through the CCE seeder. See [CCE ignore policy](docs/cce-ignore.md).
+
 The setup wrapper mirrors only allowlisted agent instructions, skills, steering, and Codex agent
 definitions from the primary checkout. It preserves real files versus symlinks and never overwrites
 worktree-owned paths. See [Codex worktree context](docs/codex-worktree-context.md).

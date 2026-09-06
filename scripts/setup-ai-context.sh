@@ -13,6 +13,7 @@ Options:
   --skip-skills LIST       Comma-separated installed skill names to exclude after bundle expansion
   --mode copy|link          copy installs files; link symlinks reusable templates and skills
   --sync                    In link mode, prune deselected AI Central-managed skill links
+  --cce-ignore              Seed an editable, locally excluded .cceignore if missing
   --skip-profiles LIST     Comma-separated profiles to exclude
   --skip-bundles LIST      Comma-separated bundles to exclude
   --dry-run                Show exact creates, links, skips, and removals without writing
@@ -301,6 +302,7 @@ skip_bundles=
 skills=
 skip_skills=
 sync=0
+cce_ignore=0
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -353,6 +355,10 @@ while [ "$#" -gt 0 ]; do
       ;;
     --sync)
       sync=1
+      shift
+      ;;
+    --cce-ignore)
+      cce_ignore=1
       shift
       ;;
     -*)
@@ -449,6 +455,14 @@ if [ -n "$skills" ] || [ -n "$skip_skills" ]; then
     set -- "$@" --skip-skills "$skip_skills"
   fi
   "$repo_root/scripts/install-skill-bundle.sh" "$@" >/dev/null
+fi
+
+if [ "$cce_ignore" -eq 1 ]; then
+  set -- "$target_dir"
+  if [ "$dry_run" -eq 1 ]; then
+    set -- "$@" --dry-run
+  fi
+  "$repo_root/scripts/seed-cce-ignore.sh" "$@"
 fi
 
 if [ -n "$profiles" ]; then

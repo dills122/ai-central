@@ -1,5 +1,16 @@
 # Reuse Candidates
 
+## Reusable CCE Ignore Policy
+
+A read-only scan of local project manifests, ignore files, and existing outputs exposed gaps in
+CCE 0.4.26's default exclusions: framework caches, Rush/Heft intermediates, Swift `.build` trees,
+test output, and nested working copies. Promote a conservative baseline in
+`templates/cce/default.cceignore`, with a non-overwriting local-copy installer and opt-in guided
+setup. Keep generated contracts, declarations, fixtures, and ambiguous `lib`/`types`/`artifacts`
+paths available. Real CCE matcher checks cover the version's root-dot normalization behavior;
+explicit root aliases are guarded against existing source-path collisions. Record scope and
+tailoring guidance in [CCE ignore policy](cce-ignore.md). Collected source material is unchanged.
+
 ## AI Central Worktree Context Hook
 
 `templates/worktree/context-post-checkout.sh` invokes the existing allowlisted context seeder

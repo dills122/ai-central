@@ -6,6 +6,16 @@ versions until their storage and pipeline contracts have been reviewed.
 
 ## Setup
 
+Seed and review a [CCE ignore policy](cce-ignore.md) before the initial index:
+
+```sh
+/path/to/ai-central/scripts/seed-cce-ignore.sh /path/to/primary-checkout --dry-run
+/path/to/ai-central/scripts/seed-cce-ignore.sh /path/to/primary-checkout
+```
+
+Existing project policy is preserved. The default local copy is Git-ignored so the worktree
+seeder inherits it; no additional hook is needed.
+
 Index the primary checkout once using its normal CCE configuration. CCE's stock `post-checkout`
 hook starts a background cold index as soon as Git creates a worktree. Install the ordered hook
 once in the primary checkout so seeding happens first:
