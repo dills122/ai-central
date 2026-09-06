@@ -1,0 +1,163 @@
+# AI Central CCE baseline. Copy to the project root as .cceignore.
+# Validated with CCE 0.4.26; supplements its built-in exclusions.
+# Directory names match at any depth. Use **/ for nested path patterns.
+# CCE does not support ! exceptions: remove or narrow an unwanted rule.
+# Keep project-specific additions below this baseline.
+
+# Common dependency and build outputs (also covered by CCE defaults).
+node_modules/
+dist/
+build/
+target/
+out/
+coverage/
+
+# JS/TS caches, framework output, and generated documentation sites.
+.npm/
+.pnpm-store/
+.turbo/
+.vite/
+**/.angular/cache/
+.astro/
+.svelte-kit/
+.wxt/
+.next/
+.nuxt/
+.output/
+.docusaurus/
+**/.vitepress/cache/
+**/.vitepress/dist/
+**/.vuepress/.temp/
+**/.vuepress/.cache/
+**/.vuepress/dist/
+**/.nx/cache/
+**/.nx/workspace-data/
+.vercel/
+.netlify/
+.wrangler/
+.serverless/
+.sass-cache/
+.parcel-cache/
+out-tsc/
+bazel-out/
+dist-storybook/
+storybook-static/
+*.tsbuildinfo
+.eslintcache
+.stylelintcache
+vite.config.*.timestamp-*
+
+# Rush/Heft intermediates. Keep lib/ and types/ available as source.
+**/common/temp/
+**/common/deploy/
+**/.rush/temp/
+.heft/
+lib-cov/
+lib-amd/
+lib-es6/
+lib-esnext/
+lib-commonjs/
+lib-shim/
+
+# Test and benchmark output. Keep tests, fixtures, and snapshots.
+playwright-report/
+blob-report/
+test-results/
+TestResults/
+BenchmarkDotNet.Artifacts/
+**/playwright/.cache/
+.nyc_output/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+lcov.info
+*.lcov
+*.trx
+*.coveragexml
+
+# Python/JVM/.NET/Swift build state.
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.ipynb_checkpoints/
+.tox/
+.nox/
+.eggs/
+*.egg-info/
+.gradle/
+.kotlin/
+.build/
+.swiftpm/
+.site-dist/
+[Bb]in/
+[Oo]bj/
+.dotnet/
+.aspire/
+.dcp/
+*.binlog
+
+# Local tool state and nested working copies.
+.cce/
+.ai-central/
+.worktrees/
+**/.claude/worktrees/
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+
+# Emitted bundles and sourcemaps; keep ordinary JS, CSS, and declarations.
+*.min.js
+*.min.css
+*.js.map
+*.mjs.map
+*.cjs.map
+*.css.map
+*.log
+
+# CCE 0.4.26 strips leading dots from root paths before glob matching.
+# These root-only aliases cover those hidden directories' contents. The seeder
+# refuses collisions with literal non-hidden paths; remove/narrow aliases if
+# adding such source paths later. Nested hidden paths use the rules above.
+# BEGIN root-dot aliases
+npm/*
+vite/*
+angular/cache/
+astro/*
+svelte-kit/*
+wxt/*
+docusaurus/*
+vitepress/cache/
+vitepress/dist/
+vuepress/.temp/
+vuepress/.cache/
+vuepress/dist/
+nx/cache/
+nx/workspace-data/
+netlify/*
+wrangler/*
+serverless/*
+rush/temp/
+heft/*
+hypothesis/*
+ipynb_checkpoints/*
+eggs/*
+kotlin/*
+swiftpm/*
+site-dist/*
+dotnet/*
+aspire/*
+dcp/*
+cce/*
+ai-central/*
+worktrees/*
+claude/worktrees/
+# END root-dot aliases
+
+# Project-specific additions:
+# Prefer exact output paths, e.g. **/engine-wasm/pkg/ or apps/api/types/.
+# Do not blanket-ignore lib/, types/, pkg/, generated/, artifacts/, docs/,
+# migrations/, *.d.ts, or *.generated.*: these may be authoritative context.

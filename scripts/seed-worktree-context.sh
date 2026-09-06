@@ -72,6 +72,7 @@ source_dir=
 created=0
 skipped=0
 adopted=0
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
 
 validate_relative_path() {
   rel=$1
@@ -83,7 +84,7 @@ validate_relative_path() {
   esac
 
   case "$rel" in
-    AGENTS.md|AGENTS.override.md|.agents/skills/*|.codex/skills/*|.codex/steering/*|.codex/agents/*)
+    AGENTS.md|AGENTS.override.md|.agents/skills|.codex/skills|.codex/steering|.codex/agents|.agents/skills/*|.codex/skills/*|.codex/steering/*|.codex/agents/*)
       ;;
     *)
       echo "Manifest contains a path outside the Codex context allowlist: $rel" >&2
@@ -95,6 +96,14 @@ validate_relative_path() {
 ensure_parent() {
   dest=$1
   parent=$(dirname "$dest")
+  check_parent=$parent
+  while [ "$check_parent" != "$target_dir" ]; do
+    if [ -L "$check_parent" ]; then
+      echo "Refusing to seed through a symlinked target parent: $check_parent" >&2
+      exit 1
+    fi
+    check_parent=$(dirname "$check_parent")
+  done
   if [ "$dry_run" -eq 0 ]; then
     mkdir -p "$parent"
   fi
@@ -153,6 +162,7 @@ seed_entry() {
         echo "Manifest symlink target is stale for $src" >&2
         exit 1
       fi
+      link_target=$(python3 "$script_dir/resolve-worktree-link.py" "$source_dir" "$src" "$link_target")
       echo "link $dest -> $link_target"
       ensure_parent "$dest"
       if [ "$dry_run" -eq 0 ]; then
@@ -182,6 +192,11 @@ adopt_legacy_skills() {
     return 0
   fi
 
+  if [ -L "$canonical_dir" ] || { [ -n "$canonical_source_dir" ] && [ -L "$canonical_source_dir" ]; }; then
+    echo "Preserve whole canonical skills link; skip legacy alias adoption across this shared boundary" >&2
+    return 0
+  fi
+
   for legacy_entry in "$legacy_dir"/*; do
     if [ ! -e "$legacy_entry" ] && [ ! -L "$legacy_entry" ]; then
       continue
@@ -199,6 +214,7 @@ adopt_legacy_skills() {
     fi
 
     echo "adopt legacy skill $canonical_entry -> ../../.codex/skills/$name"
+    ensure_parent "$canonical_entry"
     if [ "$dry_run" -eq 0 ]; then
       mkdir -p "$canonical_dir"
       ln -s "../../.codex/skills/$name" "$canonical_entry"

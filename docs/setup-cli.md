@@ -19,6 +19,11 @@ The current profile and bundle catalog is documented in `templates/catalog.json`
 
 See `docs/link-mode.md` for the symlink strategy and tradeoffs.
 
+For CCE projects, add `--cce-ignore` to seed a missing `.cceignore` as an editable, locally excluded
+copy of the shared baseline. It requires a Git checkout root, respects `--dry-run`, and preserves
+existing policies. See [CCE ignore policy](cce-ignore.md) for standalone installation, team-owned
+policy, matching limitations, and project-specific additions.
+
 ## Non-Interactive Mode
 
 Use detected recommendations without prompts:

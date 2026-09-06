@@ -1,5 +1,35 @@
 # Reuse Candidates
 
+## Reusable CCE Ignore Policy
+
+A read-only scan of local project manifests, ignore files, and existing outputs exposed gaps in
+CCE 0.4.26's default exclusions: framework caches, Rush/Heft intermediates, Swift `.build` trees,
+test output, and nested working copies. Promote a conservative baseline in
+`templates/cce/default.cceignore`, with a non-overwriting local-copy installer and opt-in guided
+setup. Keep generated contracts, declarations, fixtures, and ambiguous `lib`/`types`/`artifacts`
+paths available. Real CCE matcher checks cover the version's root-dot normalization behavior;
+explicit root aliases are guarded against existing source-path collisions. Record scope and
+tailoring guidance in [CCE ignore policy](cce-ignore.md). Collected source material is unchanged.
+
+## AI Central Worktree Context Hook
+
+`templates/worktree/context-post-checkout.sh` invokes the existing allowlisted context seeder
+from Git worktree creation, independently of the Codex app's setup trigger. The installer
+`scripts/install-worktree-context-hook.sh` preserves other hook commands and composes with the
+CCE block using a shared installer. Context seeding precedes indexing in either install order.
+External relative skill links are anchored to the source location so nested worktrees preserve
+their shared context. This promotes lifecycle wiring without changing collected source material.
+
+## CCE Worktree Context
+
+`templates/worktree/cce-guidance.md` promotes checkout-binding and filesystem-authority rules for
+Code Context Engine. `scripts/seed-cce-worktree.sh` implements reuse of content-keyed embeddings
+through SQLite backup, followed by worktree-specific indexing. It integrates with the existing
+setup wrapper through `--cce`. Cache-only reuse avoids inconsistent copies of independently
+updated source search stores and keeps session history isolated. The companion hook template and
+installer order seeding ahead of CCE's stock background checkout indexing while preserving other
+hook commands. See [CCE worktrees](cce-worktrees.md).
+
 ## Promote To Templates
 
 These are broadly reusable with placeholders:
