@@ -45,11 +45,12 @@ actual_names=$(
     sort
 )
 test "$actual_names" = "$expected_names"
-test "$(printf '%s\n' "$actual_names" | wc -l | tr -d ' ')" -eq 138
+test "$(printf '%s\n' "$actual_names" | wc -l | tr -d ' ')" -eq 139
 test -f .agents/skills/claude-playwright-review/SKILL.md
 test ! -e .agents/skills/claude-review
 test -f .agents/skills/technical-blog-writer/SKILL.md
 test -f .agents/skills/orchestrated-delivery/SKILL.md
+test -f .agents/skills/round-based-code-audit/SKILL.md
 test -f .agents/skills/dotnet-run-tests/SKILL.md
 test -f .agents/skills/dotnet-architecture/SKILL.md
 test -f .agents/skills/dotnet-run-tests/LICENSE
@@ -79,4 +80,4 @@ fi
 echo "APM CI audit passed"
 
 apm_version=$(apm --version | sed -n '1p')
-echo "APM checks passed with $apm_version: 20 bundles, 138 unique skills, and alias-free frozen replay/audit"
+echo "APM checks passed with $apm_version: 20 bundles, 139 unique skills, and alias-free frozen replay/audit"

@@ -1,6 +1,6 @@
 name: ai-central-engineering
 version: 0.2.0
-description: Engineering lifecycle, architecture, CI, security, observability, migration, and tooling skills.
+description: Engineering lifecycle, architecture, round-based code audits, CI, security, observability, migration, and tooling skills.
 repository: https://github.com/dills122/ai-central
 keywords:
   - ai
@@ -70,6 +70,7 @@ dependencies:
     - path: ../../../templates/skills/imported/agent-skills/interview-me
     - path: ../../../templates/skills/imported/agent-skills/performance-optimization
     - path: ../../../templates/skills/imported/agent-skills/planning-and-task-breakdown
+    - path: ../../../templates/skills/first-party/round-based-code-audit
     - path: ../../../templates/skills/imported/agent-skills/security-and-hardening
     - path: ../../../templates/skills/imported/agent-skills/shipping-and-launch
     - path: ../../../templates/skills/imported/agent-skills/source-driven-development

@@ -180,7 +180,7 @@
       "id": "engineering",
       "label": "Engineering",
       "type": "persona-task",
-      "description": "Engineering lifecycle, architecture, CI, security, observability, migration, and tooling skills.",
+      "description": "Engineering lifecycle, architecture, round-based code audits, CI, security, observability, migration, and tooling skills.",
       "apmPackage": "packages/apm/engineering",
       "signals": ["package.json"]
     },

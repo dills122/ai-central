@@ -1,0 +1,4 @@
+interface:
+  display_name: "Round-Based Code Audit"
+  short_description: "Run validated audit rounds and file issues"
+  default_prompt: "Use $round-based-code-audit to audit this repository in focused rounds, validate every finding, and prepare approved GitHub issues."

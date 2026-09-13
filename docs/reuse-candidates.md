@@ -102,6 +102,17 @@ Promoted as a first-party Node tooling skill:
   chosen over MCP because inspection is project-local and one-shot; persistent indexing or
   cross-project symbol queries would be the threshold for revisiting an MCP server.
 
+Promoted as a first-party engineering audit skill:
+
+- `round-based-code-audit`: freezes a configurable repository scope, runs complete passes through
+  distinct correctness, security, architecture, maintainability, operations, testing, and
+  documentation lenses, and retains every candidate in one evidence ledger. A separate adversarial
+  validation pass rejects false positives and reconciles duplicate root causes before any GitHub
+  issue is drafted. Exact issue previews, existing-label mapping, duplicate searches, sensitive
+  vulnerability handling, and an immediate approval gate keep external publication deliberate. It
+  lives in the opt-in `engineering` bundle rather than the universal `core` bundle because a full
+  repository audit is an explicit, potentially expensive workflow.
+
 Promoted as first-party workflow skills after the 2026-08-12 cross-repository workflow audit:
 
 - `independent-review`: separates a maintainer-facing author explanation from a brand-new task's
