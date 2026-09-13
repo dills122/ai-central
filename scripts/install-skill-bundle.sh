@@ -243,6 +243,7 @@ install_brevity() {
 
 install_engineering() {
   install_node
+  install_skill "$repo_root/templates/skills/first-party/round-based-code-audit" "round-based-code-audit"
   install_find_skills "$repo_root/templates/skills/imported/agent-skills" ""
   install_find_skills "$repo_root/templates/skills/imported/claude-skills/engineering" "claude-"
   install_find_skills "$repo_root/templates/skills/imported/claude-skills/engineering-team" "claude-"
