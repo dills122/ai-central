@@ -76,7 +76,7 @@ Direct bundle consumers should prefer the latest reviewed tag:
 
 <!-- x-release-please-start-version -->
 ```sh
-apm install dills122/ai-central/packages/apm/core#v0.2.0 --target agent-skills
+apm install dills122/ai-central/packages/apm/core#v0.3.0 --target agent-skills
 ```
 <!-- x-release-please-end -->
 
@@ -89,15 +89,15 @@ Consumers can choose an update policy in `apm.yml`:
 <!-- x-release-please-start-version -->
 ```yaml
 # Exact release
-- dills122/ai-central/packages/apm/core#v0.2.0
+- dills122/ai-central/packages/apm/core#v0.3.0
 
 # Patch updates within 0.2
-- dills122/ai-central/packages/apm/core#~0.2.0
+- dills122/ai-central/packages/apm/core#~0.3.0
 
 # Object form used by exact generated selections
 - git: https://github.com/dills122/ai-central.git
   path: templates/skills/first-party/example
-  ref: v0.2.0
+  ref: v0.3.0
 ```
 <!-- x-release-please-end -->
 

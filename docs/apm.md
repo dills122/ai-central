@@ -123,7 +123,7 @@ For a stable install, run this from the consuming project:
 
 <!-- x-release-please-start-version -->
 ```sh
-apm install dills122/ai-central/packages/apm/core#v0.2.0 --target agent-skills
+apm install dills122/ai-central/packages/apm/core#v0.3.0 --target agent-skills
 ```
 <!-- x-release-please-end -->
 
