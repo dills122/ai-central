@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.0](https://github.com/dills122/ai-central/compare/v0.2.0...v0.3.0) (2026-09-15)
+
+
+### Features
+
+* **skills:** add managed security testing bundle ([#27](https://github.com/dills122/ai-central/issues/27)) ([e08d63e](https://github.com/dills122/ai-central/commit/e08d63e874f39264ed36f31812476f0816b9e49e))
+* **skills:** add round-based code audit ([#26](https://github.com/dills122/ai-central/issues/26)) ([f9b8b4d](https://github.com/dills122/ai-central/commit/f9b8b4d8454726f1b6f55216d595c967ed18677e))
+* **worktrees:** seed AI Central context, CCE caches, and ignore policy ([#24](https://github.com/dills122/ai-central/issues/24)) ([0a8ef79](https://github.com/dills122/ai-central/commit/0a8ef79c0a947f22e6b2b59dafed80ae86960887))
+
+## Changelog
+
 All notable changes to this repository will be documented here.
 
 ## Unreleased
