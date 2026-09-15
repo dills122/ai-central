@@ -4,7 +4,8 @@ This repo includes third-party skills and adapted guidance from reviewed upstrea
 
 First-party skills live under `templates/skills/first-party/`. They include
 `github-keychain-auth`, `orchestrated-delivery`, `spec-traceability`, `session-handoff`,
-`research-to-decision`, `repository-doc-drift`, and `round-based-code-audit`; they do not contain
+`research-to-decision`, `repository-doc-drift`, `round-based-code-audit`,
+`security-state-recovery`, `security-secret-boundary-testing`, and `security-race-and-toctou`; they do not contain
 copied upstream text.
 
 ## Imported Sources
@@ -32,6 +33,14 @@ copied upstream text.
 | `Nutlope/hallmark` | `aeb42fb354ff4efa36ab475773a082315a3af2ce` | MIT | `templates/skills/adapted/hallmark-design/` | Substantially adapted into a compact, opt-in creative-direction skill; upstream reference library retained in ignored `external/hallmark/` for review. |
 | `blader/humanizer` | `523374dee72d67c7b2b5f858ea0094ffda49c3ac` | MIT | `templates/skills/adapted/humanizer/` | Reviewed 2026-08-13. Condensed the upstream 33-pattern catalog into a voice-relative final prose audit; removed detector-oriented framing, hard punctuation bans, and in-place editing by default. |
 | `ardalis/CleanArchitecture` | `fbdc0951879f5e8dca1bebc273d4b28cb2934469` | MIT | `templates/skills/adapted/dotnet-architecture/` | Reviewed 2026-08-24. Generalized the full and minimal templates into framework-neutral architecture selection, feature-flow, transaction/event, enforcement, and verification guidance. |
+| `SnailSploit/Claude-Red` | `24d7968bab4b883e7f13477afe0fd91f2df3b722` | MIT | `templates/skills/adapted/security-protocol-fuzzing/` | Reviewed 2026-09-14 in `external/claude-red-review-24d7968/`. Substantially adapted only `Skills/fuzzing/offensive-fuzzing/SKILL.md`; retains the root license in the installed skill and central license directory. No upstream scripts or payload examples copied. |
+
+Security-skill source files, review decisions, installed file inventories and local requirement
+provenance are recorded in [security-skill-provenance.json](security-skill-provenance.json).
+The first-party security skills generalize local requirements using original text; they do not
+copy local project documents. Claude-Red TOCTOU/race and other derivative checklists remain
+discovery-only while the provenance question in the [ingestion review](security-skill-ingestion-review-2026-09-14.md)
+is unresolved. Root MIT labeling has not been treated as blanket clearance for every cited source.
 
 ## Not Imported
 

@@ -103,10 +103,11 @@ Every bundle in `templates/catalog.json` has a generated APM package:
 | `packages/apm/documentation` | 5 |
 | `packages/apm/delivery` | 7 |
 | `packages/apm/brevity` | 5 |
-| `packages/apm/engineering` | 43 |
+| `packages/apm/engineering` | 44 |
 | `packages/apm/dotnet` | 8 |
 | `packages/apm/jvm` | 1 |
 | `packages/apm/rust` | 8 |
+| `packages/apm/security-testing` | 4 |
 | `packages/apm/product` | 25 |
 | `packages/apm/planning` | 2 |
 | `packages/apm/frontend` | 12 |
@@ -116,7 +117,7 @@ Every bundle in `templates/catalog.json` has a generated APM package:
 | `packages/apm/infra` | 1 |
 | `packages/apm/writing` | 3 |
 | `packages/apm/workflow` | 13 |
-| `packages/apm/all` | 138 unique sources |
+| `packages/apm/all` | 143 unique sources |
 
 For a stable install, run this from the consuming project:
 
@@ -330,8 +331,8 @@ Read-only validation:
 ./scripts/check-apm.sh
 ```
 
-The shell `all` bundle exposes 144 installed names. APM identifies local dependencies by source
-path and deploys each source once, so the APM `all` package contains 138 unique sources. It keeps
+The shell `all` bundle exposes 149 installed names. APM identifies local dependencies by source
+path and deploys each source once, so the APM `all` package contains 143 unique sources. It keeps
 the clearer `claude-playwright-review` name for the one historical Playwright duplicate.
 
 ## Remaining Boundaries

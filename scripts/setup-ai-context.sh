@@ -387,7 +387,7 @@ if [ ! -d "$target_dir" ]; then
 fi
 
 allowed_profiles=base,javascript-typescript,angular,dotnet-csharp,dotnet-clean-architecture,dotnet-aspnetcore,dotnet-efcore,dotnet-orleans,dotnet-aspire,dotnet-opentelemetry,dotnet-grpc,kotlin-jvm,rust,shell-scripting,payload,frontend-design,infrastructure-opentofu
-allowed_bundles=core,node,orchestration,documentation,delivery,brevity,engineering,dotnet,jvm,rust,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all,none
+allowed_bundles=core,node,orchestration,documentation,delivery,brevity,engineering,dotnet,jvm,rust,security-testing,product,planning,frontend,frontend-tooling,frontend-vue,hallmark,infra,writing,workflow,all,none
 
 case "$mode" in
   copy|link) ;;

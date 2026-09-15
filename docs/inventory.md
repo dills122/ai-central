@@ -80,6 +80,18 @@ High-value reusable skills include:
 - Generic repository docs unless they were in known AI context locations.
 - Temporary third-party skill dumps under `wap-labs/tmp`; these should be reviewed separately before importing because provenance and licensing may differ.
 
+## Security Testing Promotion — 2026-09-14
+
+The `security-testing` bundle promotes four focused workflows. Original AI Central skills cover
+state recovery, secret boundaries and race/TOCTOU testing using requirements from the reviewed
+Session Chat evidence and cross-project assessment. The protocol-fuzzing skill substantially
+adapts Claude-Red's selected MIT fuzzing workflow. No historical collected files changed.
+
+Source revisions, reviewed source paths, installed file inventories and adaptation decisions:
+[security-skill-provenance.json](security-skill-provenance.json). Bundle/templating and maintenance:
+[Security testing skills](security-skills.md). The ignored upstream review clone is
+`external/claude-red-review-24d7968/`; installed skills do not depend on it.
+
 ## Promoted Infrastructure Steering
 
 - `templates/steering/infrastructure-opentofu-steering.md` is a normalized, provider-neutral

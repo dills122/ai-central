@@ -22,6 +22,7 @@ Detailed source attribution, reviewed commits, imported locations, and notes are
 | `blader/humanizer` | MIT | Adapted final prose-audit guidance and pattern catalog |
 | `dotnet/skills` | MIT | Imported selected official .NET test and MSBuild skills |
 | `ardalis/CleanArchitecture` | MIT | Adapted framework-neutral .NET architecture guidance from the full and minimal templates |
+| `SnailSploit/Claude-Red` | MIT | Substantially adapted the selected fuzzing workflow into `security-protocol-fuzzing`; other checklist text remains unimported |
 
 Copies of upstream licenses are stored under `templates/skills/imported/licenses/`.
 
