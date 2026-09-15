@@ -108,6 +108,7 @@ the discovered skill surface small while preserving focused capabilities.
 | `dotnet` | .NET architecture selection/change/enforcement plus official test-platform/filter/run workflows and MSBuild organization, anti-pattern, and binary-log diagnostics |
 | `jvm` | Kotlin/JVM implementation, Gradle toolchains, modules, coroutines, compatibility, boundaries, and verification |
 | `rust` | Imported Rust Agentic Skills, prefixed as `rust-*` |
+| `security-testing` | Four opt-in skills for state recovery, secret boundaries, race/TOCTOU and protocol fuzzing; each includes an evidence template |
 | `product` | Selected non-duplicate PM Skills and product-team Claude Skills |
 | `planning` | `planning-files-lite` and full `planning-with-files` |
 | `frontend` | Frontend design review, UI engineering, browser testing, accessibility, Playwright, design systems, and web quality |
@@ -126,6 +127,12 @@ nested legacy Angular files do not classify the repository as an active Angular 
 
 `brevity` installs only portable skill content. It does not run the upstream global installer or
 add hooks, statusline files, or an MCP proxy.
+
+`security-testing` requires explicit selection and is included in `all` for inventory checks.
+It is not automatically selected by stack detection or included in `core`, `engineering`, or
+`rust`. Bundle opt-in does not disable normal skill discovery after installation: each skill has
+a narrow task description and remains independently selectable. See [Security testing skills](security-skills.md)
+for exact names, templates, provenance and update policy.
 
 ## Naming And Provenance
 

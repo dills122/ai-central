@@ -209,6 +209,14 @@
       "signals": ["Cargo.toml"]
     },
     {
+      "id": "security-testing",
+      "label": "Security Testing",
+      "type": "domain",
+      "description": "Bounded state-recovery, secret-boundary, race/TOCTOU, and protocol-fuzzing tests with reusable evidence templates.",
+      "apmPackage": "packages/apm/security-testing",
+      "signals": ["explicit selection"]
+    },
+    {
       "id": "product",
       "label": "Product",
       "type": "persona-task",

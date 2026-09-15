@@ -53,7 +53,7 @@ AI Central checkout; it never deletes real skill directories or copied skills.
 
 ## What Is Available
 
-AI Central currently contains 141 reviewed reusable `SKILL.md` definitions. Related skills are
+AI Central currently contains 146 reviewed reusable `SKILL.md` definitions. Related skills are
 distributed as bundles so a project can expose only the capabilities it needs.
 
 ### Recommended Layers
@@ -73,10 +73,11 @@ distributed as bundles so a project can expose only the capabilities it needs.
 | --- | ---: | --- |
 | `node` | 1 | Installed Node package entry points, declarations, export conditions, subpaths, and static runtime API hints |
 | `brevity` | 5 | Terse replies, help, commits, review comments, and context compression |
-| `engineering` | 43 | Node package API inspection, architecture, APIs, CI, security, observability, migrations, performance, and shipping |
+| `engineering` | 44 | Node package API inspection, architecture, APIs, CI, security, observability, migrations, performance, and shipping |
 | `dotnet` | 8 | .NET architecture design/review plus official test-platform/filter execution and MSBuild diagnostics |
 | `jvm` | 1 | Kotlin/JVM and Gradle implementation workflow |
 | `rust` | 8 | Rust implementation, syntax, linting, debugging, security, Pest, and RON |
+| `security-testing` | 4 | Opt-in recovery, secret-boundary, race/TOCTOU, and protocol-fuzzing workflows with evidence templates |
 | `product` | 25 | Discovery, analytics, market research, GTM, product strategy, and code-to-PRD |
 | `planning` | 2 | Lightweight and full persistent planning-file workflows |
 | `frontend` | 12 | UI implementation, accessibility, browser testing, Playwright, performance, SEO, and Core Web Vitals |
@@ -86,7 +87,7 @@ distributed as bundles so a project can expose only the capabilities it needs.
 | `infra` | 1 | Terraform/OpenTofu review, debugging, state, CI, testing, security, and rollback |
 | `writing` | 3 | Project-history research, technical story drafting, editing, and prose review |
 | `workflow` | 13 | Architecture, handoffs, requirements, QA, documentation, OpenAPI, and React workflows |
-| `all` | 144 installed names | Every bundle above, including compatibility aliases; useful for auditing only |
+| `all` | 149 installed names | Every bundle above, including compatibility aliases; useful for auditing only |
 
 Some skills appear in more than one bundle, and a few older broad bundles expose historical
 prefixed aliases. That is why bundle totals and installed names do not equal the number of source
@@ -123,6 +124,9 @@ Profiles complement skills by installing durable repository guidance.
 | `infrastructure-opentofu` | State, secrets, plan/apply, recovery, lifecycle, and network-safety guidance |
 
 The machine-readable profile and bundle registry is [`templates/catalog.json`](templates/catalog.json).
+
+For security-focused projects, see [Security testing skills](docs/security-skills.md) for bundle
+composition, evidence templates, provenance, evaluation, release pins, and safe updates.
 
 ## How Content Is Stored
 

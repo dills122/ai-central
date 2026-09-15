@@ -176,6 +176,10 @@ dependencies:
     - path: ../../../templates/skills/imported/rust-agentic-skills/rust-core
       alias: rust-rust-core
     - path: ../../../templates/skills/imported/agent-skills/security-and-hardening
+    - path: ../../../templates/skills/adapted/security-protocol-fuzzing
+    - path: ../../../templates/skills/first-party/security-race-and-toctou
+    - path: ../../../templates/skills/first-party/security-secret-boundary-testing
+    - path: ../../../templates/skills/first-party/security-state-recovery
     - path: ../../../templates/skills/first-party/session-handoff
     - path: ../../../templates/skills/imported/agent-skills/shipping-and-launch
     - path: ../../../templates/skills/imported/antfu-skills/slidev

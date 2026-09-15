@@ -1,5 +1,20 @@
 # Reuse Candidates
 
+## Security Testing Ingestion Review (2026-09-14)
+
+The [security skill ingestion review](security-skill-ingestion-review-2026-09-14.md)
+compares Claude-Red with AI Central's existing coverage and the current Capsule
+Corp, Session Chat, Sandtable, and Safelet boundaries. The first ingestion batch now
+promotes state recovery, secret-boundary testing, race/TOCTOU, and protocol fuzzing
+through the opt-in `security-testing` bundle. Recovery, secret and race workflows use
+original AI Central text; only fuzzing adapts the selected MIT upstream skill.
+Each has a portable evidence asset and installed license. Source provenance and
+file inventories are checked; copy/link ownership behavior and bounded model cases
+are verified. See [management and remaining candidates](security-skills.md).
+Capability authorization, CI trust, dependency integrity and agent/isolation boundaries
+remain scoped follow-ups. Historical collected material and general bundle defaults
+are unchanged; unresolved derivative checklist provenance is not bypassed.
+
 ## Reusable CCE Ignore Policy
 
 A read-only scan of local project manifests, ignore files, and existing outputs exposed gaps in

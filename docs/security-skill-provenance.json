@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "bundle": "security-testing",
+  "skills": [
+    {
+      "name": "security-state-recovery",
+      "path": "templates/skills/first-party/security-state-recovery",
+      "kind": "first-party",
+      "status": "reviewed",
+      "reviewDate": "2026-09-14",
+      "reviewNotes": "Original recovery-test workflow derived from local requirements; separates crash, rollback, effect and owner evidence.",
+      "sources": [
+        {
+          "url": "https://github.com/dills122/session-chat",
+          "commit": "5c0f1f9dcf7f54864a1511cf4c633a7f778e3eb0",
+          "files": [
+            "AGENTS.md",
+            "docs/evidence/security-ingress-resilience.md",
+            "docs/evidence/security-secret-boundaries-2026-09-06.md"
+          ],
+          "use": "requirements only; original AI Central text, no source text or code copied"
+        }
+      ],
+      "files": {
+        "LICENSE": "3b81900c384fb9bdef321ab1c17b9e3ff4e0d1c528ce314e5aed67ad477fe947",
+        "SKILL.md": "c9b09d74f25e022a6dd4a72348dc5ceca5192eae4291153f79a179ee29cc2fc3",
+        "assets/recovery-matrix.md": "bb9807bcde13c3accc5a7bc638782caff47a1da9b09f8e8ce3b39cfaafe4114e"
+      }
+    },
+    {
+      "name": "security-secret-boundary-testing",
+      "path": "templates/skills/first-party/security-secret-boundary-testing",
+      "kind": "first-party",
+      "status": "reviewed",
+      "reviewDate": "2026-09-14",
+      "reviewNotes": "Original capture/custody workflow derived from local requirements; separates secret scan from capture completeness.",
+      "sources": [
+        {
+          "url": "https://github.com/dills122/session-chat",
+          "commit": "5c0f1f9dcf7f54864a1511cf4c633a7f778e3eb0",
+          "files": [
+            "AGENTS.md",
+            "docs/evidence/security-ingress-resilience.md",
+            "docs/evidence/security-secret-boundaries-2026-09-06.md"
+          ],
+          "use": "requirements only; original AI Central text, no source text or code copied"
+        }
+      ],
+      "files": {
+        "LICENSE": "3b81900c384fb9bdef321ab1c17b9e3ff4e0d1c528ce314e5aed67ad477fe947",
+        "SKILL.md": "315526cbdf8d0036115f7d618e4030eaee75decadd1fe766df411f546ca15778",
+        "assets/capture-inventory.md": "8e9d693a286bddd4c31bd3eb3e4b3034c443c76d01446561bcde43056f89ff72"
+      }
+    },
+    {
+      "name": "security-race-and-toctou",
+      "path": "templates/skills/first-party/security-race-and-toctou",
+      "kind": "first-party",
+      "status": "reviewed",
+      "reviewDate": "2026-09-14",
+      "reviewNotes": "Original controlled-schedule workflow derived from local requirements and CWE-367 concepts. Claude-Red TOCTOU/race checklist text remains discovery-only due to unresolved derivative provenance.",
+      "sources": [
+        {
+          "url": "https://github.com/dills122/session-chat",
+          "commit": "5c0f1f9dcf7f54864a1511cf4c633a7f778e3eb0",
+          "files": [
+            "AGENTS.md",
+            "docs/evidence/security-ingress-resilience.md",
+            "docs/evidence/security-secret-boundaries-2026-09-06.md"
+          ],
+          "use": "requirements only; original AI Central text, no source text or code copied"
+        }
+      ],
+      "files": {
+        "LICENSE": "3b81900c384fb9bdef321ab1c17b9e3ff4e0d1c528ce314e5aed67ad477fe947",
+        "SKILL.md": "1396c7507901cded6bd64c5bb07a67db33928ddce300b4d46cb3736d0ad6978a",
+        "assets/race-case.md": "afac77a77ce8551cb49594770f5058b5848fab1192ef1354c074f23cdee5deb2"
+      }
+    },
+    {
+      "name": "security-protocol-fuzzing",
+      "path": "templates/skills/adapted/security-protocol-fuzzing",
+      "kind": "adapted",
+      "status": "reviewed",
+      "reviewDate": "2026-09-14",
+      "reviewNotes": "Substantially adapted target/harness/corpus/oracle/triage workflow. No upstream scripts, exploit examples, tool installs, kernel/EDR recipes or performance-ranking claims retained. Adds protocol semantics, bounded campaigns and synthetic evidence templates. Selected source contains no explicit derivative checklist Source annotation. Root MIT license retained.",
+      "sources": [
+        {
+          "url": "https://github.com/SnailSploit/Claude-Red",
+          "commit": "24d7968bab4b883e7f13477afe0fd91f2df3b722",
+          "files": [
+            "Skills/fuzzing/offensive-fuzzing/SKILL.md",
+            "LICENSE"
+          ],
+          "use": "adapted",
+          "license": "MIT",
+          "reviewClone": "external/claude-red-review-24d7968"
+        }
+      ],
+      "files": {
+        "LICENSE": "f2ebf01e609ee09215fbe0334dc8a96e7474a186f07a73e24e983fa2462e0ff9",
+        "SKILL.md": "90d72b7ac94ef173495c67a3575d952f0357840e3d002d4f85156a342e25d6a9",
+        "assets/fuzz-campaign.md": "f12123bce0879faf3815a58e4d06c136d14e4f96e4c3fcb3a656ecf0b1d7e45a",
+        "references/harness-selection.md": "783328979805915849aa5cbe651468efe66070406d69ce6e8535a09d3c59e4f4"
+      }
+    }
+  ]
+}

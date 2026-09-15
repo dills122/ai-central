@@ -268,6 +268,13 @@ install_rust() {
   install_find_skills "$repo_root/templates/skills/imported/rust-agentic-skills" "rust-"
 }
 
+install_security_testing() {
+  install_skill "$repo_root/templates/skills/first-party/security-state-recovery" "security-state-recovery"
+  install_skill "$repo_root/templates/skills/first-party/security-secret-boundary-testing" "security-secret-boundary-testing"
+  install_skill "$repo_root/templates/skills/first-party/security-race-and-toctou" "security-race-and-toctou"
+  install_skill "$repo_root/templates/skills/adapted/security-protocol-fuzzing" "security-protocol-fuzzing"
+}
+
 install_product() {
   install_find_skills "$repo_root/templates/skills/imported/pm-skills" "pm-"
   install_find_skills "$repo_root/templates/skills/imported/claude-skills/product-team" "claude-"
@@ -340,6 +347,7 @@ select_bundle() {
     dotnet) install_dotnet ;;
     jvm) install_jvm ;;
     rust) install_rust ;;
+    security-testing) install_security_testing ;;
     product) install_product ;;
     planning) install_planning ;;
     frontend) install_frontend ;;
@@ -360,6 +368,7 @@ select_bundle() {
       install_dotnet
       install_jvm
       install_rust
+      install_security_testing
       install_product
       install_planning
       install_frontend
